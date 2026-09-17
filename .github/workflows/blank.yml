@@ -1,0 +1,59 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: "Rama del repositorio destino"
+        required: true
+        default: "main"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Obtener la rama desde la que se ejecutó el workflow
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      # 2. Instalar Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Compilar React
+      - name: Build
+        run: npm run build
+
+      # 5. Clonar repositorio destino
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: ccampos10/PsicoCam-Backend
+          ref: ${{ inputs.target_branch }}
+          token: ${{ secrets.TEST_TOKEN }}
+          path: target-repo
+
+      # 6. Reemplazar contenido del repositorio destino
+      - name: Copy build
+        run: |
+          rm -rf target-repo/*
+          cp -r dist/* target-repo/
+
+      # 7. Commit y push
+      - name: Commit and push
+        working-directory: target-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          git commit -m "Deploy from source repository" || echo "No changes to commit"
+          git push origin ${{ inputs.target_branch }}
