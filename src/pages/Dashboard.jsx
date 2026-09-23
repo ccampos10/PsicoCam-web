@@ -1,3 +1,4 @@
+import { Bell, Clock, CircleCheck, TriangleAlert } from 'lucide-react'
 import GraficoDistribucionRiesgo from '../components/GraficoDistribucionRiesgo'
 import ListaAlertasRecientes from '../components/ListaAlertasRecientes'
 import ListaBoxes from '../components/ListaBoxes'
@@ -36,10 +37,10 @@ export default function Dashboard({ titulo }) {
       <span className="dashboard-estado"><span className="dashboard-estado-punto" aria-hidden="true"></span>Monitoreo activo</span>
     </section>
     <section className="dashboard-metricas" aria-label="Métricas principales">
-      <TarjetaMetrica etiqueta="Alertas registradas" valor={resumenAlertas.registradas} nota="Total de detecciones" color="var(--secondary)" />
-      <TarjetaMetrica etiqueta="Pendientes" valor={resumenAlertas.pendientes} nota="Requieren evaluación" color="var(--risk-medium)" />
-      <TarjetaMetrica etiqueta="Evaluadas" valor={resumenAlertas.evaluadas} nota="Con evaluación registrada" color="var(--risk-low)" />
-      <TarjetaMetrica etiqueta="Riesgo alto" valor={resumenAlertas.riesgoAlto} nota="Prioridad visual" color="var(--risk-high)" destacado />
+      <TarjetaMetrica etiqueta="Alertas registradas" valor={resumenAlertas.registradas} nota="Total de detecciones" color="var(--secondary)" icono={Bell} />
+      <TarjetaMetrica etiqueta="Pendientes" valor={resumenAlertas.pendientes} nota="Requieren evaluación" color="var(--risk-medium)" icono={Clock} />
+      <TarjetaMetrica etiqueta="Evaluadas" valor={resumenAlertas.evaluadas} nota="Con evaluación registrada" color="var(--risk-low)" icono={CircleCheck} />
+      <TarjetaMetrica etiqueta="Riesgo alto" valor={resumenAlertas.riesgoAlto} nota="Prioridad visual" color="var(--risk-high)" icono={TriangleAlert} destacado />
     </section>
     <section className="dashboard-fila" aria-label="Estadísticas de alertas">
       <GraficoDistribucionRiesgo datos={nivelRiesgo} />

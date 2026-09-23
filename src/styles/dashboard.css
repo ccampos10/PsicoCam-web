@@ -10,7 +10,10 @@
 
 .tarjeta-metrica { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgb(23 52 69 / 4%); }
 .tarjeta-metrica::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accento, var(--secondary)); }
+.tarjeta-metrica-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .tarjeta-metrica-etiqueta { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.tarjeta-metrica-icono { display: grid; place-items: center; line-height: 0; width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: var(--accento, var(--secondary)); color: #fff; }
+.tarjeta-metrica-icono svg { display: block; }
 .tarjeta-metrica-valor { font-size: 28px; font-weight: 700; line-height: 1.15; color: var(--text-primary); }
 .tarjeta-metrica-destacada .tarjeta-metrica-valor { color: var(--risk-high); }
 .tarjeta-metrica-nota { font-size: 11px; color: var(--text-secondary); }
