@@ -1,33 +1,95 @@
-import { Bell, Clock, CircleCheck, TriangleAlert } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Bell, CircleCheck, Clock, TriangleAlert, Users } from 'lucide-react'
 import GraficoDistribucionRiesgo from '../components/GraficoDistribucionRiesgo'
 import ListaAlertasRecientes from '../components/ListaAlertasRecientes'
 import ListaBoxes from '../components/ListaBoxes'
 import ProgresoDetecciones from '../components/ProgresoDetecciones'
 import TarjetaMetrica from '../components/TarjetaMetrica'
+import { MockService } from '../services/MockService'
 import '../styles/dashboard.css'
 
-const resumenAlertas = { registradas: 15, pendientes: 5, evaluadas: 8, riesgoAlto: 2 }
+const ORDEN_NIVELES = ['Bajo', 'Medio', 'Alto']
 
-const nivelRiesgo = [
-  { nivel: 'Bajo', cantidad: 6 },
-  { nivel: 'Medio', cantidad: 7 },
-  { nivel: 'Alto', cantidad: 2 },
-]
+const NOMBRES_CATEGORIA = {
+  RS: { nombre: 'Riesgo Suicida', abreviatura: 'RS', color: 'var(--secondary)' },
+  VD: { nombre: 'Vulneración de Derechos', abreviatura: 'VD', color: '#5d7a88' },
+}
 
-const detecciones = [
-  { nombre: 'Riesgo Suicida', abreviatura: 'RS', alertas: 9, color: 'var(--secondary)' },
-  { nombre: 'Vulneración de Derechos', abreviatura: 'VD', alertas: 6, color: '#5d7a88' },
-]
+function agruparPorNivel(alertas) {
+  const conteo = alertas.reduce((acumulado, alerta) => {
+    acumulado[alerta.nivel] = (acumulado[alerta.nivel] ?? 0) + 1
+    return acumulado
+  }, {})
+  return ORDEN_NIVELES.map(nivel => ({ nivel, cantidad: conteo[nivel] ?? 0 }))
+}
 
-const boxesClínicos = ['Box 4', 'Box 5', 'Box 6', 'Box 7', 'Box Infanto-Juvenil']
+function agruparPorCategoria(alertas) {
+  const conteo = alertas.reduce((acumulado, alerta) => {
+    acumulado[alerta.categoria] = (acumulado[alerta.categoria] ?? 0) + 1
+    return acumulado
+  }, {})
+  return Object.entries(conteo).map(([categoria, cantidad]) => ({ categoria, cantidad }))
+}
 
-const alertasRecientes = [
-  { box: 'Box 6', tipo: 'RS', nivel: 'alto', hora: '14:32' },
-  { box: 'Box 4', tipo: 'VD', nivel: 'medio', hora: '13:48' },
-  { box: 'Box 7', tipo: 'RS', nivel: 'bajo', hora: '12:15' },
-]
+function agruparEvaluaciones(alertas) {
+  return alertas.reduce((acumulado, alerta) => {
+    if (alerta.estado_evaluacion === 'neutro') acumulado.pendientes += 1
+    else acumulado.evaluadas += 1
+    return acumulado
+  }, { pendientes: 0, evaluadas: 0 })
+}
+
+function contarAtencionesPorSupervisor(alertas) {
+  return alertas.reduce((acumulado, alerta) => {
+    acumulado[alerta.supervisor] = (acumulado[alerta.supervisor] ?? 0) + 1
+    return acumulado
+  }, {})
+}
 
 export default function Dashboard({ titulo }) {
+  const [alertas, setAlertas] = useState([])
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    let activo = true
+    MockService.listarAlertas().then(datos => {
+      if (activo) {
+        setAlertas(datos)
+        setCargando(false)
+      }
+    })
+    return () => { activo = false }
+  }, [])
+
+  const totalAlertas = alertas.length
+  const nivelRiesgo = agruparPorNivel(alertas)
+  const detecciones = agruparPorCategoria(alertas).map(({ categoria, cantidad }) => ({
+    ...NOMBRES_CATEGORIA[categoria],
+    alertas: cantidad,
+  }))
+  const evaluaciones = agruparEvaluaciones(alertas)
+
+  const atencionesPorSupervisor = contarAtencionesPorSupervisor(alertas)
+  const supervisores = Object.keys(atencionesPorSupervisor)
+  const mediaAtenciones = supervisores.length
+    ? supervisores.reduce((acumulado, supervisor) => acumulado + atencionesPorSupervisor[supervisor], 0) / supervisores.length
+    : 0
+
+  const boxesClinicos = [...new Set(alertas.map(alerta => alerta.box))]
+
+  const alertasRecientes = [...alertas]
+    .sort((a, b) => `${b.fecha}T${b.hora}`.localeCompare(`${a.fecha}T${a.hora}`))
+    .slice(0, 3)
+    .map(alerta => ({ box: alerta.box, tipo: alerta.categoria, nivel: alerta.nivel.toLowerCase(), hora: alerta.hora }))
+
+  const resumenAlertas = {
+    registradas: totalAlertas,
+    pendientes: evaluaciones.pendientes,
+    evaluadas: evaluaciones.evaluadas,
+    riesgoAlto: nivelRiesgo.find(nivel => nivel.nivel === 'Alto')?.cantidad ?? 0,
+    mediaAtenciones: Number.isInteger(mediaAtenciones) ? mediaAtenciones : mediaAtenciones.toFixed(1),
+  }
+
   return <div className="dashboard">
     <section className="dashboard-cabecera" aria-labelledby="dashboard-titulo">
       <div>
@@ -36,19 +98,24 @@ export default function Dashboard({ titulo }) {
       </div>
       <span className="dashboard-estado"><span className="dashboard-estado-punto" aria-hidden="true"></span>Monitoreo activo</span>
     </section>
-    <section className="dashboard-metricas" aria-label="Métricas principales">
-      <TarjetaMetrica etiqueta="Alertas registradas" valor={resumenAlertas.registradas} nota="Total de detecciones" color="var(--secondary)" icono={Bell} />
-      <TarjetaMetrica etiqueta="Pendientes" valor={resumenAlertas.pendientes} nota="Requieren evaluación" color="var(--risk-medium)" icono={Clock} />
-      <TarjetaMetrica etiqueta="Evaluadas" valor={resumenAlertas.evaluadas} nota="Con evaluación registrada" color="var(--risk-low)" icono={CircleCheck} />
-      <TarjetaMetrica etiqueta="Riesgo alto" valor={resumenAlertas.riesgoAlto} nota="Prioridad visual" color="var(--risk-high)" icono={TriangleAlert} destacado />
-    </section>
-    <section className="dashboard-fila" aria-label="Estadísticas de alertas">
-      <GraficoDistribucionRiesgo datos={nivelRiesgo} />
-      <ProgresoDetecciones datos={detecciones} />
-    </section>
-    <section className="dashboard-fila" aria-label="Boxes y alertas recientes">
-      <ListaBoxes boxes={boxesClínicos} />
-      <ListaAlertasRecientes alertas={alertasRecientes} />
-    </section>
+    {cargando
+      ? <p className="dashboard-cargando">Cargando alertas…</p>
+      : <>
+          <section className="dashboard-metricas" aria-label="Métricas principales">
+            <TarjetaMetrica etiqueta="Alertas registradas" valor={resumenAlertas.registradas} nota="Total de detecciones" color="var(--secondary)" icono={Bell} />
+            <TarjetaMetrica etiqueta="Pendientes" valor={resumenAlertas.pendientes} nota="Requieren evaluación" color="var(--risk-medium)" icono={Clock} />
+            <TarjetaMetrica etiqueta="Evaluadas" valor={resumenAlertas.evaluadas} nota="Con evaluación registrada" color="var(--risk-low)" icono={CircleCheck} />
+            <TarjetaMetrica etiqueta="Riesgo alto" valor={resumenAlertas.riesgoAlto} nota="Prioridad visual" color="var(--risk-high)" icono={TriangleAlert} destacado />
+            <TarjetaMetrica etiqueta="Promedio por supervisor" valor={resumenAlertas.mediaAtenciones} nota="Media de atenciones" color="var(--secondary)" icono={Users} />
+          </section>
+          <section className="dashboard-fila" aria-label="Estadísticas de alertas">
+            <GraficoDistribucionRiesgo datos={nivelRiesgo} />
+            <ProgresoDetecciones datos={detecciones} />
+          </section>
+          <section className="dashboard-fila" aria-label="Boxes y alertas recientes">
+            <ListaBoxes boxes={boxesClinicos} />
+            <ListaAlertasRecientes alertas={alertasRecientes} />
+          </section>
+        </>}
   </div>
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { ProveedorSesion } from '../src/context/ProveedorSesion'
 import RutasAplicacion from '../src/routes/RutasAplicacion'
@@ -31,59 +31,63 @@ describe('Dashboard: SCRUM-221', () => {
     expect(screen.getByText('Monitoreo activo')).toBeTruthy()
   })
 
-  it('muestra las métricas globales en el grid principal', () => {
+  it('muestra las métricas globales en el grid principal', async () => {
     renderizarConRuta('/dashboard')
-    const metricas = screen.getByRole('region', { name: 'Métricas principales' })
+    const metricas = await screen.findByRole('region', { name: 'Métricas principales' })
     expect(within(metricas).getByText('Alertas registradas')).toBeTruthy()
     expect(within(metricas).getByText('15')).toBeTruthy()
     expect(within(metricas).getByText('Pendientes')).toBeTruthy()
     expect(within(metricas).getByText('5')).toBeTruthy()
     expect(within(metricas).getByText('Evaluadas')).toBeTruthy()
-    expect(within(metricas).getByText('8')).toBeTruthy()
+    expect(within(metricas).getByText('10')).toBeTruthy()
     expect(within(metricas).getByText('Riesgo alto')).toBeTruthy()
-    expect(within(metricas).getByText('2')).toBeTruthy()
+    expect(within(metricas).getByText('6')).toBeTruthy()
+    expect(within(metricas).getByText('Promedio por supervisor')).toBeTruthy()
+    expect(within(metricas).getByText('3')).toBeTruthy()
   })
 
-  it('define los contenedores de gráficos con su distribución por nivel de riesgo', () => {
+  it('define los contenedores de gráficos con su distribución por nivel de riesgo', async () => {
     renderizarConRuta('/dashboard')
-    const grafico = screen.getByRole('region', { name: 'Distribución por nivel de riesgo' })
+    const grafico = await screen.findByRole('region', { name: 'Distribución por nivel de riesgo' })
     expect(screen.getByRole('heading', { name: 'Distribución por nivel de riesgo' })).toBeTruthy()
-    expect(within(grafico).getByRole('img', { name: /Bajo: 6, Medio: 7, Alto: 2/ })).toBeTruthy()
+    expect(within(grafico).getByRole('img', { name: /Bajo: 4, Medio: 5, Alto: 6/ })).toBeTruthy()
     for (const nivel of ['Bajo', 'Medio', 'Alto']) {
-      expect(within(grafico).getByText(nivel)).toBeTruthy()
+      expect(await within(grafico).findByText(nivel)).toBeTruthy()
     }
-    const colores = [...grafico.querySelectorAll('path')]
-      .map(nodo => nodo.getAttribute('fill'))
-      .filter(relleno => /^#[0-9A-Fa-f]{6}$/.test(relleno || ''))
-    expect(new Set(colores)).toEqual(new Set(Object.values(colorNivel)))
+    await waitFor(() => {
+      const colores = [...grafico.querySelectorAll('path')]
+        .map(nodo => nodo.getAttribute('fill'))
+        .filter(relleno => /^#[0-9A-Fa-f]{6}$/.test(relleno || ''))
+      expect(new Set(colores)).toEqual(new Set(Object.values(colorNivel)))
+    })
   })
 
-  it('define el contenedor de detecciones con sus barras de progreso', () => {
+  it('define el contenedor de detecciones con sus barras de progreso', async () => {
     renderizarConRuta('/dashboard')
-    const panel = screen.getByRole('region', { name: 'Alertas por tipo de detección' })
+    const panel = await screen.findByRole('region', { name: 'Alertas por tipo de detección' })
     expect(screen.getByRole('heading', { name: 'Alertas por tipo de detección' })).toBeTruthy()
     expect(within(panel).getByText(/Riesgo Suicida/)).toBeTruthy()
-    expect(within(panel).getByText('9 alertas')).toBeTruthy()
+    expect(within(panel).getByText('8 alertas')).toBeTruthy()
     expect(within(panel).getByText(/Vulneración de Derechos/)).toBeTruthy()
-    expect(within(panel).getByText('6 alertas')).toBeTruthy()
+    expect(within(panel).getByText('7 alertas')).toBeTruthy()
   })
 
-  it('lista los boxes clínicos en monitoreo', () => {
+  it('lista los boxes clínicos en monitoreo', async () => {
     renderizarConRuta('/dashboard')
-    const panel = screen.getByRole('region', { name: 'Boxes clínicos' })
+    const panel = await screen.findByRole('region', { name: 'Boxes clínicos' })
     expect(within(panel).getByText('5 boxes designados para monitoreo')).toBeTruthy()
-    for (const nombre of ['Box 4', 'Box 5', 'Box 6', 'Box 7', 'Box Infanto-Juvenil']) {
+    for (const nombre of ['Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5']) {
       expect(within(panel).getByText(nombre)).toBeTruthy()
     }
     expect(within(panel).getAllByText('Monitoreando')).toHaveLength(5)
   })
 
-  it('muestra las alertas recientes con su nivel de riesgo', () => {
+  it('muestra las alertas recientes con su nivel de riesgo', async () => {
     renderizarConRuta('/dashboard')
-    const panel = screen.getByRole('region', { name: 'Alertas recientes' })
-    expect(within(panel).getByText('Box 6')).toBeTruthy()
+    const panel = await screen.findByRole('region', { name: 'Alertas recientes' })
+    expect(within(panel).getByText('Box 5')).toBeTruthy()
     expect(within(panel).getByText('Riesgo alto')).toBeTruthy()
-    expect(within(panel).getByText('14:32')).toBeTruthy()
+    expect(within(panel).getByText('17:05')).toBeTruthy()
     expect(within(panel).getByText('Riesgo medio')).toBeTruthy()
     expect(within(panel).getByText('Riesgo bajo')).toBeTruthy()
   })
