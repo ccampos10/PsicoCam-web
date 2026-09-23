@@ -22,7 +22,7 @@ function prepararPrueba({ rutaInicial = '/dashboard', sesion = usuario, alCerrar
 describe('Integración de SCRUM-27', () => {
   it('redirige sin sesión y no expone la estructura interna', async () => {
     prepararPrueba({ sesion: null, rutaInicial: '/historial' })
-    expect(await screen.findByRole('heading', { name: 'Acceso a PsicoCam' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Iniciar sesión' })).toBeTruthy()
     expect(screen.queryByRole('navigation')).toBeNull()
   })
 
@@ -107,7 +107,7 @@ describe('Integración de SCRUM-27', () => {
     expect(alCerrarSesion).not.toHaveBeenCalled()
     await interaccion.click(screen.getByRole('button', { name: 'Cerrar sesión' }))
     await interaccion.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Cerrar sesión' }))
-    expect(await screen.findByRole('heading', { name: 'Acceso a PsicoCam' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Iniciar sesión' })).toBeTruthy()
     expect(alCerrarSesion).toHaveBeenCalledTimes(1)
     await interaccion.click(screen.getByRole('button', { name: 'Atrás de prueba' }))
     expect(screen.queryByRole('navigation')).toBeNull()

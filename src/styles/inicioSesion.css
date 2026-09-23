@@ -1,0 +1,64 @@
+.inicio-sesion {
+  --acceso-borde-campo: #dfe6ef;
+  --acceso-texto-ejemplo: #8797ad;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100dvh;
+}
+.acceso-panel-marca { background: var(--primary); color: var(--card); position: relative; min-width: 0; padding: 58px 52px; display: flex; flex-direction: column; }
+.acceso-panel-marca .brand { padding: 0; gap: 11px; }
+.acceso-panel-marca .brand-mark { width: 42px; height: 42px; border-radius: 50%; }
+.acceso-panel-marca .brand p { font-size: 20px; line-height: 24px; }
+.acceso-panel-marca .brand > div > span { font-size: 13px; }
+.acceso-panel-marca .brand-mark img { display: block; width: 14px; height: 14px; }
+.acceso-presentacion { margin-block: auto; padding-top: 42px; padding-bottom: 16px; }
+.acceso-antetitulo { color: #72c5c4; font-size: 12px; font-weight: 600; margin-bottom: 20px; }
+.acceso-presentacion h2 { font-size: 45px; font-weight: 700; line-height: 1.2; letter-spacing: -0.6px; }
+.acceso-presentacion h2 span { color: #64bdba; }
+.acceso-descripcion { color: #d2dfe7; font-size: 16px; line-height: 28px; margin-top: 28px; }
+.acceso-area-formulario { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 64px 32px; background: var(--canvas); }
+.acceso-contenedor { width: 440px; max-width: 100%; position: relative; }
+.acceso-tarjeta { padding: 29px 32px 28px; border-radius: 16px; background: var(--card); }
+.acceso-tarjeta h1 { font-size: 24px; font-weight: 600; line-height: 32px; }
+.acceso-introduccion { font-size: 14px; line-height: 22px; color: var(--text-secondary); margin-top: 9px; margin-bottom: 19px; }
+.acceso-grupo-campo + .acceso-grupo-campo { margin-top: 22px; }
+.acceso-grupo-campo > label { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
+.acceso-campo { position: relative; }
+.acceso-campo input { width: 100%; height: 46px; border: 1px solid var(--acceso-borde-campo); border-radius: 8px; background: var(--card); color: var(--text-primary); padding: 0 44px 0 40px; font-size: 13px; }
+.acceso-campo input::placeholder { color: var(--acceso-texto-ejemplo); opacity: 1; }
+.acceso-campo input:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
+.acceso-icono-usuario, .acceso-icono-candado { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); pointer-events: none; color: var(--text-secondary); }
+.acceso-mostrar-contrasena { position: absolute; inset: 0 4px 0 auto; margin-block: auto; height: 36px; width: 32px; display: grid; place-items: center; border: 0; border-radius: 6px; background: transparent; }
+.acceso-mostrar-contrasena img { display: block; width: 22px; height: 22px; }
+.acceso-opciones { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 28px; margin-bottom: 28px; font-size: 12px; }
+.acceso-recordarme { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); cursor: pointer; }
+.acceso-recordarme input { appearance: none; width: 16px; height: 16px; margin: 0; border: 1px solid #cbd5e1; border-radius: 4px; background: var(--card); display: grid; place-content: center; cursor: pointer; }
+.acceso-recordarme input:checked { appearance: auto; accent-color: var(--secondary); }
+.acceso-recordarme input:focus-visible { outline: 2px solid var(--secondary); outline-offset: 3px; }
+.acceso-recuperar { color: var(--secondary); font-size: 12px; font-weight: 500; border: 0; background: transparent; padding: 0; }
+.acceso-recuperar:hover { text-decoration: underline; }
+.acceso-enviar { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 46px; padding: 10px 16px; border: 0; border-radius: 8px; background: var(--primary); color: var(--card); font-size: 14px; font-weight: 600; }
+.acceso-enviar:hover { background: var(--text-primary); }
+.acceso-enviar:disabled { opacity: 0.65; }
+.acceso-ayuda { border-top: 1px solid var(--border); margin-top: 19px; padding-top: 17px; text-align: center; font-size: 11px; line-height: 17px; color: var(--text-secondary); }
+.acceso-pie { margin-top: 26px; text-align: center; font-size: 11px; line-height: 17px; color: var(--text-secondary); }
+.acceso-error { margin-top: 6px; font-size: 12px; color: var(--text-primary); }
+.acceso-mensaje { padding: 12px; margin-top: 14px; font-size: 13px; background: var(--canvas); border-radius: 8px; }
+.acceso-desarrollo { position: absolute; top: calc(100% + 20px); left: 0; right: 0; text-align: center; color: var(--text-secondary); font-size: 11px; }
+.acceso-desarrollo summary { cursor: pointer; }
+.acceso-desarrollo button { margin-top: 8px; }
+@media (max-width: 1199px) {
+  .acceso-panel-marca { padding-inline: 32px; }
+  .acceso-presentacion h2 { font-size: 38px; }
+  .acceso-salto-descripcion { display: none; }
+}
+@media (max-width: 767px) {
+  .inicio-sesion { grid-template-columns: minmax(0, 1fr); }
+  .acceso-panel-marca { padding: 28px 24px; }
+  .acceso-presentacion { margin: 0; padding-top: 32px; padding-bottom: 0; }
+  .acceso-presentacion h2 { font-size: 32px; }
+  .acceso-antetitulo { margin-bottom: 14px; }
+  .acceso-descripcion { margin-top: 20px; font-size: 14px; line-height: 24px; }
+  .acceso-area-formulario { padding: 32px 20px 100px; }
+  .acceso-tarjeta { padding: 28px 24px; }
+}

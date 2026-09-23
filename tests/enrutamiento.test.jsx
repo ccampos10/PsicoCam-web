@@ -24,8 +24,9 @@ function prepararPrueba(rutaInicial, sesion = usuario) {
 describe('Enrutamiento principal: SCRUM-222 a SCRUM-225', () => {
   it('mantiene el acceso fuera del Layout y permite entrar al historial', async () => {
     const interaccion = prepararPrueba('/historial', null)
-    expect(screen.getByRole('heading', { name: 'Acceso a PsicoCam' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Iniciar sesión' })).toBeTruthy()
     expect(screen.queryByRole('banner')).toBeNull()
+    await interaccion.click(screen.getByText('Vista previa de desarrollo'))
     await interaccion.click(screen.getByRole('button', { name: 'Abrir vista previa' }))
     expect(await screen.findByRole('heading', { name: 'Historial' })).toBeTruthy()
     expect(screen.getByRole('banner')).toBeTruthy()
@@ -53,6 +54,7 @@ describe('Enrutamiento principal: SCRUM-222 a SCRUM-225', () => {
   it('recupera el detalle solicitado después de abrir la vista previa', async () => {
     const interaccion = prepararPrueba('/alertas/AL-789?origen=historial', null)
     expect(screen.queryByRole('heading', { name: 'Detalle de alerta' })).toBeNull()
+    await interaccion.click(screen.getByText('Vista previa de desarrollo'))
     await interaccion.click(screen.getByRole('button', { name: 'Abrir vista previa' }))
     expect(await screen.findByText('Identificador de alerta: AL-789')).toBeTruthy()
   })

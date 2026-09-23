@@ -1,0 +1,35 @@
+import { matchPath, Navigate, useLocation } from 'react-router-dom'
+import { useSesion } from '../hooks/useSesion'
+import Marca from '../components/Marca'
+import FormularioInicioSesion from '../components/FormularioInicioSesion'
+import anilloMarca from '../assets/acceso/anillo-marca.svg'
+import '../styles/inicioSesion.css'
+
+export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
+  const { usuario, vistaPreviaDisponible, iniciarVistaPrevia } = useSesion()
+  const { state } = useLocation()
+  const rutaSolicitada = state?.rutaSolicitada
+  const destinoInterno = typeof rutaSolicitada === 'string' && rutasDisponibles.some(opcion =>
+    matchPath(opcion.ruta, rutaSolicitada.split(/[?#]/)[0]))
+  if (usuario) return <Navigate to={destinoInterno ? rutaSolicitada : usuario.rutasPermitidas?.[0] || '/dashboard'} replace />
+  return <main className="inicio-sesion">
+    <section className="acceso-panel-marca" aria-labelledby="titulo-presentacion">
+      <Marca imagenSimbolo={anilloMarca} />
+      <div className="acceso-presentacion">
+        <p className="acceso-antetitulo">PSICOCAM - MONITOREO CLÍNICO</p>
+        <h2 id="titulo-presentacion">Supervisión<br />continua de los<br /><span>boxes clínicos</span></h2>
+        <p className="acceso-descripcion">Detección temprana de señales de riesgo suicida (RS) y<br className="acceso-salto-descripcion" /> vulneración de derechos (VD) para una respuesta clínica<br className="acceso-salto-descripcion" /> oportuna.</p>
+      </div>
+    </section>
+    <div className="acceso-area-formulario">
+      <div className="acceso-contenedor">
+        <FormularioInicioSesion alEnviar={alEnviar} />
+        <p className="acceso-pie">PsicoCam · Sistema de Monitoreo y Alerta Temprana</p>
+        {vistaPreviaDisponible && <details className="acceso-desarrollo">
+          <summary>Vista previa de desarrollo</summary>
+          <button className="button-secondary" onClick={iniciarVistaPrevia}>Abrir vista previa</button>
+        </details>}
+      </div>
+    </div>
+  </main>
+}
