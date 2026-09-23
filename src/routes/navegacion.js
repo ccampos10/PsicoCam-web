@@ -1,14 +1,15 @@
 import { LayoutDashboard, Bell, History, Settings, UserRound } from 'lucide-react'
+import { mapaRutas } from './mapaRutas'
 
 export const navegacion = [
-  { ruta: '/dashboard', titulo: 'Dashboard', icono: LayoutDashboard, grupo: 'principal' },
-  { ruta: '/alertas', titulo: 'Alertas', icono: Bell, grupo: 'principal' },
-  { ruta: '/historial', titulo: 'Historial', icono: History, grupo: 'principal' },
-  { ruta: '/configuracion', titulo: 'Configuración', icono: Settings, grupo: 'cuenta' },
-  { ruta: '/mi-cuenta', titulo: 'Mi cuenta', icono: UserRound, grupo: 'cuenta' },
+  { ...mapaRutas.dashboard, icono: LayoutDashboard, grupo: 'principal' },
+  { ...mapaRutas.alertas, icono: Bell, grupo: 'principal', incluirSubrutas: true },
+  { ...mapaRutas.historial, icono: History, grupo: 'principal' },
+  { ...mapaRutas.configuracion, icono: Settings, grupo: 'cuenta' },
+  { ...mapaRutas.cuenta, icono: UserRound, grupo: 'cuenta' },
 ]
 
-// Los permisos provienen de la sesión autenticada, no del nombre visible del rol.
+// Los permisos provienen de la sesión autenticada, no provienen del nombre visible del rol ojo.
 export function puedeAcceder(usuario, ruta) {
   return Boolean(usuario?.rutasPermitidas?.includes(ruta))
 }

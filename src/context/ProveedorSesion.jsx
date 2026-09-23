@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { ContextoSesion } from './ContextoSesion'
-import { navegacion } from '../routes/navegacion'
+import { rutasInternas } from '../routes/mapaRutas'
 
 // Perfil de prueba para la vista previa, TODAVIA NO HAY BD
 const usuarioVistaPrevia = {
   nombre: 'Usuario', rol: 'Profesional',
-  rutasPermitidas: navegacion.map(({ ruta }) => ruta),
+  rutasPermitidas: rutasInternas.map(({ ruta }) => ruta),
 }
 
 export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesion }) {

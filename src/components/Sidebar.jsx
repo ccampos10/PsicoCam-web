@@ -8,7 +8,7 @@ export default function Sidebar({ alNavegar, alSolicitarCierreSesion }) {
   const { usuario } = useSesion()
   function enlaces(grupo) {
     return navegacion.filter(opcion => opcion.grupo === grupo && puedeAcceder(usuario, opcion.ruta))
-      .map(({ ruta, titulo, icono: Icono }) => <NavLink key={ruta} to={ruta} end
+      .map(({ ruta, titulo, icono: Icono, incluirSubrutas }) => <NavLink key={ruta} to={ruta} end={!incluirSubrutas}
         className={({ isActive }) => `sidebar-link${isActive ? ' is-active' : ''}`}
         onClick={alNavegar}><Icono size={18} aria-hidden="true" /><span>{titulo}</span></NavLink>)
   }
