@@ -27,6 +27,8 @@
 .acceso-campo input { width: 100%; height: 46px; border: 1px solid var(--acceso-borde-campo); border-radius: 8px; background: var(--card); color: var(--text-primary); padding: 0 44px 0 40px; font-size: 13px; }
 .acceso-campo input::placeholder { color: var(--acceso-texto-ejemplo); opacity: 1; }
 .acceso-campo input:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
+.acceso-campo input[aria-invalid="true"] { border-color: var(--risk-high); }
+.acceso-campo input[aria-invalid="true"]:focus-visible { outline-color: var(--risk-high); }
 .acceso-icono-usuario, .acceso-icono-candado { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); pointer-events: none; color: var(--text-secondary); }
 .acceso-mostrar-contrasena { position: absolute; inset: 0 4px 0 auto; margin-block: auto; height: 36px; width: 32px; display: grid; place-items: center; border: 0; border-radius: 6px; background: transparent; }
 .acceso-mostrar-contrasena img { display: block; width: 22px; height: 22px; }

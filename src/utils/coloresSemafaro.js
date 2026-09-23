@@ -1,0 +1,1 @@
+export const colorNivel = { Bajo: '#44c58a', Medio: '#f2c94c', Alto: '#d9534f' }

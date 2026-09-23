@@ -29,7 +29,7 @@ export default function FormularioInicioSesion({ alEnviar }) {
       return
     }
     if (!alEnviar) {
-      establecerMensaje('El inicio de sesión no está funcional (FALTA CONECTAR EL BACKEND).')
+      establecerMensaje('El inicio de sesión no está disponible en este momento.')
       return
     }
     // La integración futura recibe los datos; este componente no autentica.
