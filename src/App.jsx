@@ -1,10 +1,6 @@
-function App() {
-  return (
-    <>
-      <h1>PsicoCam</h1>
-      <p>Sistema de Monitoreo y Alerta Temprana para Boxes Clínicos.</p>
-    </>
-  );
-}
+import { ProveedorSesion } from './context/ProveedorSesion'
+import RutasAplicacion from './routes/RutasAplicacion'
 
-export default App;
+export default function App() {
+  return <ProveedorSesion><RutasAplicacion /></ProveedorSesion>
+}

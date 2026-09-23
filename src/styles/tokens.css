@@ -1,0 +1,14 @@
+﻿:root {
+  --primary: #103b4d;
+  --secondary: #2e8c8a;
+  --canvas: #f5f8fb;
+  --card: #fff;
+  --text-primary: #173445;
+  --text-secondary: #6e8794;
+  --risk-low: #44c58a;
+  --risk-medium: #f2c94c;
+  --risk-high: #d9534f;
+  --border: #e4eaf1;
+  --sidebar-width: 176px;
+  --navbar-height: 56px;
+}
