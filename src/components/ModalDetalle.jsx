@@ -1,6 +1,13 @@
+import { useState, useEffect } from 'react';
 import styles from './ModalDetalle.module.css';
 
-const ModalDetalle = ({ alerta, onCerrar }) => {
+const ModalDetalle = ({ alerta, onCerrar, onGuardar }) => {
+  const [evaluacion, setEvaluacion] = useState('');
+
+  useEffect(() => {
+    if (alerta) setEvaluacion('');
+  }, [alerta]);
+
   if (!alerta) return null;
 
   const getEstilosRiesgo = (nivel) => {
@@ -10,6 +17,11 @@ const ModalDetalle = ({ alerta, onCerrar }) => {
   };
 
   const estilosRiesgo = getEstilosRiesgo(alerta.nivel);
+
+  const handleSubmit = () => {
+    if (!evaluacion) return;
+    onGuardar(alerta, evaluacion);
+  };
 
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true">
@@ -54,15 +66,33 @@ const ModalDetalle = ({ alerta, onCerrar }) => {
             <p className={styles.evalTitle}>Registrar evaluación clínica</p>
             <div className={styles.radioGroup}>
               <label className={styles.radioLabel}>
-                <input type="radio" name="evaluacion" value="Correcta" />
+                <input 
+                  type="radio" 
+                  name="evaluacion" 
+                  value="Correcta" 
+                  checked={evaluacion === 'Correcta'}
+                  onChange={(e) => setEvaluacion(e.target.value)}
+                />
                 <span>Alerta Correcta</span>
               </label>
               <label className={styles.radioLabel}>
-                <input type="radio" name="evaluacion" value="Falso Positivo" />
+                <input 
+                  type="radio" 
+                  name="evaluacion" 
+                  value="Falso Positivo" 
+                  checked={evaluacion === 'Falso Positivo'}
+                  onChange={(e) => setEvaluacion(e.target.value)}
+                />
                 <span>Falso Positivo</span>
               </label>
               <label className={styles.radioLabel}>
-                <input type="radio" name="evaluacion" value="Neutro" />
+                <input 
+                  type="radio" 
+                  name="evaluacion" 
+                  value="Neutro" 
+                  checked={evaluacion === 'Neutro'}
+                  onChange={(e) => setEvaluacion(e.target.value)}
+                />
                 <span>Neutro / No concluyente</span>
               </label>
             </div>
@@ -73,7 +103,13 @@ const ModalDetalle = ({ alerta, onCerrar }) => {
           <button onClick={onCerrar} type="button" className={styles.btnCancel}>
             Cancelar
           </button>
-          <button type="button" className={styles.btnSubmit}>
+          <button 
+            type="button" 
+            onClick={handleSubmit} 
+            disabled={!evaluacion}
+            className={styles.btnSubmit}
+            style={{ opacity: !evaluacion ? 0.5 : 1, cursor: !evaluacion ? 'not-allowed' : 'pointer' }}
+          >
             Guardar Evaluación
           </button>
         </footer>
