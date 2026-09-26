@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla';
 import { MockService } from '../services/MockService';
+import ModalDetalle from '../components/ModalDetalle';
+import styles from './HistorialAlertas.module.css';
 
 const HistorialAlertas = () => {
   const [alertas, setAlertas] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [alertaSeleccionada, setAlertaSeleccionada] = useState(null);
 
   const columnasAlertas = [
     { clave: 'fecha', encabezado: 'Fecha / Hora' },
@@ -14,10 +17,11 @@ const HistorialAlertas = () => {
     { 
       clave: 'acciones', 
       encabezado: '', 
-      renderizar: () => (
+      renderizar: (_, item) => (
         <button 
           type="button" 
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-brand-primary/25 bg-brand-primary/5 text-brand-primary text-[11px] font-semibold hover:bg-brand-primary/10 transition-all"
+          onClick={() => setAlertaSeleccionada(item)}
+          className={styles.btnAccion}
         >
           Ver detalle
         </button>
@@ -70,6 +74,11 @@ const HistorialAlertas = () => {
           />
         )}
       </section>
+
+      <ModalDetalle 
+        alerta={alertaSeleccionada} 
+        onCerrar={() => setAlertaSeleccionada(null)} 
+      />
     </div>
   );
 };
