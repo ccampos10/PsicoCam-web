@@ -1,0 +1,177 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.seccion {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.seccion h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.descripcion {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.selectoresHora {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.campo select,
+.campo input {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  background: #fff;
+}
+
+.opcional {
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.timeline {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--canvas);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.timelineFill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--secondary);
+  border-radius: 999px;
+}
+
+.resumen {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.duracion {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.inputValido {
+  border-color: var(--risk-low) !important;
+}
+
+.inputInvalido {
+  border-color: var(--risk-high) !important;
+}
+
+.mensajeValido {
+  color: var(--risk-low);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.mensajeInvalido {
+  color: var(--risk-high);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+}
+
+.chipPendiente {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--risk-medium);
+}
+
+.chipSinCambios {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.botones {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.botones button {
+  padding: 0.55rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text-secondary);
+}
+
+.botonPrimario {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.botones button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bannerExito {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ecfdf5;
+  border: 1px solid var(--risk-low);
+  color: #065f46;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.bannerExito button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: inherit;
+  cursor: pointer;
+}

@@ -8,6 +8,12 @@ function simularLatencia(valor) {
   });
 }
 
+let configuracionActual = {
+  horaInicio: "08:00",
+  horaTermino: "22:00",
+  correoCliente: "atencion.cliente@universidad.cl",
+};
+
 export const MockService = {
   /**
    * Devuelve la lista de alertas, opcionalmente filtrada.
@@ -50,5 +56,14 @@ export const MockService = {
       conteo[a.nivel] = (conteo[a.nivel] ?? 0) + 1;
     });
     return simularLatencia(conteo);
+  },
+
+  async obtenerConfiguracion() {
+    return simularLatencia({ ...configuracionActual });
+  },
+
+  async actualizarConfiguracion(nuevaConfiguracion) {
+    configuracionActual = { ...configuracionActual, ...nuevaConfiguracion };
+    return simularLatencia({ ...configuracionActual });
   },
 };

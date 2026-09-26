@@ -1,0 +1,25 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.encabezado h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.encabezado p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.cargando {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
