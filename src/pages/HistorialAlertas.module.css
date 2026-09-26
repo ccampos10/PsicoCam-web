@@ -16,3 +16,51 @@
 .btnAccion:hover {
   background-color: rgba(22, 56, 77, 0.1);
 }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pillAlto {
+  background-color: rgba(217, 83, 79, 0.10);
+  color: #B43A36;
+  border-color: rgba(217, 83, 79, 0.35);
+}
+.dotAlto { background-color: #D9534F; }
+
+.pillMedio {
+  background-color: rgba(242, 200, 76, 0.16);
+  color: #96790A;
+  border-color: rgba(242, 200, 76, 0.48);
+}
+.dotMedio { background-color: #F2C84C; }
+
+.pillBajo {
+  background-color: rgba(68, 197, 138, 0.12);
+  color: #1F8A5B;
+  border-color: rgba(68, 197, 138, 0.35);
+}
+.dotBajo { background-color: #44C58A; }
+
+.boxContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #172A45;
+}

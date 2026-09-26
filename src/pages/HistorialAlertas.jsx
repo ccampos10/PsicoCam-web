@@ -9,10 +9,40 @@ const HistorialAlertas = () => {
   const [cargando, setCargando] = useState(true);
   const [alertaSeleccionada, setAlertaSeleccionada] = useState(null);
 
+  const getEstilosSeveridad = (nivel) => {
+    if (nivel === 'Alto') return { pill: styles.pillAlto, dot: styles.dotAlto };
+    if (nivel === 'Medio') return { pill: styles.pillMedio, dot: styles.dotMedio };
+    return { pill: styles.pillBajo, dot: styles.dotBajo };
+  };
+
   const columnasAlertas = [
     { clave: 'fecha', encabezado: 'Fecha / Hora' },
-    { clave: 'box', encabezado: 'Box' },
-    { clave: 'nivel', encabezado: 'Nivel de Riesgo' },
+    { 
+      clave: 'box', 
+      encabezado: 'Box',
+      renderizar: (valor, item) => {
+        const estilos = getEstilosSeveridad(item.nivel);
+        return (
+          <div className={styles.boxContainer}>
+            <span className={`${styles.dot} ${estilos.dot}`}></span>
+            {valor}
+          </div>
+        );
+      }
+    },
+    { 
+      clave: 'nivel', 
+      encabezado: 'Nivel de Riesgo',
+      renderizar: (valor) => {
+        const estilos = getEstilosSeveridad(valor);
+        return (
+          <span className={`${styles.pill} ${estilos.pill}`}>
+            <span className={`${styles.dot} ${estilos.dot}`}></span>
+            {valor}
+          </span>
+        );
+      }
+    },
     { clave: 'estado', encabezado: 'Estado' },
     { 
       clave: 'acciones', 
