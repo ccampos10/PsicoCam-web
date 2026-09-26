@@ -8,6 +8,7 @@ const HistorialAlertas = () => {
   const [alertas, setAlertas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [alertaSeleccionada, setAlertaSeleccionada] = useState(null);
+  const [mostrarExito, setMostrarExito] = useState(false); // Estado para el toast
 
   const getEstilosSeveridad = (nivel) => {
     if (nivel === 'Alto') return { pill: styles.pillAlto, dot: styles.dotAlto };
@@ -80,6 +81,19 @@ const HistorialAlertas = () => {
     cargarDatos();
   }, []);
 
+  const handleGuardarEvaluacion = (alertaEditada, evaluacion) => {
+    setAlertaSeleccionada(null);
+
+    setAlertas(prevAlertas => 
+      prevAlertas.map(a => 
+        a.id === alertaEditada.id ? { ...a, estado: `Evaluada (${evaluacion})` } : a
+      )
+    );
+
+    setMostrarExito(true);
+    setTimeout(() => setMostrarExito(false), 4000);
+  };
+
   return (
     <div className="flex-1 p-8 space-y-6 max-w-7xl w-full mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -92,6 +106,25 @@ const HistorialAlertas = () => {
           </p>
         </div>
       </div>
+
+      {mostrarExito && (
+        <div className={styles.toastExito}>
+          <div className={styles.toastIconContainer}>
+            <svg className={styles.toastIcon} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <div className={styles.toastContent}>
+            <p className={styles.toastTitle}>Evaluación registrada correctamente</p>
+            <p className={styles.toastMessage}>La alerta ha sido clasificada y archivada en el historial.</p>
+          </div>
+          <button onClick={() => setMostrarExito(false)} className={styles.toastCloseBtn}>
+            <svg className={styles.toastIcon} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+      )}
 
       <section className="bg-surface-card rounded-xl border border-gray-200/90 shadow-xs overflow-hidden p-5">
         {cargando ? (
@@ -108,6 +141,7 @@ const HistorialAlertas = () => {
       <ModalDetalle 
         alerta={alertaSeleccionada} 
         onCerrar={() => setAlertaSeleccionada(null)} 
+        onGuardar={handleGuardarEvaluacion}
       />
     </div>
   );
