@@ -123,4 +123,4 @@ El hosting de producción debe devolver `index.html` para rutas de la SPA como `
 
 Para ver que el programa este corriendo de manera perfecta se creo un directorio dentro de src llamado tests, se encargan de revisar que el código este funcionando correctamente y ayudan a detectar si un cambio rompe algo en el código que antes funcionaba. 
 
-Para poder ejecutarlos en consola se usa 'npm test' ejecutara una serie de pruebas y nos mostrará si fueron superadas en su totalidad; si es que no es así; mostrará el error en consola
+Para poder ejecutarlos en consola se usa `npm test` ejecutara una serie de pruebas y nos mostrará si fueron superadas en su totalidad; si es que no es así; mostrará el error en consola
