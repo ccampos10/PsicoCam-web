@@ -1,0 +1,90 @@
+:root {
+  --info-bg: #dfe9f7;
+  --info-fg: #3e4e64;
+  --adver-bg: #f7efc5;
+  --adver-fg: #746523;
+  --grave-bg: #f8dddd;
+  --grave-fg: #742323;
+  --bajo-bg: #ceebde;
+  --bajo-fg: #26a16a;
+  --medio-bg: #f5ecd1;
+  --medio-fg: #b18c1e;
+  --alto-bg: #fcdedc;
+  --alto-fg: #d9534f;
+}
+
+.pilaContenedor {
+  display: flex;
+}
+
+.nivelInfo {
+  border: 1px solid var(--info-fg);
+  background-color: var(--info-bg);
+  color: var(--info-fg);
+
+  padding: 5px 10px;
+  border-radius: 20px;
+
+  width: 110px;
+  text-align: center;
+}
+
+.nivelAdver {
+  border: 1px solid var(--adver-fg);
+  background-color: var(--adver-bg);
+  color: var(--adver-fg);
+
+  padding: 5px 10px;
+  border-radius: 20px;
+
+  width: 110px;
+  text-align: center;
+}
+
+.nivelGrave {
+  border: 1px solid var(--grave-fg);
+  background-color: var(--grave-bg);
+  color: var(--grave-fg);
+
+  padding: 5px 10px;
+  border-radius: 20px;
+
+  width: 110px;
+  text-align: center;
+}
+
+.urgBajo {
+  border: 1px solid var(--bajo-fg);
+  background-color: var(--bajo-bg);
+  color: var(--bajo-fg);
+
+  padding: 2px 3px;
+  border-radius: 20px;
+
+  width: 75px;
+  text-align: center;
+}
+
+.urgMedio {
+  border: 1px solid var(--medio-fg);
+  background-color: var(--medio-bg);
+  color: var(--medio-fg);
+
+  padding: 2px 3px;
+  border-radius: 20px;
+
+  width: 75px;
+  text-align: center;
+}
+
+.urgAlto {
+  border: 1px solid var(--alto-fg);
+  background-color: var(--alto-bg);
+  color: var(--alto-fg);
+
+  padding: 2px 3px;
+  border-radius: 20px;
+
+  width: 75px;
+  text-align: center;
+}
