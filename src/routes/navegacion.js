@@ -1,10 +1,10 @@
-import { LayoutDashboard, Bell, History, Settings, UserRound } from 'lucide-react'
+import { LayoutDashboard, Bell, Settings, UserRound, ClipboardList } from 'lucide-react'
 import { mapaRutas } from './mapaRutas'
 
 export const navegacion = [
   { ...mapaRutas.dashboard, icono: LayoutDashboard, grupo: 'principal' },
   { ...mapaRutas.alertas, icono: Bell, grupo: 'principal', incluirSubrutas: true },
-  { ...mapaRutas.historial, icono: History, grupo: 'principal' },
+  { ...mapaRutas.bitacora, icono: ClipboardList, grupo: 'principal' },
   { ...mapaRutas.configuracion, icono: Settings, grupo: 'cuenta' },
   { ...mapaRutas.cuenta, icono: UserRound, grupo: 'cuenta' },
 ]

@@ -1,0 +1,84 @@
+h1, h2 {
+  color: var(--text-primary);
+}
+
+.titulo {
+  margin: 10px 0;
+}
+
+.subtitulo {
+  color: var(--text-secondary)
+}
+
+.header {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.masDetallesButton {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.masDetallesButton:hover {
+  transform: scale(1.5);
+}
+
+.modal {
+  border-radius: 10px;
+  min-width: 500px;
+  padding: 30px;
+}
+
+.modalDetalle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 10px 0;
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalDetalle .modalTitulo {
+  color: var(--text-secondary);
+}
+
+.modalButton {
+  width: 100%;
+  background-color: var(--card);
+  border: 2px solid var(--text-secondary);
+  color: var(--text-secondary);
+  font-weight: bold;
+  border-radius: 10px;
+
+  padding: 15px;
+  margin: 10px 0;
+
+  transition: all 0.2s ease;
+}
+
+.modalButton:hover {
+  color: var(--card);
+  background-color: var(--text-secondary);
+}
+
+.modalAlertaContenedor {
+  background-color: var(--canvas);
+  border: 2px solid var(--border);
+
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.modalAlertaDetalle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 3px 0px;
+}
+
+.modalAlertaDetalle .modalAlertaTitulo {
+  color: var(--text-secondary);
+}
