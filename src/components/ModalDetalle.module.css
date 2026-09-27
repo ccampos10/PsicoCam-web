@@ -1,0 +1,73 @@
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.modal {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid #f1f5f9;
+}
+
+.header {
+  padding: 1.5rem 1.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.title { font-size: 1rem; font-weight: 700; color: #172A45; margin: 0; }
+.subtitle { font-size: 0.6875rem; color: #6E7D91; margin-top: 4px; }
+.closeBtn { background: none; border: none; cursor: pointer; color: #8B9BB0; }
+
+.body { padding: 0.5rem 1.75rem; }
+
+.row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9;
+  font-size: 0.75rem;
+}
+
+.label { color: #6E7D91; font-weight: 500; }
+.value { color: #172A45; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+
+.dotAlto { width: 6px; height: 6px; border-radius: 50%; background-color: #D9534F; }
+.textAlto { color: #D9534F; }
+.dotMedio { width: 6px; height: 6px; border-radius: 50%; background-color: #F2C84C; }
+.textMedio { color: #B47A00; }
+.dotBajo { width: 6px; height: 6px; border-radius: 50%; background-color: #44C58A; }
+.textBajo { color: #1F8A5B; }
+
+.evalForm {
+  margin-top: 1.5rem; padding: 1rem; background-color: #f8fafc;
+  border: 1px solid #f1f5f9; border-radius: 12px;
+}
+.evalTitle { font-size: 0.75rem; font-weight: 600; color: #172A45; margin: 0 0 12px 0; }
+.radioGroup { display: flex; flex-direction: column; gap: 12px; }
+.radioLabel {
+  display: flex; align-items: center; gap: 8px; font-size: 0.75rem;
+  font-weight: 500; color: #172A45; cursor: pointer;
+}
+
+.footer {
+  padding: 1rem 1.75rem 1.5rem; display: flex; justify-content: flex-end; gap: 12px;
+}
+
+.btnCancel {
+  padding: 8px 16px; border-radius: 8px; border: 1px solid #cbd5e1;
+  background: white; color: #6E7D91; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+}
+.btnSubmit {
+  padding: 8px 20px; border-radius: 8px; border: none;
+  background-color: #16384D; color: white; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+}
