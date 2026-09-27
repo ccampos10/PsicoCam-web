@@ -104,6 +104,7 @@ El hosting de producción debe devolver `index.html` para rutas de la SPA como `
 | react-dom | 19.3.0 | Existente |
 | react-router-dom | 7.18.4 | Nueva: enrutamiento |
 | lucide-react | 1.47.0 | Nueva: iconos |
+| recharts | 3.10.1 | Nueva: gráficos de barras del dashboard |
 | @fontsource/inter | 5.3.0 | Nueva: Inter local |
 | vite | 8.3.0 | Existente |
 | @vitejs/plugin-react | 6.1.1 | Existente |
