@@ -3,6 +3,7 @@ import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla';
 import { MockService } from '../services/MockService';
 import ModalDetalle from '../components/ModalDetalle';
 import styles from './HistorialAlertas.module.css';
+import { ColorUrgencia } from '../components/Pilas';
 
 const HistorialAlertas = () => {
   const [alertas, setAlertas] = useState([]);
@@ -32,17 +33,9 @@ const HistorialAlertas = () => {
       }
     },
     { 
-      clave: 'nivel', 
+      clave: 'nivel',
       encabezado: 'Nivel de Riesgo',
-      renderizar: (valor) => {
-        const estilos = getEstilosSeveridad(valor);
-        return (
-          <span className={`${styles.pill} ${estilos.pill}`}>
-            <span className={`${styles.dot} ${estilos.dot}`}></span>
-            {valor}
-          </span>
-        );
-      }
+      renderizar: (valor) => <ColorUrgencia valor={valor}/>
     },
     { clave: 'estado', encabezado: 'Estado' },
     { 
@@ -94,14 +87,23 @@ const HistorialAlertas = () => {
     setTimeout(() => setMostrarExito(false), 4000);
   };
 
+  const headerFiltros = <div className={styles.titulo}>
+    <h2>Filtros</h2>
+    <p className={styles.subtitulo}>Consulta eventos por fecha, categoría o nivel del evento.</p>
+  </div>
+  const headerTabla = <div className={styles.titulo}>
+    <h2>Registro de alertas</h2>
+    <p className={styles.subtitulo}>Cada registro identifica cuándo ocurrió la alerta, nuemro de box y el nivel de riesgo.</p>
+  </div>
+
   return (
     <div className="flex-1 p-8 space-y-6 max-w-7xl w-full mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
+        <div className={styles.header}>
           <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-content-primary">
             Historial de Alertas
           </h1>
-          <p className="text-sm text-content-secondary mt-1">
+          <p className={`${styles.subtitulo} text-sm text-content-secondary mt-1`}>
             Visualiza el registro histórico de todas las alertas generadas por los boxes.
           </p>
         </div>
@@ -134,6 +136,8 @@ const HistorialAlertas = () => {
             columnas={columnasAlertas} 
             datos={alertas} 
             filtros={filtrosAlertas}
+            headerFiltros={headerFiltros}
+            headerTabla={headerTabla}
           />
         )}
       </section>

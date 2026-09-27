@@ -2,20 +2,25 @@ import "../styles/pilas.css"
 
 export const ColorUrgencia = ({valor}) => {
   let clase = "urgBajo"
+  let claseDot = "dotBajo"
 
   if (valor === "Bajo") {
     clase = "urgBajo"
+    claseDot = "dotBajo"
   }
   else if (valor === "Medio") {
     clase = "urgMedio"
+    claseDot = "dotMedio"
   }
   else if (valor === "Alto") {
     clase = "urgAlto"
+    claseDot = "dotAlto"
   }
 
-  return <div className="pilaContenedor">
-    <p className={clase}>{valor}</p>
-  </div>
+  return <span className={`pill ${clase}`}>
+    <span className={`dot ${claseDot}`}></span>
+    {valor}
+  </span>
 }
 
 export const ColorNivel = ({valor}) => {
@@ -31,7 +36,7 @@ export const ColorNivel = ({valor}) => {
     clase = "nivelGrave"
   }
 
-  return <div className="pilaContenedor">
+  return <div className="pill">
     <p className={clase}>{valor}</p>
   </div>
 }
