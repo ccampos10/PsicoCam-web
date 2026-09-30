@@ -29,6 +29,10 @@
   color: var(--text-primary);
 }
 
+.desplazamientoTabla {
+  overflow-x: auto;
+}
+
 .tabla {
   width: 100%;
   border-collapse: collapse;

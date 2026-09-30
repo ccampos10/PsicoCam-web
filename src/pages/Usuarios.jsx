@@ -1,0 +1,104 @@
+import { useEffect, useState } from 'react'
+import { Plus, Search, Trash2 } from 'lucide-react'
+import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
+import { MockService } from '../services/MockService'
+import estilos from './Usuarios.module.css'
+
+const formatoFecha = new Intl.DateTimeFormat('es-CL', {
+  day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Santiago',
+})
+
+// Permite buscar sin distinguir mayúsculas ni tildes.
+function normalizarTexto(texto) {
+  return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+}
+
+// Presenta los usuarios y deja las acciones disponibles mediante funciones externas.
+export default function Usuarios({ servicio = MockService, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
+  const [usuarios, establecerUsuarios] = useState([])
+  const [busqueda, establecerBusqueda] = useState('')
+  const [rol, establecerRol] = useState('')
+  const [estado, establecerEstado] = useState('')
+  const [cargando, establecerCargando] = useState(true)
+  const [error, establecerError] = useState('')
+  const [intento, establecerIntento] = useState(0)
+
+  useEffect(() => {
+    let vigente = true
+    // Carga los perfiles desde el servicio y evita actualizar una vista desmontada.
+    async function cargarUsuarios() {
+      establecerCargando(true)
+      establecerError('')
+      try {
+        const datos = await servicio.listarUsuarios()
+        if (vigente) establecerUsuarios(datos)
+      } catch {
+        if (vigente) establecerError('No se pudieron cargar los usuarios. Inténtalo nuevamente.')
+      } finally {
+        if (vigente) establecerCargando(false)
+      }
+    }
+    cargarUsuarios()
+    return () => { vigente = false }
+  }, [servicio, intento])
+
+  const textoBuscado = normalizarTexto(busqueda)
+  const usuariosEncontrados = usuarios.filter(usuario =>
+    (!rol || usuario.rol === rol) && (!estado || usuario.estado === estado) &&
+    (normalizarTexto(usuario.nombre).includes(textoBuscado) || normalizarTexto(usuario.correo).includes(textoBuscado)))
+  const roles = [...new Set(usuarios.map(usuario => usuario.rol))].sort()
+  const estados = [...new Set(usuarios.map(usuario => usuario.estado))].sort()
+  const columnas = [
+    { clave: 'nombre', encabezado: 'Nombre' },
+    { clave: 'correo', encabezado: 'Correo electrónico' },
+    { clave: 'rol', encabezado: 'Rol de acceso', renderizar: rol => <span className={rol === 'Administrador' ? estilos.administrador : estilos.profesional}>{rol}</span> },
+    { clave: 'estado', encabezado: 'Estado', renderizar: estado =>
+      <span className={estado === 'Activo' ? estilos.activo : estilos.inactivo}>{estado}</span> },
+    { clave: 'ultimoAcceso', encabezado: 'Último acceso', renderizar: fecha =>
+      fecha ? formatoFecha.format(new Date(fecha)).replaceAll('-', '/') : 'Sin accesos' },
+    { clave: 'acciones', encabezado: 'Acciones', renderizar: (_, usuario) =>
+      <div className={estilos.acciones}>
+        <button type="button" disabled={!alEditar} onClick={() => alEditar?.(usuario)} aria-label={`Editar a ${usuario.nombre}`}>Editar</button>
+        <button type="button" className={usuario.estado === 'Activo' ? estilos.bloquear : estilos.habilitar} disabled={!alCambiarEstado} onClick={() => alCambiarEstado?.(usuario)}
+          aria-label={`${usuario.estado === 'Activo' ? 'Bloquear' : 'Habilitar'} a ${usuario.nombre}`}>
+          {usuario.estado === 'Activo' ? 'Bloquear' : 'Habilitar'}
+        </button>
+        <button type="button" className={estilos.eliminar} disabled={!alEliminar} onClick={() => alEliminar?.(usuario)} aria-label={`Eliminar a ${usuario.nombre}`}><Trash2 size={16} aria-hidden="true" /></button>
+      </div> },
+  ]
+
+  return <section className={estilos.pagina} aria-labelledby="titulo-usuarios">
+    <header className={estilos.encabezado}>
+      <div><h1 id="titulo-usuarios">Gestión de usuarios</h1><p>Administra las cuentas del personal clínico y administrativo con acceso a PsicoCam.</p></div>
+      <span className={estilos.contador}>{usuarios.length} usuarios</span>
+    </header>
+    {cargando ? <p role="status">Cargando usuarios…</p> : error ? <div role="alert">
+      <p>{error}</p><button type="button" onClick={() => establecerIntento(valor => valor + 1)}>Reintentar</button>
+    </div> : <>
+      <section className={estilos.herramientas} aria-labelledby="titulo-plataforma">
+        <h2 id="titulo-plataforma">Usuarios de la plataforma</h2>
+        <p>Consulta, filtra y administra las cuentas registradas.</p>
+        <div className={estilos.controles}>
+          <label className={estilos.busqueda} htmlFor="buscar-usuarios">Buscar usuario
+            <span><Search size={14} aria-hidden="true" /><input id="buscar-usuarios" type="search"
+              placeholder="Buscar por nombre o correo electrónico..." value={busqueda}
+              onChange={evento => establecerBusqueda(evento.target.value)} /></span>
+          </label>
+          <label>Rol<select value={rol} onChange={evento => establecerRol(evento.target.value)}>
+            <option value="">Todos</option>{roles.map(opcion => <option key={opcion}>{opcion}</option>)}
+          </select></label>
+          <label>Estado<select value={estado} onChange={evento => establecerEstado(evento.target.value)}>
+            <option value="">Todos</option>{estados.map(opcion => <option key={opcion}>{opcion}</option>)}
+          </select></label>
+          <button type="button" className={estilos.agregar} disabled={!alAgregar} onClick={() => alAgregar?.()}>
+            <Plus size={16} aria-hidden="true" /> Agregar Usuario
+          </button>
+        </div>
+        <p className={estilos.resultados} role="status">Mostrando {usuariosEncontrados.length} de {usuarios.length} usuarios</p>
+      </section>
+      <PaginaTabla datos={usuariosEncontrados} columnas={columnas} className={estilos.listado} resumenPaginacion
+        mensajeVacio={usuarios.length ? 'No hay usuarios que coincidan con la búsqueda y los filtros.' : 'No hay usuarios registrados.'}
+        headerTabla={<div className={estilos.tituloTabla}><h2>Listado de usuarios</h2><p>Personal autorizado y estado de acceso a la plataforma.</p></div>} />
+    </>}
+  </section>
+}

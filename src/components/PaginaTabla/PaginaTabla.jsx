@@ -10,7 +10,7 @@ import styles from "./PaginaTabla.module.css";
  * @param {React.ReactNode} [headerTabla]
  * @param {number} [itemsPorPagina]
  */
-export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, headerTabla, itemsPorPagina = 10 }) {
+export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, headerTabla, itemsPorPagina = 10, mensajeVacio = 'No hay registros para mostrar.', className = '', resumenPaginacion = false }) {
   const [valoresFiltro, setValoresFiltro] = useState({});
   const [paginaActual, setPaginaActual] = useState(1);
 
@@ -23,7 +23,8 @@ export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, head
   }, [datos, valoresFiltro]);
 
   const totalPaginas = Math.max(1, Math.ceil(datosFiltrados.length / itemsPorPagina));
-  const inicio = (paginaActual - 1) * itemsPorPagina;
+  const paginaVisible = Math.min(paginaActual, totalPaginas);
+  const inicio = (paginaVisible - 1) * itemsPorPagina;
   const datosPagina = datosFiltrados.slice(inicio, inicio + itemsPorPagina);
 
   function handleFiltroChange(campo, valor) {
@@ -32,7 +33,7 @@ export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, head
   }
 
   return (
-    <div>
+    <div className={className}>
       {filtros.length > 0 && (
         <div className={styles.contenedor}>
           {headerFiltros}
@@ -57,6 +58,7 @@ export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, head
 
       <div className={styles.contenedor}>
         {headerTabla}
+        <div className={styles.desplazamientoTabla}>
         <table className={styles.tabla}>
           <thead>
             <tr>
@@ -66,6 +68,7 @@ export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, head
             </tr>
           </thead>
           <tbody>
+            {datosPagina.length === 0 && <tr><td colSpan={columnas.length}>{mensajeVacio}</td></tr>}
             {datosPagina.map((item, i) => (
               <Fila
                 key={item.id ?? i}
@@ -76,15 +79,16 @@ export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, head
             ))}
           </tbody>
         </table>
+        </div>
 
         <div className={styles.paginacion}>
-          <button disabled={paginaActual === 1} onClick={() => setPaginaActual((p) => p - 1)}>
+          {(!resumenPaginacion || totalPaginas > 1) && <button disabled={paginaVisible === 1} onClick={() => setPaginaActual(paginaVisible - 1)}>
             Anterior
-          </button>
-          <span>Página {paginaActual} de {totalPaginas}</span>
-          <button disabled={paginaActual === totalPaginas} onClick={() => setPaginaActual((p) => p + 1)}>
+          </button>}
+          <span>Página {paginaVisible} de {totalPaginas}{resumenPaginacion && `  -  ${datosFiltrados.length} registros`}</span>
+          {(!resumenPaginacion || totalPaginas > 1) && <button disabled={paginaVisible === totalPaginas} onClick={() => setPaginaActual(paginaVisible + 1)}>
             Siguiente
-          </button>
+          </button>}
         </div>
       </div>
     </div>

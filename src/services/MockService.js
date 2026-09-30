@@ -1,4 +1,6 @@
 import mockData from "./mockData.json";
+import usuariosMock from "./usuariosMock.json";
+import { Usuario } from "../models/Usuario";
 
 const LATENCIA_MS = 400;
 
@@ -15,6 +17,10 @@ let configuracionActual = {
 };
 
 export const MockService = {
+  // Carga perfiles ficticios para la tabla de usuarios.
+  async listarUsuarios() {
+    return simularLatencia(usuariosMock.map((usuario) => new Usuario(usuario)));
+  },
   /**
    * Devuelve la lista de alertas, opcionalmente filtrada.
    * @param {{ box?: string, categoria?: string, nivel?: string, fecha?: string }} filtros

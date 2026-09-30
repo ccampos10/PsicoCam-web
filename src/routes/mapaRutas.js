@@ -5,10 +5,12 @@ import HistorialAlertas from '../pages/HistorialAlertas'
 import DetalleAlerta from '../pages/DetalleAlerta'
 import ModuloPendiente from '../pages/ModuloPendiente'
 import PaginaConfiguracion from '../pages/PaginaConfiguracion'
+import Usuarios from '../pages/Usuarios'
 
 export const mapaRutas = {
   acceso: { ruta: '/login', componente: InicioSesion },
   dashboard: { ruta: '/dashboard', titulo: 'Dashboard', componente: Dashboard },
+  usuarios: { ruta: '/usuarios', titulo: 'Gestión de usuarios', componente: Usuarios },
   alertas: { ruta: '/alertas', titulo: 'Alertas', componente: HistorialAlertas },
   bitacora: { ruta: "/bitacora", titulo: "Bitacora", componente: Bitacora},
   detalleAlerta: { ruta: '/alertas/:idAlerta', titulo: 'Detalle de alerta', componente: DetalleAlerta },
