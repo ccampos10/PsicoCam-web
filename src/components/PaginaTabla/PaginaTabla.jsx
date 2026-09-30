@@ -10,7 +10,7 @@ import styles from "./PaginaTabla.module.css";
  * @param {React.ReactNode} [headerTabla]
  * @param {number} [itemsPorPagina]
  */
-export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, headerTabla, itemsPorPagina = 10, mensajeVacio = 'No hay registros para mostrar.', className = '', resumenPaginacion = false }) {
+export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, headerTabla, itemsPorPagina = 10, mensajeVacio = 'No hay registros para mostrar.', className = '', resumenPaginacion = false, alSeleccionarFila }) {
   const [valoresFiltro, setValoresFiltro] = useState({});
   const [paginaActual, setPaginaActual] = useState(1);
 
@@ -72,6 +72,7 @@ export function PaginaTabla({ datos, columnas, filtros = [], headerFiltros, head
             {datosPagina.map((item, i) => (
               <Fila
                 key={item.id ?? i}
+                alSeleccionar={alSeleccionarFila ? () => alSeleccionarFila(item) : undefined}
                 celdas={columnas.map((col) =>
                   col.renderizar ? col.renderizar(item[col.clave], item) : item[col.clave]
                 )}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Plus, Search, Trash2 } from 'lucide-react'
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
 import { MockService } from '../services/MockService'
+import ModalDetalleUsuario from '../components/ModalDetalleUsuario'
 import estilos from './Usuarios.module.css'
 
 const formatoFecha = new Intl.DateTimeFormat('es-CL', {
@@ -16,6 +17,7 @@ function normalizarTexto(texto) {
 // Presenta los usuarios y deja las acciones disponibles mediante funciones externas.
 export default function Usuarios({ servicio = MockService, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
   const [usuarios, establecerUsuarios] = useState([])
+  const [usuarioSeleccionado, establecerUsuarioSeleccionado] = useState(null)
   const [busqueda, establecerBusqueda] = useState('')
   const [rol, establecerRol] = useState('')
   const [estado, establecerEstado] = useState('')
@@ -49,7 +51,9 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
   const roles = [...new Set(usuarios.map(usuario => usuario.rol))].sort()
   const estados = [...new Set(usuarios.map(usuario => usuario.estado))].sort()
   const columnas = [
-    { clave: 'nombre', encabezado: 'Nombre' },
+    { clave: 'nombre', encabezado: 'Nombre', renderizar: (nombre, usuario) =>
+      <button type="button" className={estilos.nombreUsuario} aria-label={`Ver detalle de ${nombre}`}
+        onClick={() => establecerUsuarioSeleccionado(usuario)}>{nombre}</button> },
     { clave: 'correo', encabezado: 'Correo electrónico' },
     { clave: 'rol', encabezado: 'Rol de acceso', renderizar: rol => <span className={rol === 'Administrador' ? estilos.administrador : estilos.profesional}>{rol}</span> },
     { clave: 'estado', encabezado: 'Estado', renderizar: estado =>
@@ -97,8 +101,10 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
         <p className={estilos.resultados} role="status">Mostrando {usuariosEncontrados.length} de {usuarios.length} usuarios</p>
       </section>
       <PaginaTabla datos={usuariosEncontrados} columnas={columnas} className={estilos.listado} resumenPaginacion
+        alSeleccionarFila={establecerUsuarioSeleccionado}
         mensajeVacio={usuarios.length ? 'No hay usuarios que coincidan con la búsqueda y los filtros.' : 'No hay usuarios registrados.'}
         headerTabla={<div className={estilos.tituloTabla}><h2>Listado de usuarios</h2><p>Personal autorizado y estado de acceso a la plataforma.</p></div>} />
     </>}
+    {usuarioSeleccionado && <ModalDetalleUsuario usuario={usuarioSeleccionado} alCerrar={() => establecerUsuarioSeleccionado(null)} />}
   </section>
 }

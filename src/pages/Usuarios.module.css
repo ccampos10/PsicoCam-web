@@ -1,4 +1,8 @@
 .pagina { min-width: 0; padding: 14px 16px; color: #193849; }
+.listado tbody tr[tabindex] { cursor: pointer; }
+.listado tbody tr[tabindex]:hover { background: #eef6fa; }
+.listado tbody tr[tabindex]:focus-visible { outline: 2px solid var(--secondary); outline-offset: -2px; }
+.nombreUsuario { border: 0; padding: 2px 0; background: transparent; color: inherit; font: inherit; text-align: inherit; text-decoration: none; }
 .encabezado { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 28px; }
 .encabezado h1 { margin: 0 0 3px; font-size: 30px; font-weight: 600; letter-spacing: -.5px; }
 .encabezado p { font-size: 14px; color: #718ea0; }
