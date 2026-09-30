@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Plus, Search, Trash2 } from 'lucide-react'
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
 import { MockService } from '../services/MockService'
+import FormularioUsuario from '../components/FormularioUsuario'
+import Modal from '../components/Modal'
 import ModalDetalleUsuario from '../components/ModalDetalleUsuario'
 import estilos from './Usuarios.module.css'
 
@@ -16,6 +18,11 @@ function normalizarTexto(texto) {
 
 // Presenta los usuarios y deja las acciones disponibles mediante funciones externas.
 export default function Usuarios({ servicio = MockService, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
+  const [formulario, establecerFormulario] = useState(null)
+  const [eliminando, establecerEliminando] = useState(null)
+  const [procesando, establecerProcesando] = useState(false)
+  const [errorAccion, establecerErrorAccion] = useState('')
+  const [mensaje, establecerMensaje] = useState('')
   const [usuarios, establecerUsuarios] = useState([])
   const [usuarioSeleccionado, establecerUsuarioSeleccionado] = useState(null)
   const [busqueda, establecerBusqueda] = useState('')
@@ -44,6 +51,46 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
     return () => { vigente = false }
   }, [servicio, intento])
 
+  // Guarda el perfil y actualiza la tabla sin perder la búsqueda.
+  async function guardarUsuario(datos) {
+    const perfil = formulario.usuario
+      ? await servicio.actualizarUsuario(formulario.usuario.id, datos)
+      : await servicio.crearUsuario(datos)
+    establecerUsuarios(actuales => formulario.usuario
+      ? actuales.map(usuario => usuario.id === perfil.id ? perfil : usuario)
+      : [...actuales, perfil])
+    establecerFormulario(null)
+    establecerMensaje('Usuario guardado correctamente.')
+  }
+
+  // Alterna el estado simulado de acceso de la cuenta.
+  async function cambiarEstado(usuario) {
+    if (procesando) return
+    establecerProcesando(true)
+    establecerErrorAccion('')
+    establecerMensaje('')
+    try {
+      const perfil = await servicio.cambiarEstadoUsuario(usuario.id, usuario.estado === 'Activo' ? 'Inactivo' : 'Activo')
+      establecerUsuarios(actuales => actuales.map(actual => actual.id === perfil.id ? perfil : actual))
+      establecerMensaje(perfil.estado === 'Activo' ? 'Usuario habilitado.' : 'Usuario bloqueado.')
+    } catch (fallo) { establecerErrorAccion(fallo.message || 'No se pudo cambiar el estado.') }
+    finally { establecerProcesando(false) }
+  }
+
+  // Elimina la cuenta después de la confirmación del administrador.
+  async function confirmarEliminacion() {
+    if (procesando) return
+    establecerProcesando(true)
+    establecerErrorAccion('')
+    establecerMensaje('')
+    try {
+      await servicio.eliminarUsuario(eliminando.id)
+      establecerUsuarios(actuales => actuales.filter(usuario => usuario.id !== eliminando.id))
+      establecerEliminando(null)
+      establecerMensaje('Usuario eliminado correctamente.')
+    } catch (fallo) { establecerErrorAccion(fallo.message || 'No se pudo eliminar el usuario.') }
+    finally { establecerProcesando(false) }
+  }
   const textoBuscado = normalizarTexto(busqueda)
   const usuariosEncontrados = usuarios.filter(usuario =>
     (!rol || usuario.rol === rol) && (!estado || usuario.estado === estado) &&
@@ -62,12 +109,12 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
       fecha ? formatoFecha.format(new Date(fecha)).replaceAll('-', '/') : 'Sin accesos' },
     { clave: 'acciones', encabezado: 'Acciones', renderizar: (_, usuario) =>
       <div className={estilos.acciones}>
-        <button type="button" disabled={!alEditar} onClick={() => alEditar?.(usuario)} aria-label={`Editar a ${usuario.nombre}`}>Editar</button>
-        <button type="button" className={usuario.estado === 'Activo' ? estilos.bloquear : estilos.habilitar} disabled={!alCambiarEstado} onClick={() => alCambiarEstado?.(usuario)}
+        <button type="button" disabled={procesando} onClick={() => { establecerErrorAccion(''); establecerMensaje(''); if (alEditar) alEditar(usuario); else establecerFormulario({ usuario }) }} aria-label={`Editar a ${usuario.nombre}`}>Editar</button>
+        <button type="button" className={usuario.estado === 'Activo' ? estilos.bloquear : estilos.habilitar} disabled={procesando} onClick={() => alCambiarEstado ? alCambiarEstado(usuario) : cambiarEstado(usuario)}
           aria-label={`${usuario.estado === 'Activo' ? 'Bloquear' : 'Habilitar'} a ${usuario.nombre}`}>
           {usuario.estado === 'Activo' ? 'Bloquear' : 'Habilitar'}
         </button>
-        <button type="button" className={estilos.eliminar} disabled={!alEliminar} onClick={() => alEliminar?.(usuario)} aria-label={`Eliminar a ${usuario.nombre}`}><Trash2 size={16} aria-hidden="true" /></button>
+        <button type="button" className={estilos.eliminar} disabled={procesando} onClick={() => { establecerErrorAccion(''); establecerMensaje(''); if (alEliminar) alEliminar(usuario); else establecerEliminando(usuario) }} aria-label={`Eliminar a ${usuario.nombre}`}><Trash2 size={16} aria-hidden="true" /></button>
       </div> },
   ]
 
@@ -76,6 +123,8 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
       <div><h1 id="titulo-usuarios">Gestión de usuarios</h1><p>Administra las cuentas del personal clínico y administrativo con acceso a PsicoCam.</p></div>
       <span className={estilos.contador}>{usuarios.length} usuarios</span>
     </header>
+    {mensaje && <p role="status">{mensaje}</p>}
+    {errorAccion && !eliminando && <p role="alert">{errorAccion}</p>}
     {cargando ? <p role="status">Cargando usuarios…</p> : error ? <div role="alert">
       <p>{error}</p><button type="button" onClick={() => establecerIntento(valor => valor + 1)}>Reintentar</button>
     </div> : <>
@@ -94,7 +143,7 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
           <label>Estado<select value={estado} onChange={evento => establecerEstado(evento.target.value)}>
             <option value="">Todos</option>{estados.map(opcion => <option key={opcion}>{opcion}</option>)}
           </select></label>
-          <button type="button" className={estilos.agregar} disabled={!alAgregar} onClick={() => alAgregar?.()}>
+          <button type="button" className={estilos.agregar} disabled={procesando} onClick={() => { establecerErrorAccion(''); establecerMensaje(''); if (alAgregar) alAgregar(); else establecerFormulario({ usuario: null }) }}>
             <Plus size={16} aria-hidden="true" /> Agregar Usuario
           </button>
         </div>
@@ -105,6 +154,16 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
         mensajeVacio={usuarios.length ? 'No hay usuarios que coincidan con la búsqueda y los filtros.' : 'No hay usuarios registrados.'}
         headerTabla={<div className={estilos.tituloTabla}><h2>Listado de usuarios</h2><p>Personal autorizado y estado de acceso a la plataforma.</p></div>} />
     </>}
+    {formulario && <FormularioUsuario usuario={formulario.usuario} usuarios={usuarios} alGuardar={guardarUsuario} alCerrar={() => establecerFormulario(null)} />}
+    {eliminando && <Modal className="logout-dialog" idTitulo="titulo-eliminar-usuario" alCerrar={() => { if (!procesando) establecerEliminando(null) }}>
+      <h2 id="titulo-eliminar-usuario">Eliminar usuario</h2>
+      <p>¿Deseas eliminar a {eliminando.nombre}? Esta cuenta se retirará de la lista de usuarios.</p>
+      {errorAccion && <p role="alert">{errorAccion}</p>}
+      <div className="dialog-actions">
+        <button type="button" className="button-secondary" disabled={procesando} onClick={() => establecerEliminando(null)}>Cancelar</button>
+        <button type="button" className="button-primary" disabled={procesando} onClick={confirmarEliminacion}>{procesando ? 'Eliminando…' : 'Eliminar usuario'}</button>
+      </div>
+    </Modal>}
     {usuarioSeleccionado && <ModalDetalleUsuario usuario={usuarioSeleccionado} alCerrar={() => establecerUsuarioSeleccionado(null)} />}
   </section>
 }
