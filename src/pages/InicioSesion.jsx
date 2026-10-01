@@ -23,7 +23,6 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
     <div className="acceso-area-formulario">
       <div className="acceso-contenedor">
         <FormularioInicioSesion alEnviar={alEnviar} />
-        <p className="acceso-pie">PsicoCam · Sistema de Monitoreo y Alerta Temprana</p>
         {vistaPreviaDisponible && <details className="acceso-desarrollo">
           <summary>Vista previa de desarrollo</summary>
           <button className="button-secondary" onClick={iniciarVistaPrevia}>Abrir vista previa</button>
