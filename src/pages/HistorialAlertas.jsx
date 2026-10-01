@@ -9,7 +9,7 @@ const HistorialAlertas = () => {
   const [alertas, setAlertas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [alertaSeleccionada, setAlertaSeleccionada] = useState(null);
-  const [mostrarExito, setMostrarExito] = useState(false); // Estado para el toast
+  const [mostrarExito, setMostrarExito] = useState(false);
 
   const getEstilosSeveridad = (nivel) => {
     if (nivel === 'Alto') return { pill: styles.pillAlto, dot: styles.dotAlto };
@@ -19,8 +19,8 @@ const HistorialAlertas = () => {
 
   const columnasAlertas = [
     { clave: 'fecha', encabezado: 'Fecha / Hora' },
-    { 
-      clave: 'box', 
+    {
+      clave: 'box',
       encabezado: 'Box',
       renderizar: (valor, item) => {
         const estilos = getEstilosSeveridad(item.nivel);
@@ -30,32 +30,32 @@ const HistorialAlertas = () => {
             {valor}
           </div>
         );
-      }
+      },
     },
-    { 
+    {
       clave: 'nivel',
       encabezado: 'Nivel de Riesgo',
-      renderizar: (valor) => <ColorUrgencia valor={valor}/>
+      renderizar: (valor) => <ColorUrgencia valor={valor} />,
     },
-    { clave: 'estado', encabezado: 'Estado' },
-    { 
-      clave: 'acciones', 
-      encabezado: '', 
+    { clave: 'estado_evaluacion', encabezado: 'Estado' },
+    {
+      clave: 'acciones',
+      encabezado: '',
       renderizar: (_, item) => (
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={() => setAlertaSeleccionada(item)}
           className={styles.btnAccion}
         >
           Ver detalle
         </button>
-      ) 
-    }
+      ),
+    },
   ];
 
   const filtrosAlertas = [
     { clave: 'categoria', etiqueta: 'Categoría', opciones: ['RS', 'VD'] },
-    { clave: 'nivel', etiqueta: 'Nivel', opciones: ['Alto', 'Medio', 'Bajo'] }
+    { clave: 'nivel', etiqueta: 'Nivel', opciones: ['Alto', 'Medio', 'Bajo'] },
   ];
 
   useEffect(() => {
@@ -77,9 +77,9 @@ const HistorialAlertas = () => {
   const handleGuardarEvaluacion = (alertaEditada, evaluacion) => {
     setAlertaSeleccionada(null);
 
-    setAlertas(prevAlertas => 
-      prevAlertas.map(a => 
-        a.id === alertaEditada.id ? { ...a, estado: `Evaluada (${evaluacion})` } : a
+    setAlertas((prevAlertas) =>
+      prevAlertas.map((a) =>
+        a.id === alertaEditada.id ? { ...a, estado_evaluacion: evaluacion } : a
       )
     );
 
@@ -87,64 +87,70 @@ const HistorialAlertas = () => {
     setTimeout(() => setMostrarExito(false), 4000);
   };
 
-  const headerFiltros = <div className={styles.titulo}>
-    <h2>Filtros</h2>
-    <p className={styles.subtitulo}>Consulta eventos por fecha, categoría o nivel del evento.</p>
-  </div>
-  const headerTabla = <div className={styles.titulo}>
-    <h2>Registro de alertas</h2>
-    <p className={styles.subtitulo}>Cada registro identifica cuándo ocurrió la alerta, nuemro de box y el nivel de riesgo.</p>
-  </div>
-
   return (
-    <div className="flex-1 p-8 space-y-6 max-w-7xl w-full mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className={styles.header}>
-          <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-content-primary">
-            Historial de Alertas
-          </h1>
-          <p className={`${styles.subtitulo} text-sm text-content-secondary mt-1`}>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div>
+          <h1 className={styles.title}>Historial de Alertas</h1>
+          <p className={styles.subtitle}>
             Visualiza el registro histórico de todas las alertas generadas por los boxes.
           </p>
         </div>
-      </div>
+      </header>
 
       {mostrarExito && (
         <div className={styles.toastExito}>
           <div className={styles.toastIconContainer}>
-            <svg className={styles.toastIcon} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <svg
+              className={styles.toastIcon}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
           <div className={styles.toastContent}>
             <p className={styles.toastTitle}>Evaluación registrada correctamente</p>
-            <p className={styles.toastMessage}>La alerta ha sido clasificada y archivada en el historial.</p>
+            <p className={styles.toastMessage}>
+              La alerta ha sido clasificada y archivada en el historial.
+            </p>
           </div>
-          <button onClick={() => setMostrarExito(false)} className={styles.toastCloseBtn}>
-            <svg className={styles.toastIcon} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <button
+            type="button"
+            onClick={() => setMostrarExito(false)}
+            className={styles.toastCloseBtn}
+          >
+            <svg
+              className={styles.toastIcon}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+            >
               <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18"></path>
             </svg>
           </button>
         </div>
       )}
 
-      <section className="bg-surface-card rounded-xl border border-gray-200/90 shadow-xs overflow-hidden p-5">
+      <section className={styles.cardSection}>
         {cargando ? (
-          <p className="text-sm text-content-secondary text-center py-10">Cargando alertas...</p>
+          <p className={styles.loadingText}>Cargando alertas...</p>
         ) : (
-          <PaginaTabla 
-            columnas={columnasAlertas} 
-            datos={alertas} 
+          <PaginaTabla
+            columnas={columnasAlertas}
+            datos={alertas}
             filtros={filtrosAlertas}
-            headerFiltros={headerFiltros}
-            headerTabla={headerTabla}
           />
         )}
       </section>
 
-      <ModalDetalle 
-        alerta={alertaSeleccionada} 
-        onCerrar={() => setAlertaSeleccionada(null)} 
+      <ModalDetalle
+        key={alertaSeleccionada?.id || 'modal-cerrado'}
+        alerta={alertaSeleccionada}
+        onCerrar={() => setAlertaSeleccionada(null)}
         onGuardar={handleGuardarEvaluacion}
       />
     </div>

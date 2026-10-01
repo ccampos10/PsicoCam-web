@@ -1,14 +1,45 @@
-.titulo {
-  margin: 10px 0;
-}
-
-.subtitulo {
-  color: var(--text-secondary)
+.container {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .header {
-  margin-top: 20px;
-  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #172A45;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #5A6A85;
+  margin: 4px 0 0 0;
+}
+
+.cardSection {
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.loadingText {
+  font-size: 14px;
+  color: #5A6A85;
+  text-align: center;
+  padding: 40px 0;
+  margin: 0;
 }
 
 .btnAccion {
@@ -54,22 +85,32 @@
   color: #B43A36;
   border-color: rgba(217, 83, 79, 0.35);
 }
-.dotAlto { background-color: #D9534F; }
+
+.dotAlto {
+  background-color: #D9534F;
+}
 
 .pillMedio {
   background-color: rgba(242, 200, 76, 0.16);
   color: #96790A;
   border-color: rgba(242, 200, 76, 0.48);
 }
-.dotMedio { background-color: #F2C84C; }
+
+.dotMedio {
+  background-color: #F2C84C;
+}
 
 .pillBajo {
   background-color: rgba(68, 197, 138, 0.12);
   color: #1F8A5B;
   border-color: rgba(68, 197, 138, 0.35);
 }
-.dotBajo { background-color: #44C58A; }
 
+.dotBajo {
+  background-color: #44C58A;
+}
+
+/* Contenedor para la celda del Box */
 .boxContainer {
   display: flex;
   align-items: center;
@@ -92,7 +133,6 @@
   background-color: #ecfdf5;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   max-width: 400px;
-  
   animation: toastFadeInOut 4s ease-in-out forwards;
 }
 

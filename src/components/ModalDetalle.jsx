@@ -1,12 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './ModalDetalle.module.css';
 
 const ModalDetalle = ({ alerta, onCerrar, onGuardar }) => {
   const [evaluacion, setEvaluacion] = useState('');
-
-  useEffect(() => {
-    if (alerta) setEvaluacion('');
-  }, [alerta]);
 
   if (!alerta) return null;
 
@@ -19,21 +15,29 @@ const ModalDetalle = ({ alerta, onCerrar, onGuardar }) => {
   const estilosRiesgo = getEstilosRiesgo(alerta.nivel);
 
   const handleSubmit = () => {
-    if (!evaluacion) return;
-    onGuardar(alerta, evaluacion);
+    if (evaluacion) {
+      onGuardar(alerta, evaluacion);
+      setEvaluacion('');
+    }
   };
 
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true">
       <div className={styles.modal}>
-        
         <header className={styles.header}>
           <div>
             <h2 className={styles.title}>Detalle de alerta</h2>
             <p className={styles.subtitle}>Información asociada al evento detectado</p>
           </div>
           <button onClick={onCerrar} aria-label="Cerrar" className={styles.closeBtn}>
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
@@ -54,11 +58,13 @@ const ModalDetalle = ({ alerta, onCerrar, onGuardar }) => {
             </div>
             <div className={styles.row}>
               <span className={styles.label}>Hora</span>
-              <span className={styles.value} style={{ fontFamily: 'monospace' }}>{alerta.fecha || 'No registrada'}</span>
+              <span className={styles.value} style={{ fontFamily: 'monospace' }}>
+                {alerta.fecha || 'No registrada'}
+              </span>
             </div>
             <div className={styles.row}>
               <span className={styles.label}>Estado actual</span>
-              <span className={styles.value}>{alerta.estado}</span>
+              <span className={styles.value}>{alerta.estado_evaluacion}</span>
             </div>
           </div>
 
@@ -66,31 +72,31 @@ const ModalDetalle = ({ alerta, onCerrar, onGuardar }) => {
             <p className={styles.evalTitle}>Registrar evaluación clínica</p>
             <div className={styles.radioGroup}>
               <label className={styles.radioLabel}>
-                <input 
-                  type="radio" 
-                  name="evaluacion" 
-                  value="Correcta" 
-                  checked={evaluacion === 'Correcta'}
+                <input
+                  type="radio"
+                  name="evaluacion"
+                  value="correcta"
+                  checked={evaluacion === 'correcta'}
                   onChange={(e) => setEvaluacion(e.target.value)}
                 />
                 <span>Alerta Correcta</span>
               </label>
               <label className={styles.radioLabel}>
-                <input 
-                  type="radio" 
-                  name="evaluacion" 
-                  value="Falso Positivo" 
-                  checked={evaluacion === 'Falso Positivo'}
+                <input
+                  type="radio"
+                  name="evaluacion"
+                  value="falso positivo"
+                  checked={evaluacion === 'falso positivo'}
                   onChange={(e) => setEvaluacion(e.target.value)}
                 />
                 <span>Falso Positivo</span>
               </label>
               <label className={styles.radioLabel}>
-                <input 
-                  type="radio" 
-                  name="evaluacion" 
-                  value="Neutro" 
-                  checked={evaluacion === 'Neutro'}
+                <input
+                  type="radio"
+                  name="evaluacion"
+                  value="neutro"
+                  checked={evaluacion === 'neutro'}
                   onChange={(e) => setEvaluacion(e.target.value)}
                 />
                 <span>Neutro / No concluyente</span>
@@ -103,17 +109,19 @@ const ModalDetalle = ({ alerta, onCerrar, onGuardar }) => {
           <button onClick={onCerrar} type="button" className={styles.btnCancel}>
             Cancelar
           </button>
-          <button 
-            type="button" 
-            onClick={handleSubmit} 
+          <button
+            type="button"
+            onClick={handleSubmit}
             disabled={!evaluacion}
             className={styles.btnSubmit}
-            style={{ opacity: !evaluacion ? 0.5 : 1, cursor: !evaluacion ? 'not-allowed' : 'pointer' }}
+            style={{
+              opacity: !evaluacion ? 0.5 : 1,
+              cursor: !evaluacion ? 'not-allowed' : 'pointer',
+            }}
           >
             Guardar Evaluación
           </button>
         </footer>
-
       </div>
     </div>
   );
