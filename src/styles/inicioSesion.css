@@ -5,18 +5,14 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   min-height: 100dvh;
 }
-.acceso-panel-marca { background: var(--primary); color: var(--card); position: relative; min-width: 0; padding: 58px 52px; display: flex; flex-direction: column; }
-.acceso-panel-marca .brand { padding: 0; gap: 11px; }
-.acceso-panel-marca .brand-mark { width: 42px; height: 42px; border-radius: 50%; }
-.acceso-panel-marca .brand p { font-size: 20px; line-height: 24px; }
-.acceso-panel-marca .brand > div > span { font-size: 13px; }
-.acceso-panel-marca .brand-mark img { display: block; width: 14px; height: 14px; }
-.acceso-presentacion { margin-block: auto; padding-top: 42px; padding-bottom: 16px; }
+.acceso-panel-marca { background: var(--primary); color: var(--card); position: relative; min-width: 0; padding: 108px 52px 64px; display: flex; flex-direction: column; }
+.acceso-logo-ua { display: block; width: 141px; height: 197px; margin-left: 4px; object-fit: contain; flex-shrink: 0; }
+.acceso-presentacion { margin-top: 29px; }
 .acceso-antetitulo { color: #72c5c4; font-size: 12px; font-weight: 600; margin-bottom: 20px; }
-.acceso-presentacion h2 { font-size: 45px; font-weight: 700; line-height: 1.2; letter-spacing: -0.6px; }
+.acceso-presentacion h2 { color: #fff; font-size: 46px; font-weight: 700; line-height: 1.14; letter-spacing: -0.6px; }
 .acceso-presentacion h2 span { color: #64bdba; }
 .acceso-descripcion { color: #d2dfe7; font-size: 16px; line-height: 28px; margin-top: 28px; }
-.acceso-area-formulario { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 64px 32px; background: var(--canvas); }
+.acceso-area-formulario { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 96px 32px 64px; background: var(--canvas); }
 .acceso-contenedor { width: 440px; max-width: 100%; position: relative; }
 .acceso-tarjeta { padding: 29px 32px 28px; border-radius: 16px; background: var(--card); }
 .acceso-tarjeta h1 { font-size: 24px; font-weight: 600; line-height: 32px; }
@@ -57,7 +53,8 @@
 @media (max-width: 767px) {
   .inicio-sesion { grid-template-columns: minmax(0, 1fr); }
   .acceso-panel-marca { padding: 28px 24px; }
-  .acceso-presentacion { margin: 0; padding-top: 32px; padding-bottom: 0; }
+  .acceso-logo-ua { width: 100px; height: 140px; margin-left: 0; }
+  .acceso-presentacion { margin-top: 24px; }
   .acceso-presentacion h2 { font-size: 32px; }
   .acceso-antetitulo { margin-bottom: 14px; }
   .acceso-descripcion { margin-top: 20px; font-size: 14px; line-height: 24px; }
