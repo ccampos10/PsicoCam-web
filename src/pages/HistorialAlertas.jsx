@@ -87,16 +87,32 @@ const HistorialAlertas = () => {
     setTimeout(() => setMostrarExito(false), 4000);
   };
 
+  const headerFiltros = (
+    <div className={styles.titulo}>
+      <h2>Filtros</h2>
+      <p className={styles.subtitulo}>
+        Consulta eventos por fecha, categoría o nivel del evento.
+      </p>
+    </div>
+  );
+
+  const headerTabla = (
+    <div className={styles.titulo}>
+      <h2>Registro de alertas</h2>
+      <p className={styles.subtitulo}>
+        Cada registro identifica cuándo ocurrió la alerta, número de box y el nivel de riesgo.
+      </p>
+    </div>
+  );
+
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Historial de Alertas</h1>
-          <p className={styles.subtitle}>
-            Visualiza el registro histórico de todas las alertas generadas por los boxes.
-          </p>
-        </div>
-      </header>
+    <div>
+      <div className={styles.header}>
+        <h1>Historial de Alertas</h1>
+        <p className={styles.subtitulo}>
+          Visualiza el registro histórico de todas las alertas generadas por los boxes.
+        </p>
+      </div>
 
       {mostrarExito && (
         <div className={styles.toastExito}>
@@ -135,17 +151,17 @@ const HistorialAlertas = () => {
         </div>
       )}
 
-      <section className={styles.cardSection}>
-        {cargando ? (
-          <p className={styles.loadingText}>Cargando alertas...</p>
-        ) : (
-          <PaginaTabla
-            columnas={columnasAlertas}
-            datos={alertas}
-            filtros={filtrosAlertas}
-          />
-        )}
-      </section>
+      {cargando ? (
+        <p className={styles.loadingText}>Cargando alertas...</p>
+      ) : (
+        <PaginaTabla
+          columnas={columnasAlertas}
+          datos={alertas}
+          filtros={filtrosAlertas}
+          headerFiltros={headerFiltros}
+          headerTabla={headerTabla}
+        />
+      )}
 
       <ModalDetalle
         key={alertaSeleccionada?.id || 'modal-cerrado'}
