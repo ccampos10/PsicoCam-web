@@ -2,6 +2,8 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // La compilación carga sus recursos desde el prefijo publicado por Express.
+  base: command === 'build' ? '/resources/' : '/',
   plugins: [react()],
-})
+}))
