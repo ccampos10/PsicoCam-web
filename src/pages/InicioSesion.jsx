@@ -1,8 +1,7 @@
 import { matchPath, Navigate, useLocation } from 'react-router-dom'
 import { useSesion } from '../hooks/useSesion'
-import Marca from '../components/Marca'
 import FormularioInicioSesion from '../components/FormularioInicioSesion'
-import anilloMarca from '../assets/acceso/anillo-marca.svg'
+import logoUa from '../assets/ua-logo.png'
 import '../styles/inicioSesion.css'
 
 export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
@@ -14,7 +13,7 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
   if (usuario) return <Navigate to={destinoInterno ? rutaSolicitada : usuario.rutasPermitidas?.[0] || '/dashboard'} replace />
   return <main className="inicio-sesion">
     <section className="acceso-panel-marca" aria-labelledby="titulo-presentacion">
-      <Marca imagenSimbolo={anilloMarca} />
+      <img className="acceso-logo-ua" src={logoUa} alt="Universidad Autónoma" width="141" height="197" />
       <div className="acceso-presentacion">
         <p className="acceso-antetitulo">PSICOCAM - MONITOREO CLÍNICO</p>
         <h2 id="titulo-presentacion">Supervisión<br />continua de los<br /><span>boxes clínicos</span></h2>
@@ -24,7 +23,6 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
     <div className="acceso-area-formulario">
       <div className="acceso-contenedor">
         <FormularioInicioSesion alEnviar={alEnviar} />
-        <p className="acceso-pie">PsicoCam · Sistema de Monitoreo y Alerta Temprana</p>
         {vistaPreviaDisponible && <details className="acceso-desarrollo">
           <summary>Vista previa de desarrollo</summary>
           <button className="button-secondary" onClick={iniciarVistaPrevia}>Abrir vista previa</button>

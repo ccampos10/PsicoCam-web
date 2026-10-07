@@ -21,7 +21,7 @@ export default function Navbar({ alAbrirMenu, alSolicitarCierreSesion, menuAbier
     </div>
     <div className="navbar-actions">
       <PanelDesplegable id="notifications" etiqueta="Notificaciones" abierto={abierto === 'notificaciones'} alCerrar={cerrar}
-        alAlternar={() => alternar('notificaciones')} className="notifications" activador={<Bell size={20} aria-hidden="true" />}>
+        alAlternar={() => alternar('notificaciones')} className="notifications" activador={<Bell size={26} strokeWidth={1.8} aria-hidden="true" />}>
         <h2 className="popover-title">Notificaciones</h2>
         <p className="notification-empty">Las notificaciones estarán disponibles al conectar el servicio de alertas.</p>
         {puedeAcceder(usuario, '/alertas') && <Link className="popover-link" to="/alertas" onClick={cerrar}>Ver alertas</Link>}
