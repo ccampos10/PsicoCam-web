@@ -3,7 +3,7 @@
   padding: 20px 0;
 }
 
-/* Encabezado */
+
 .encabezado {
   display: flex;
   justify-content: space-between;
@@ -45,7 +45,7 @@
   border-radius: 50%;
 }
 
-/* Panel Filtrar alertas */
+
 .panelFiltros {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -103,7 +103,7 @@
   color: #94a3b8;
 }
 
-/* Resultados y leyenda */
+
 .pieFiltros {
   display: flex;
   justify-content: space-between;
@@ -145,7 +145,7 @@
   background: #d9534f;
 }
 
-/* Mensaje de clasificación */
+
 .exito {
   display: flex;
   justify-content: space-between;
@@ -166,7 +166,7 @@
   cursor: pointer;
 }
 
-/* Diseño adaptable */
+
 @media (max-width: 768px) {
   .encabezado {
     flex-direction: column;
@@ -184,7 +184,7 @@
 }
 
 
-/* Panel de filtros compacto, similar a Historial */
+
 .panelFiltros {
   padding: 16px 14px;
   border-radius: 6px;
@@ -196,7 +196,7 @@
   font-weight: 600;
 }
 
-/* Campos agrupados hacia la izquierda */
+
 .camposFiltros {
   display: flex;
   align-items: flex-end;
@@ -213,12 +213,12 @@
   min-width: 0;
 }
 
-/* Buscador un poco más ancho */
+
 .campo:first-child {
   width: 260px;
 }
 
-/* Selectores compactos */
+
 .campo:nth-child(2),
 .campo:nth-child(3) {
   width: 130px;
@@ -237,7 +237,7 @@
   border-radius: 5px;
 }
 
-/* Pie del panel */
+
 .pieFiltros {
   margin-top: 12px;
   padding-top: 8px;

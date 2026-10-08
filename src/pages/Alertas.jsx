@@ -18,7 +18,7 @@ export default function Alertas() {
   const [alertaSeleccionada, setAlertaSeleccionada] = useState(null);
   const [mensajeExito, setMensajeExito] = useState('');
 
-  // Obtener alertas desde MockService
+  
   useEffect(() => {
     async function cargarAlertas() {
       try {
@@ -37,12 +37,12 @@ export default function Alertas() {
     cargarAlertas();
   }, []);
 
-  // Mostrar únicamente alertas sin clasificar
+  
   const alertasPendientes = alertas.filter(
     (alerta) => alerta.estado_evaluacion === null
   );
 
-  // Aplicar filtros de búsqueda, categoría y nivel
+  
   const alertasFiltradas = alertasPendientes.filter((alerta) => {
     const texto = busqueda.toLowerCase().trim();
 
@@ -59,7 +59,7 @@ export default function Alertas() {
     return coincideBusqueda && coincideCategoria && coincideNivel;
   });
 
-  // Columnas de la tabla
+  
   const columnas = [
     {
       clave: 'box',
@@ -88,7 +88,7 @@ export default function Alertas() {
     },
   ];
 
-  // Clasificar una alerta desde ModalDetalle
+  
   function guardarEvaluacion(alerta, evaluacion) {
     setAlertas((anteriores) =>
       anteriores.map((item) =>
