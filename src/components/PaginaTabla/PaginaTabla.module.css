@@ -21,13 +21,33 @@
   color: var(--text-secondary);
 }
 
-.filtro select {
+
+.filtro select,
+.filtro input {
   padding: 0.4rem 0.6rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--canvas);
   color: var(--text-primary);
+  font: inherit;
+  min-height: 34px;
+  box-sizing: border-box;
 }
+
+.filtro input[type="text"] {
+  min-width: 190px;
+}
+
+.filtro input[type="date"] {
+  min-width: 155px;
+}
+
+.filtro select:focus-visible,
+.filtro input:focus-visible {
+  outline: 2px solid var(--text-secondary);
+  outline-offset: 2px;
+}
+
 
 .desplazamientoTabla {
   overflow-x: auto;

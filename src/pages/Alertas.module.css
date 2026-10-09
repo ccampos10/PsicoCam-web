@@ -3,6 +3,7 @@
   padding: 20px 0;
 }
 
+/* ENCABEZADO */
 
 .encabezado {
   display: flex;
@@ -45,6 +46,7 @@
   border-radius: 50%;
 }
 
+/* PANEL DE FILTROS */
 
 .panelFiltros {
   background: #ffffff;
@@ -63,8 +65,9 @@
 
 .camposFiltros {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
+  align-items: end;
 }
 
 .campo {
@@ -103,6 +106,101 @@
   color: #94a3b8;
 }
 
+/* FILTRO DE FECHA */
+
+.contenedorFecha {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.contenedorFecha:focus-within {
+  border-color: #16384d;
+}
+
+.campo .contenedorFecha .entradaFecha {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0 12px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+.campo .contenedorFecha .entradaFecha:focus {
+  border: none;
+}
+
+/* Calendario nativo: solo muestra el icono */
+
+.campo .contenedorFecha .selectorCalendario {
+  display: block;
+  flex: 0 0 42px;
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+  height: 100%;
+  margin: 0;
+  padding: 0 8px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #16384d;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.campo .contenedorFecha .selectorCalendario:focus {
+  border: none;
+}
+
+.contenedorFecha .selectorCalendario::-webkit-datetime-edit {
+  display: none;
+}
+
+.contenedorFecha .selectorCalendario::-webkit-calendar-picker-indicator {
+  display: block;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Botón para limpiar fecha */
+
+.limpiarFecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.limpiarFecha:hover {
+  color: #16384d;
+}
+
+/* RESULTADOS Y LEYENDA */
 
 .pieFiltros {
   display: flex;
@@ -145,6 +243,7 @@
   background: #d9534f;
 }
 
+/* MENSAJE DE ÉXITO */
 
 .exito {
   display: flex;
@@ -166,8 +265,15 @@
   cursor: pointer;
 }
 
+/* DISEÑO RESPONSIVE */
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
+  .camposFiltros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
   .encabezado {
     flex-direction: column;
     align-items: flex-start;
@@ -181,78 +287,8 @@
     flex-direction: column;
     align-items: flex-start;
   }
-}
 
-
-
-.panelFiltros {
-  padding: 16px 14px;
-  border-radius: 6px;
-}
-
-.panelFiltros h2 {
-  margin: 0 0 12px;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-
-.camposFiltros {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 0 1 auto;
-  min-width: 0;
-}
-
-
-.campo:first-child {
-  width: 260px;
-}
-
-
-.campo:nth-child(2),
-.campo:nth-child(3) {
-  width: 130px;
-}
-
-.campo label {
-  font-size: 12px;
-}
-
-.campo input,
-.campo select {
-  width: 100%;
-  height: 32px;
-  padding: 5px 10px;
-  font-size: 12px;
-  border-radius: 5px;
-}
-
-
-.pieFiltros {
-  margin-top: 12px;
-  padding-top: 8px;
-  font-size: 12px;
-}
-
-@media (max-width: 700px) {
-  .camposFiltros {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .campo:first-child,
-  .campo:nth-child(2),
-  .campo:nth-child(3) {
-    width: 100%;
+  .leyenda {
+    flex-wrap: wrap;
   }
 }
