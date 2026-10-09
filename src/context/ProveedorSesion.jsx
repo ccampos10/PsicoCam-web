@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ContextoSesion } from './ContextoSesion'
 import { rutasInternas } from '../routes/mapaRutas'
+import { api } from '../services/api'
 
 // Perfil de prueba para la vista previa, TODAVIA NO HAY BD
 const usuarioVistaPrevia = {
@@ -12,10 +13,12 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
   const [usuario, establecerUsuario] = useState(usuarioInicial)
   const [errorCierreSesion, establecerErrorCierreSesion] = useState('')
   const [cerrandoSesion, establecerCerrandoSesion] = useState(false)
+  async function iniciarSesion(credenciales) { const perfil = await api.iniciarSesion(credenciales); establecerUsuario(perfil); return perfil }
   async function cerrarSesion() {
     establecerCerrandoSesion(true)
     establecerErrorCierreSesion('')
     try {
+      await api.cerrarSesion()
       await alCerrarSesion?.()
       establecerUsuario(null)
       return true
@@ -25,7 +28,7 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
     } finally { establecerCerrandoSesion(false) }
   }
   const valor = {
-    usuario, cerrarSesion, cerrandoSesion, errorCierreSesion,
+    usuario, iniciarSesion, cerrarSesion, cerrandoSesion, errorCierreSesion,
     vistaPreviaDisponible: import.meta.env.DEV,
     iniciarVistaPrevia: () => { if (import.meta.env.DEV) establecerUsuario(usuarioVistaPrevia) },
   }

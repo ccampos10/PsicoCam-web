@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla';
-import { MockService } from '../services/MockService';
+import { api } from '../services/api'
 import ModalDetalle from '../components/ModalDetalle';
 import styles from './HistorialAlertas.module.css';
 import { ColorUrgencia } from '../components/Pilas';
@@ -62,7 +62,7 @@ const HistorialAlertas = () => {
     const cargarDatos = async () => {
       try {
         setCargando(true);
-        const datosMock = await MockService.listarAlertas();
+        const datosMock = await api.listarAlertas();
         setAlertas(datosMock);
       } catch (error) {
         console.error('Error al obtener el historial de alertas:', error);
@@ -77,11 +77,7 @@ const HistorialAlertas = () => {
   const handleGuardarEvaluacion = (alertaEditada, evaluacion) => {
     setAlertaSeleccionada(null);
 
-    setAlertas(prevAlertas => 
-      prevAlertas.map(a => 
-        a.id === alertaEditada.id ? { ...a, estado: `Evaluada (${evaluacion})` } : a
-      )
-    );
+    api.actualizarEvaluacion(alertaEditada.id, evaluacion).then(actualizada => setAlertas(prev => prev.map(a => a.id === actualizada.id ? actualizada : a)))
 
     setMostrarExito(true);
     setTimeout(() => setMostrarExito(false), 4000);

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react"
 
 import { PaginaTabla } from "../components/PaginaTabla/PaginaTabla"
 import { ColorUrgencia, ColorNivel } from "../components/Pilas";
 import Modal from "../components/Modal"
-import BitacoraRepository from "../services/BitacoraRepository";
+import { api } from '../services/api'
 
 import styles from "./Bitacora.module.css";
 
@@ -97,8 +97,8 @@ const Registro = ({valor, item}) => {
 }
 
 export default function Bitacora({ rutasDisponibles = [], alEnviar }) {
-  const rep = new BitacoraRepository();
-  const datos = rep.ObtenerRegistros()
+  const [datos, establecerDatos] = useState([])
+  useEffect(() => { api.listarBitacora().then(establecerDatos).catch(() => establecerDatos([])) }, [])
   const columnas = [
     {
       clave: "fechaHora",

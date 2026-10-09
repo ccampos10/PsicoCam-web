@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ConfiguracionForm } from "../components/ConfiguracionForm/ConfiguracionForm";
-import { MockService } from "../services/MockService";
+import { api } from '../services/api'
 import styles from "./PaginaConfiguracion.module.css";
 
 export default function PaginaConfiguracion({ titulo }) {
@@ -9,7 +9,7 @@ export default function PaginaConfiguracion({ titulo }) {
 
   useEffect(() => {
     let activo = true;
-    MockService.obtenerConfiguracion().then((datos) => {
+    api.obtenerConfiguracion().then((datos) => {
       if (activo) {
         setConfiguracion(datos);
         setCargando(false);
@@ -19,7 +19,7 @@ export default function PaginaConfiguracion({ titulo }) {
   }, []);
 
   async function handleGuardar(nuevaConfiguracion) {
-    const actualizada = await MockService.actualizarConfiguracion(nuevaConfiguracion);
+    const actualizada = await api.actualizarConfiguracion(nuevaConfiguracion);
     setConfiguracion(actualizada);
   }
 

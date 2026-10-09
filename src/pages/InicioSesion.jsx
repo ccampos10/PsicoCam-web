@@ -5,7 +5,7 @@ import logoUa from '../assets/ua-logo.png'
 import '../styles/inicioSesion.css'
 
 export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
-  const { usuario, vistaPreviaDisponible, iniciarVistaPrevia } = useSesion()
+  const { usuario, iniciarSesion, vistaPreviaDisponible, iniciarVistaPrevia } = useSesion()
   const { state } = useLocation()
   const rutaSolicitada = state?.rutaSolicitada
   const destinoInterno = typeof rutaSolicitada === 'string' && rutasDisponibles.some(opcion =>
@@ -22,7 +22,7 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
     </section>
     <div className="acceso-area-formulario">
       <div className="acceso-contenedor">
-        <FormularioInicioSesion alEnviar={alEnviar} />
+        <FormularioInicioSesion alEnviar={alEnviar || iniciarSesion} />
         {vistaPreviaDisponible && <details className="acceso-desarrollo">
           <summary>Vista previa de desarrollo</summary>
           <button className="button-secondary" onClick={iniciarVistaPrevia}>Abrir vista previa</button>
