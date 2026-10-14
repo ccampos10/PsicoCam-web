@@ -1,14 +1,183 @@
+
+h1, h2 {
+  color: var(--text-primary);
+}
+
 .titulo {
   margin: 10px 0;
 }
 
 .subtitulo {
-  color: var(--text-secondary)
+  color: var(--text-secondary);
 }
 
 .header {
   margin-top: 20px;
   margin-bottom: 40px;
+}
+
+.loadingText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 40px 0;
+  margin: 0;
+}
+
+
+.panelFiltros {
+  background: #ffffff;
+  border: 1px solid #d5e0f0;
+  border-radius: 12px;
+  padding: 22px 23px 18px;
+  margin-bottom: 20px;
+}
+
+.panelFiltros h2 {
+  margin: 0 0 18px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #16384d;
+}
+
+.camposFiltros {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.4fr;
+  gap: 14px 12px;
+  align-items: end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.campo label {
+  color: #6e7d91;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #d5e0f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #172a45;
+  font-size: 13px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #7196c4;
+}
+
+.campo input::placeholder {
+  color: #94a3b8;
+}
+
+
+.contenedorFecha {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  border: 1px solid #d5e0f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.contenedorFecha:focus-within {
+  border-color: #7196c4;
+}
+
+.campo .contenedorFecha .entradaFecha {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0 12px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+.campo .contenedorFecha .entradaFecha:focus {
+  border: none;
+}
+
+.campo .contenedorFecha .selectorCalendario {
+  display: block;
+  flex: 0 0 42px;
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+  height: 100%;
+  margin: 0;
+  padding: 0 8px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #16384d;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.campo .contenedorFecha .selectorCalendario:focus {
+  border: none;
+}
+
+.contenedorFecha .selectorCalendario::-webkit-datetime-edit {
+  display: none;
+}
+
+.contenedorFecha .selectorCalendario::-webkit-calendar-picker-indicator {
+  display: block;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.limpiarFecha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.limpiarFecha:hover {
+  color: #16384d;
+}
+
+/* CONTADOR DE RESULTADOS */
+
+.pieFiltros {
+  margin-top: 26px;
+  font-size: 12px;
+  color: #6e7d91;
 }
 
 .btnAccion {
@@ -54,21 +223,30 @@
   color: #B43A36;
   border-color: rgba(217, 83, 79, 0.35);
 }
-.dotAlto { background-color: #D9534F; }
+
+.dotAlto {
+  background-color: #D9534F;
+}
 
 .pillMedio {
   background-color: rgba(242, 200, 76, 0.16);
   color: #96790A;
   border-color: rgba(242, 200, 76, 0.48);
 }
-.dotMedio { background-color: #F2C84C; }
+
+.dotMedio {
+  background-color: #F2C84C;
+}
 
 .pillBajo {
   background-color: rgba(68, 197, 138, 0.12);
   color: #1F8A5B;
   border-color: rgba(68, 197, 138, 0.35);
 }
-.dotBajo { background-color: #44C58A; }
+
+.dotBajo {
+  background-color: #44C58A;
+}
 
 .boxContainer {
   display: flex;
@@ -92,7 +270,6 @@
   background-color: #ecfdf5;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   max-width: 400px;
-  
   animation: toastFadeInOut 4s ease-in-out forwards;
 }
 
@@ -149,4 +326,31 @@
 
 .toastCloseBtn:hover {
   color: #047857;
+}
+
+
+@media (max-width: 1000px) {
+  .camposFiltros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .camposFiltros {
+    grid-template-columns: 1fr;
+  }
+
+  .panelFiltros {
+    padding: 16px;
+  }
+
+  .header {
+    margin-bottom: 24px;
+  }
+
+  .toastExito {
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
 }
