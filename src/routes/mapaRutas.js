@@ -13,7 +13,7 @@ export const mapaRutas = {
   dashboard: { ruta: '/dashboard', titulo: 'Dashboard', componente: Dashboard },
   usuarios: { ruta: '/usuarios', titulo: 'Gestión de usuarios', componente: Usuarios },
   alertas: {ruta: '/alertas',titulo: 'Alertas',componente: Alertas},
-  historial: { ruta: '/historial', titulo: 'Historial de alertas', componente: HistorialAlertas },
+  historial: { ruta: '/historial', titulo: 'Historial', componente: HistorialAlertas },
   bitacora: { ruta: "/bitacora", titulo: "Bitacora", componente: Bitacora},
   detalleAlerta: { ruta: '/alertas/:idAlerta', titulo: 'Detalle de alerta', componente: DetalleAlerta },
   configuracion: { ruta: '/configuracion', titulo: 'Configuración', componente: PaginaConfiguracion },

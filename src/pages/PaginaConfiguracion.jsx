@@ -25,10 +25,10 @@ export default function PaginaConfiguracion({ titulo }) {
 
   return (
     <div className={styles.pagina}>
-      <header className={styles.encabezado}>
+      <div className={styles.encabezado}>
         <h1>{titulo}</h1>
         <p>Ajusta los parámetros operativos que rigen la captura, el procesamiento de los boxes y los canales de notificación.</p>
-      </header>
+      </div>
 
       {cargando ? (
         <p className={styles.cargando}>Cargando configuración...</p>

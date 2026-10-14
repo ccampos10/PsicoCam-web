@@ -143,6 +143,7 @@ const Registro = ({ item }) => {
 };
 
 export default function Bitacora({
+  titulo = 'Bitacora',
   rutasDisponibles = [],
   alEnviar,
 }) {
@@ -235,7 +236,7 @@ export default function Bitacora({
     <div>
       {/* Encabezado */}
       <div className={styles.header}>
-        <h1>Bitácora y auditoría</h1>
+        <h1>{titulo}</h1>
         <p className={styles.subtitulo}>
           Trazabilidad de alertas, notificaciones, evaluaciones
           y eventos técnicos del sistema.
