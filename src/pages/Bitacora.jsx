@@ -143,7 +143,7 @@ const Registro = ({ item }) => {
 };
 
 export default function Bitacora({
-  titulo = 'Bitacora',
+  titulo = 'Bitácora y auditoría',
   rutasDisponibles = [],
   alEnviar,
 }) {

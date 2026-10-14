@@ -6,7 +6,7 @@ import ModalDetalle from "../components/ModalDetalle";
 import styles from "./HistorialAlertas.module.css";
 import { ColorUrgencia } from "../components/Pilas";
 
-const HistorialAlertas = ({ titulo = 'Historial' }) => {
+const HistorialAlertas = ({ titulo = 'Historial de Alertas' }) => {
   const [alertas, setAlertas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [alertaSeleccionada, setAlertaSeleccionada] = useState(null);

@@ -4,7 +4,7 @@ import { mapaRutas } from './mapaRutas'
 export const navegacion = [
   { ...mapaRutas.dashboard, icono: LayoutDashboard, grupo: 'principal' },
   { ...mapaRutas.alertas, icono: Bell, grupo: 'principal', incluirSubrutas: true },
-  { ...mapaRutas.historial, titulo: 'Historial', icono: Clock, grupo: 'principal' },
+  { ...mapaRutas.historial, icono: Clock, grupo: 'principal' },
   { ...mapaRutas.bitacora, icono: ClipboardList, grupo: 'principal' },
   { ...mapaRutas.usuarios, icono: Users, grupo: 'principal' },
   { ...mapaRutas.configuracion, icono: Settings, grupo: 'cuenta' },
