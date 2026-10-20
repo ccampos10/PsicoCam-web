@@ -5,10 +5,11 @@ import ListaAlertasRecientes from '../components/ListaAlertasRecientes'
 import ListaBoxes from '../components/ListaBoxes'
 import ProgresoDetecciones from '../components/ProgresoDetecciones'
 import TarjetaMetrica from '../components/TarjetaMetrica'
-import { MockService } from '../services/MockService'
+import { ApiAlertaRepository } from '../repositories/ApiAlertaRepository'
 import '../styles/dashboard.css'
 
 const ORDEN_NIVELES = ['Bajo', 'Medio', 'Alto']
+const repositorioAlertas = new ApiAlertaRepository()
 
 const NOMBRES_CATEGORIA = {
   RS: { nombre: 'Riesgo Suicida', abreviatura: 'RS', color: 'var(--secondary)' },
@@ -52,12 +53,10 @@ export default function Dashboard({ titulo }) {
 
   useEffect(() => {
     let activo = true
-    MockService.listarAlertas().then(datos => {
-      if (activo) {
-        setAlertas(datos)
-        setCargando(false)
-      }
-    })
+    repositorioAlertas.getAll()
+      .then(datos => { if (activo) setAlertas(datos) })
+      .catch(() => { if (activo) setAlertas([]) })
+      .finally(() => { if (activo) setCargando(false) })
     return () => { activo = false }
   }, [])
 

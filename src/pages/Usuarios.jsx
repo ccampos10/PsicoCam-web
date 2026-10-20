@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Plus, Search, Trash2 } from 'lucide-react'
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
-import { MockService } from '../services/MockService'
+import { ApiUsuarioRepository } from '../repositories/ApiUsuarioRepository'
 import FormularioUsuario from '../components/FormularioUsuario'
 import Modal from '../components/Modal'
 import ModalDetalleUsuario from '../components/ModalDetalleUsuario'
@@ -16,8 +16,10 @@ function normalizarTexto(texto) {
   return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
 }
 
+const repositorioUsuarios = new ApiUsuarioRepository()
+
 // Presenta los usuarios y deja las acciones disponibles mediante funciones externas.
-export default function Usuarios({ servicio = MockService, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
+export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
   const [formulario, establecerFormulario] = useState(null)
   const [eliminando, establecerEliminando] = useState(null)
   const [procesando, establecerProcesando] = useState(false)
@@ -31,6 +33,7 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
   const [cargando, establecerCargando] = useState(true)
   const [error, establecerError] = useState('')
   const [intento, establecerIntento] = useState(0)
+  const permiteGestionCompleta = servicio.soportaGestionCompleta !== false
 
   useEffect(() => {
     let vigente = true
@@ -107,7 +110,7 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
       <span className={estado === 'Activo' ? estilos.activo : estilos.inactivo}>{estado}</span> },
     { clave: 'ultimoAcceso', encabezado: 'Último acceso', renderizar: fecha =>
       fecha ? formatoFecha.format(new Date(fecha)).replaceAll('-', '/') : 'Sin accesos' },
-    { clave: 'acciones', encabezado: 'Acciones', renderizar: (_, usuario) =>
+    { clave: 'acciones', encabezado: 'Acciones', renderizar: (_, usuario) => permiteGestionCompleta &&
       <div className={estilos.acciones}>
         <button type="button" disabled={procesando} onClick={() => { establecerErrorAccion(''); establecerMensaje(''); if (alEditar) alEditar(usuario); else establecerFormulario({ usuario }) }} aria-label={`Editar a ${usuario.nombre}`}>Editar</button>
         <button type="button" className={usuario.estado === 'Activo' ? estilos.bloquear : estilos.habilitar} disabled={procesando} onClick={() => alCambiarEstado ? alCambiarEstado(usuario) : cambiarEstado(usuario)}
@@ -119,10 +122,10 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
   ]
 
   return <section className={estilos.pagina} aria-labelledby="titulo-usuarios">
-    <header className={estilos.encabezado}>
+    <div className={estilos.encabezado}>
       <div><h1 id="titulo-usuarios">Gestión de usuarios</h1><p>Administra las cuentas del personal clínico y administrativo con acceso a PsicoCam.</p></div>
       <span className={estilos.contador}>{usuarios.length} usuarios</span>
-    </header>
+    </div>
     {mensaje && <p role="status">{mensaje}</p>}
     {errorAccion && !eliminando && <p role="alert">{errorAccion}</p>}
     {cargando ? <p role="status">Cargando usuarios…</p> : error ? <div role="alert">

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ContextoSesion } from './ContextoSesion'
 import { rutasInternas } from '../routes/mapaRutas'
 import { api } from '../services/api'
@@ -9,11 +9,30 @@ const usuarioVistaPrevia = {
   rutasPermitidas: rutasInternas.map(({ ruta }) => ruta),
 }
 
+function asignarRutasPermitidas(usuario) {
+  if (!usuario) return null
+  if (Array.isArray(usuario.rutasPermitidas)) return usuario
+
+  const esAdministrador = String(usuario.rol || '').toLowerCase() === 'administrador'
+  const rutasPermitidas = rutasInternas
+    .filter(({ ruta }) => esAdministrador || ruta !== '/usuarios')
+    .map(({ ruta }) => ruta)
+  return { ...usuario, rutasPermitidas }
+}
+
 export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesion }) {
   const [usuario, establecerUsuario] = useState(usuarioInicial)
   const [errorCierreSesion, establecerErrorCierreSesion] = useState('')
   const [cerrandoSesion, establecerCerrandoSesion] = useState(false)
-  async function iniciarSesion(credenciales) { const perfil = await api.iniciarSesion(credenciales); establecerUsuario(perfil); return perfil }
+  useEffect(() => {
+    if (usuarioInicial === null) establecerUsuario(asignarRutasPermitidas(api.sesionActual()))
+  }, [usuarioInicial])
+
+  async function iniciarSesion(credenciales) {
+    const perfil = asignarRutasPermitidas(await api.iniciarSesion(credenciales))
+    establecerUsuario(perfil)
+    return perfil
+  }
   async function cerrarSesion() {
     establecerCerrandoSesion(true)
     establecerErrorCierreSesion('')

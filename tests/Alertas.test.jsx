@@ -1,16 +1,8 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Alertas from '../src/pages/Alertas';
-import { MockService } from '../src/services/MockService';
-
-// Simulamos el servicio sin modificar el archivo original.
-vi.mock('../src/services/MockService', () => ({
-  MockService: {
-    listarAlertas: vi.fn(),
-  },
-}));
 
 // Datos de prueba independientes del mockData.json.
 const alertasPrueba = [
@@ -46,17 +38,23 @@ const alertasPrueba = [
   },
 ];
 
+const repositorioPrueba = {
+  getAll: vi.fn(),
+  actualizarEstadoEvaluacion: vi.fn(),
+};
+
 beforeEach(() => {
   vi.clearAllMocks();
-
-  MockService.listarAlertas.mockResolvedValue(
-    alertasPrueba.map((alerta) => ({ ...alerta }))
-  );
+  repositorioPrueba.getAll.mockResolvedValue(alertasPrueba.map((alerta) => ({ ...alerta })));
+  repositorioPrueba.actualizarEstadoEvaluacion.mockImplementation(async (id, estado_evaluacion) => ({
+    ...alertasPrueba.find((alerta) => alerta.id === id),
+    estado_evaluacion,
+  }));
 });
 
 describe('SCRUM-602 - Página Alertas', () => {
   it('muestra solamente las alertas pendientes', async () => {
-    render(<Alertas />);
+    render(<Alertas repositorio={repositorioPrueba} />);
 
     expect(
       await screen.findByText('supervisor1@psicocam.cl')
@@ -78,7 +76,7 @@ describe('SCRUM-602 - Página Alertas', () => {
   it('filtra las alertas por categoría', async () => {
     const usuario = userEvent.setup();
 
-    render(<Alertas />);
+    render(<Alertas repositorio={repositorioPrueba} />);
 
     await screen.findByText('supervisor1@psicocam.cl');
 
@@ -99,7 +97,7 @@ describe('SCRUM-602 - Página Alertas', () => {
   it('filtra las alertas por nivel', async () => {
     const usuario = userEvent.setup();
 
-    render(<Alertas />);
+    render(<Alertas repositorio={repositorioPrueba} />);
 
     await screen.findByText('supervisor1@psicocam.cl');
 
@@ -120,7 +118,7 @@ describe('SCRUM-602 - Página Alertas', () => {
   it('permite buscar alertas por supervisor', async () => {
     const usuario = userEvent.setup();
 
-    render(<Alertas />);
+    render(<Alertas repositorio={repositorioPrueba} />);
 
     await screen.findByText('supervisor1@psicocam.cl');
 
@@ -141,7 +139,7 @@ describe('SCRUM-602 - Página Alertas', () => {
   it('abre el detalle de una alerta pendiente', async () => {
     const usuario = userEvent.setup();
 
-    render(<Alertas />);
+    render(<Alertas repositorio={repositorioPrueba} />);
 
     const supervisor = await screen.findByText(
       'supervisor1@psicocam.cl'
@@ -155,7 +153,7 @@ describe('SCRUM-602 - Página Alertas', () => {
   it('clasifica una alerta y la elimina del listado de pendientes', async () => {
     const usuario = userEvent.setup();
 
-    render(<Alertas />);
+    render(<Alertas repositorio={repositorioPrueba} />);
 
     // Esperamos que aparezca una alerta pendiente.
     const supervisor = await screen.findByText(
@@ -178,9 +176,7 @@ describe('SCRUM-602 - Página Alertas', () => {
     );
 
     // La alerta clasificada debe desaparecer.
-    expect(
-      screen.queryByText('supervisor1@psicocam.cl')
-    ).toBeNull();
+    await waitFor(() => expect(screen.queryByText('supervisor1@psicocam.cl')).toBeNull());
 
     // La otra alerta pendiente debe mantenerse.
     expect(

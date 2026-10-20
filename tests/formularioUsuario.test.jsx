@@ -8,7 +8,7 @@ import { MockService } from '../src/services/MockService'
 describe('Creación, edición y administración de usuarios', () => {
   it('crea, edita sin contraseña, bloquea, habilita y elimina mediante MockService', async () => {
     const interaccion = userEvent.setup()
-    render(<Usuarios />)
+    render(<Usuarios servicio={MockService} />)
     await screen.findByRole('button', { name: 'Agregar Usuario' })
     await interaccion.click(screen.getByRole('button', { name: 'Agregar Usuario' }))
     let modal = screen.getByRole('dialog')

@@ -35,6 +35,7 @@ export function ConfiguracionForm({ valoresIniciales, onGuardar }) {
   const [correo, setCorreo] = useState(valoresIniciales.correoCliente);
   const [guardando, setGuardando] = useState(false);
   const [guardadoReciente, setGuardadoReciente] = useState(false);
+  const [errorGuardado, setErrorGuardado] = useState('');
 
   useEffect(() => {
     setHoraInicio(valoresIniciales.horaInicio);
@@ -87,9 +88,12 @@ export function ConfiguracionForm({ valoresIniciales, onGuardar }) {
   async function handleGuardar() {
     if (!puedeGuardar) return;
     setGuardando(true);
+    setErrorGuardado('');
     try {
       await onGuardar({ horaInicio, horaTermino, correoCliente: correo.trim() });
       setGuardadoReciente(true);
+    } catch (fallo) {
+      setErrorGuardado(fallo.message || 'No se pudo guardar la configuracion.');
     } finally {
       setGuardando(false);
     }
@@ -174,6 +178,7 @@ export function ConfiguracionForm({ valoresIniciales, onGuardar }) {
       </section>
 
       <div className={styles.acciones}>
+        {errorGuardado && <p role="alert">{errorGuardado}</p>}
         <span className={hayCambios ? styles.chipPendiente : styles.chipSinCambios}>
           {hayCambios ? "Cambios sin guardar" : "Sin cambios"}
         </span>
