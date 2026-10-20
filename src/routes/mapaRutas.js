@@ -7,6 +7,7 @@ import ModuloPendiente from '../pages/ModuloPendiente'
 import PaginaConfiguracion from '../pages/PaginaConfiguracion'
 import Usuarios from '../pages/Usuarios'
 import Alertas from '../pages/Alertas';
+import DemoNotificacion from '../pages/DemoNotificacion'
 
 export const mapaRutas = {
   acceso: { ruta: '/login', componente: InicioSesion },
@@ -18,6 +19,8 @@ export const mapaRutas = {
   detalleAlerta: { ruta: '/alertas/:idAlerta', titulo: 'Detalle de alerta', componente: DetalleAlerta },
   configuracion: { ruta: '/configuracion', titulo: 'Configuración', componente: PaginaConfiguracion },
   cuenta: { ruta: '/mi-cuenta', titulo: 'Mi cuenta', componente: ModuloPendiente },
+  // Ruta temporal para validar visualmente SCRUM-658. No se agrega a navegacion.
+  demoNotificacion: { ruta: '/demo-notificacion', titulo: 'Demo de notificaciones', componente: DemoNotificacion },
 }
 
 export const rutasInternas = Object.values(mapaRutas).filter(opcion => opcion !== mapaRutas.acceso)
