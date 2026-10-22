@@ -2,23 +2,19 @@ import "../styles/pilas.css"
 
 export const ColorUrgencia = ({valor}) => {
   let clase = "urgBajo"
-  let claseDot = "dotBajo"
 
   if (valor === "Bajo") {
     clase = "urgBajo"
-    claseDot = "dotBajo"
   }
   else if (valor === "Medio") {
     clase = "urgMedio"
-    claseDot = "dotMedio"
   }
   else if (valor === "Alto") {
     clase = "urgAlto"
-    claseDot = "dotAlto"
   }
 
   return <span className={`pill ${clase}`}>
-    <span className={`dot ${claseDot}`}></span>
+    <span className="iconoUrgencia" aria-hidden="true">{valor === 'Bajo' ? '✓' : valor === 'Medio' ? '△' : '!'}</span>
     {valor}
   </span>
 }

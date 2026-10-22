@@ -21,7 +21,7 @@ function renderizarConRuta(rutaInicial, sesion = usuario) {
 
 describe('Dashboard: SCRUM-221', () => {
   it('mapea los colores de semáforo a los niveles de riesgo', () => {
-    expect(colorNivel).toEqual({ Bajo: '#44c58a', Medio: '#f2c94c', Alto: '#d9534f' })
+    expect(colorNivel).toEqual({ Bajo: 'var(--risk-low)', Medio: 'var(--risk-medium)', Alto: 'var(--risk-high)' })
   })
 
   it('muestra la cabecera sin afirmar un estado de monitoreo no verificado', () => {
@@ -87,7 +87,7 @@ describe('Dashboard: SCRUM-221', () => {
     await waitFor(() => {
       const colores = [...grafico.querySelectorAll('path')]
         .map(nodo => nodo.getAttribute('fill'))
-        .filter(relleno => /^#[0-9A-Fa-f]{6}$/.test(relleno || ''))
+        .filter(relleno => Object.values(colorNivel).includes(relleno))
       expect(new Set(colores)).toEqual(new Set(Object.values(colorNivel)))
     })
   })

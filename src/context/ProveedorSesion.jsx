@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ContextoSesion } from './ContextoSesion'
+import { ProveedorAccesibilidad } from './Accesibilidad'
+import { ProveedorNotificaciones } from './Notificaciones'
 import { rutasInternas } from '../routes/mapaRutas'
 import { api } from '../services/api'
 
 // Perfil de prueba para la vista previa, TODAVIA NO HAY BD
 const usuarioVistaPrevia = {
-  nombre: 'Usuario', rol: 'Profesional',
+  nombre: 'Usuario', rol: 'Supervisor',
   rutasPermitidas: rutasInternas.map(({ ruta }) => ruta),
 }
 
@@ -56,5 +58,5 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
     vistaPreviaDisponible: import.meta.env.DEV,
     iniciarVistaPrevia: () => { if (import.meta.env.DEV) establecerUsuario(usuarioVistaPrevia) },
   }
-  return <ContextoSesion.Provider value={valor}>{children}</ContextoSesion.Provider>
+  return <ContextoSesion.Provider value={valor}><ProveedorAccesibilidad key={usuario?.id ?? usuario?.correo ?? 'sin-sesion'} usuario={usuario}><ProveedorNotificaciones key={usuario?.id ?? usuario?.correo ?? 'sin-sesion'} usuario={usuario}>{children}</ProveedorNotificaciones></ProveedorAccesibilidad></ContextoSesion.Provider>
 }

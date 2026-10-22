@@ -1,1 +1,1 @@
-export const colorNivel = { Bajo: '#44c58a', Medio: '#f2c94c', Alto: '#d9534f' }
+export const colorNivel = { Bajo: 'var(--risk-low)', Medio: 'var(--risk-medium)', Alto: 'var(--risk-high)' }

@@ -4,14 +4,14 @@ import { api } from '../services/api'
 function adaptarUsuario(usuario) {
   return {
     ...usuario,
-    rol: usuario.rol === 'administrador' ? 'Administrador' : 'Profesional',
+    rol: usuario.rol === 'administrador' ? 'Administrador' : usuario.rol === 'supervisor' ? 'Supervisor' : usuario.rol,
     estado: usuario.esta_activo ? 'Activo' : 'Inactivo',
     ultimoAcceso: usuario.ultimo_acceso || null,
   }
 }
 
 export class ApiUsuarioRepository extends IUserRepository {
-  soportaGestionCompleta = false
+  soportaGestionCompleta = true
 
   async buscarPorCorreo(correo) {
     return (await this.obtenerTodos()).find((usuario) => usuario.correo === correo) || null
@@ -27,6 +27,18 @@ export class ApiUsuarioRepository extends IUserRepository {
 
   async crearUsuario(datos) {
     return adaptarUsuario(await api.crearUsuario(datos))
+  }
+
+  async actualizarUsuario(id, datos) {
+    return adaptarUsuario(await api.actualizarUsuario(id, datos))
+  }
+
+  async cambiarEstadoUsuario(id, estado) {
+    return adaptarUsuario(await api.actualizarUsuario(id, { estado }))
+  }
+
+  async eliminarUsuario(id) {
+    return api.eliminarUsuario(id)
   }
 
   verificarCredenciales(credenciales) {

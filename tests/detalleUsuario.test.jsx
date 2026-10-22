@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Usuarios from '../src/pages/Usuarios'
+import ModalDetalleUsuario from '../src/components/ModalDetalleUsuario'
 
 const usuarios = Array.from({ length: 12 }, (_, indice) => ({
   id: indice + 1, nombre: `Persona ${indice + 1}`, correo: `persona${indice + 1}@example.com`,
@@ -20,7 +21,7 @@ describe('Detalle de usuario', () => {
     nombre.focus()
     await interaccion.keyboard('{Enter}')
     const modal = screen.getByRole('dialog', { name: 'Detalle de usuario' })
-    for (const valor of ['Persona 11', 'persona11@example.com', 'Profesional', 'Activo', '24/09/2026']) {
+    for (const valor of ['Persona 11', 'persona11@example.com', 'Profesional', 'Activo', '24/09/2026, 12:00']) {
       expect(within(modal).getByText(valor)).toBeTruthy()
     }
     expect(within(modal).getAllByRole('term')).toHaveLength(5)
@@ -30,6 +31,13 @@ describe('Detalle de usuario', () => {
     expect(screen.queryByRole('dialog')).toBeNull()
     expect(screen.getByText('Página 2 de 2 - 12 registros')).toBeTruthy()
     expect(document.activeElement).toBe(nombre)
+  })
+
+  it('muestra la hora chilena con su cambio de horario de invierno y verano', () => {
+    const { rerender } = render(<ModalDetalleUsuario usuario={{ ...usuarios[0], ultimoAcceso: '2026-07-01T12:00:00Z' }} alCerrar={() => {}} />)
+    expect(screen.getByText('01/07/2026, 08:00')).toBeTruthy()
+    rerender(<ModalDetalleUsuario usuario={{ ...usuarios[0], ultimoAcceso: '2026-01-01T12:00:00Z' }} alCerrar={() => {}} />)
+    expect(screen.getByText('01/01/2026, 09:00')).toBeTruthy()
   })
 
   it('muestra el usuario inactivo sin accesos y conserva los filtros al cerrar con X o cancelar', async () => {

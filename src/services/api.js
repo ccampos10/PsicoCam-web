@@ -43,6 +43,20 @@ function normalizarConfiguracion(datos) {
     horaInicio: datos?.horaOperacion?.hora_inicio || '08:00',
     horaTermino: datos?.horaOperacion?.hora_termino || '22:00',
     correoCliente: datos?.contactoRespaldo?.correo || '',
+    modoCorreo: datos?.notificacionesCorreo?.modo || 'asignado',
+    incluirAdministradores: datos?.notificacionesCorreo?.incluirAdministradores === true,
+  }
+}
+
+function datosUsuario(datos) {
+  const roles = { Administrador: 'administrador', Supervisor: 'supervisor' }
+  if (datos.rol !== undefined && !Object.hasOwn(roles, datos.rol)) throw new Error('Selecciona un rol válido.')
+  return {
+    ...(datos.nombre !== undefined && { nombre: datos.nombre }),
+    ...(datos.correo !== undefined && { correo: datos.correo }),
+    ...(datos.contrasena && { password: datos.contrasena }),
+    ...(datos.rol !== undefined && { rol: roles[datos.rol] }),
+    ...(datos.estado !== undefined && { esta_activo: datos.estado === 'Activo' }),
   }
 }
 
@@ -97,18 +111,17 @@ export const api = {
         hora_inicio: datos.horaInicio,
         hora_termino: datos.horaTermino,
       },
-      contactoRespaldo: { correo: datos.correoCliente },
+      ...(datos.correoCliente ? { contactoRespaldo: { correo: datos.correoCliente } } : {}),
+      notificacionesCorreo: { modo: datos.modoCorreo, incluirAdministradores: datos.incluirAdministradores },
     }),
   })),
   listarUsuarios: () => solicitar('/api/usuarios'),
   crearUsuario: datos => solicitar('/api/usuarios', {
     method: 'POST',
-    body: JSON.stringify({
-      nombre: datos.nombre,
-      correo: datos.correo,
-      password: datos.contrasena,
-      rol: datos.rol?.toLowerCase(),
-      esta_activo: datos.estado === 'Activo',
-    }),
+    body: JSON.stringify(datosUsuario(datos)),
   }),
+  actualizarUsuario: (id, datos) => solicitar(`/api/usuarios/${encodeURIComponent(id)}`, {
+    method: 'PATCH', body: JSON.stringify(datosUsuario(datos)),
+  }),
+  eliminarUsuario: id => solicitar(`/api/usuarios/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 }

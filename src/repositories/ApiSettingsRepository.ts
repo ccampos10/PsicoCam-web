@@ -8,6 +8,8 @@ export class ApiSettingsRepository implements ISettingsRepository {
       horaInicio: configuracion.horaInicio,
       horaTermino: configuracion.horaTermino,
       correo: configuracion.correoCliente,
+      modoCorreo: configuracion.modoCorreo,
+      incluirAdministradores: configuracion.incluirAdministradores,
     }
   }
 
@@ -17,6 +19,8 @@ export class ApiSettingsRepository implements ISettingsRepository {
       horaInicio,
       horaTermino,
       correoCliente: configuracion.correo,
+      modoCorreo: configuracion.modoCorreo,
+      incluirAdministradores: configuracion.incluirAdministradores,
     })
     return null
   }
@@ -27,6 +31,8 @@ export class ApiSettingsRepository implements ISettingsRepository {
       horaInicio: configuracion.horaInicio,
       horaTermino: configuracion.horaTermino,
       correoCliente: correo,
+      modoCorreo: configuracion.modoCorreo,
+      incluirAdministradores: configuracion.incluirAdministradores,
     })
     return null
   }
@@ -36,7 +42,7 @@ export class ApiSettingsRepository implements ISettingsRepository {
     return { ...configuracion, correoCliente: configuracion.correo }
   }
 
-  async actualizarConfiguracion(configuracion: { horaInicio: string, horaTermino: string, correoCliente: string }) {
+  async actualizarConfiguracion(configuracion: { horaInicio: string, horaTermino: string, correoCliente: string, modoCorreo: string, incluirAdministradores: boolean }) {
     return api.actualizarConfiguracion(configuracion)
   }
 }
