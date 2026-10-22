@@ -22,6 +22,7 @@ const repositorioUsuarios = new ApiUsuarioRepository()
 export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
   const [formulario, establecerFormulario] = useState(null)
   const [eliminando, establecerEliminando] = useState(null)
+  const [cambiandoEstado, establecerCambiandoEstado] = useState(null)
   const [procesando, establecerProcesando] = useState(false)
   const [errorAccion, establecerErrorAccion] = useState('')
   const [mensaje, establecerMensaje] = useState('')
@@ -75,6 +76,7 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
     try {
       const perfil = await servicio.cambiarEstadoUsuario(usuario.id, usuario.estado === 'Activo' ? 'Inactivo' : 'Activo')
       establecerUsuarios(actuales => actuales.map(actual => actual.id === perfil.id ? perfil : actual))
+      establecerCambiandoEstado(null)
       establecerMensaje(perfil.estado === 'Activo' ? 'Usuario habilitado.' : 'Usuario bloqueado.')
     } catch (fallo) { establecerErrorAccion(fallo.message || 'No se pudo cambiar el estado.') }
     finally { establecerProcesando(false) }
@@ -113,7 +115,7 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
     { clave: 'acciones', encabezado: 'Acciones', renderizar: (_, usuario) => permiteGestionCompleta &&
       <div className={estilos.acciones}>
         <button type="button" disabled={procesando} onClick={() => { establecerErrorAccion(''); establecerMensaje(''); if (alEditar) alEditar(usuario); else establecerFormulario({ usuario }) }} aria-label={`Editar a ${usuario.nombre}`}>Editar</button>
-        <button type="button" className={usuario.estado === 'Activo' ? estilos.bloquear : estilos.habilitar} disabled={procesando} onClick={() => alCambiarEstado ? alCambiarEstado(usuario) : cambiarEstado(usuario)}
+        <button type="button" className={usuario.estado === 'Activo' ? estilos.bloquear : estilos.habilitar} disabled={procesando} onClick={() => { establecerErrorAccion(''); establecerMensaje(''); if (alCambiarEstado) alCambiarEstado(usuario); else establecerCambiandoEstado(usuario) }}
           aria-label={`${usuario.estado === 'Activo' ? 'Bloquear' : 'Habilitar'} a ${usuario.nombre}`}>
           {usuario.estado === 'Activo' ? 'Bloquear' : 'Habilitar'}
         </button>
@@ -127,7 +129,7 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
       <span className={estilos.contador}>{usuarios.length} usuarios</span>
     </div>
     {mensaje && <p role="status">{mensaje}</p>}
-    {errorAccion && !eliminando && <p role="alert">{errorAccion}</p>}
+    {errorAccion && !eliminando && !cambiandoEstado && <p role="alert">{errorAccion}</p>}
     {cargando ? <p role="status">Cargando usuarios…</p> : error ? <div role="alert">
       <p>{error}</p><button type="button" onClick={() => establecerIntento(valor => valor + 1)}>Reintentar</button>
     </div> : <>
@@ -151,6 +153,7 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
           </button>
         </div>
         <p className={estilos.resultados} role="status">Mostrando {usuariosEncontrados.length} de {usuarios.length} usuarios</p>
+        {!permiteGestionCompleta && <p className={estilos.aviso}>La edición, el bloqueo y la eliminación de usuarios aún no están disponibles en el servidor.</p>}
       </section>
       <PaginaTabla datos={usuariosEncontrados} columnas={columnas} className={estilos.listado} resumenPaginacion
         alSeleccionarFila={establecerUsuarioSeleccionado}
@@ -158,13 +161,22 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
         headerTabla={<div className={estilos.tituloTabla}><h2>Listado de usuarios</h2><p>Personal autorizado y estado de acceso a la plataforma.</p></div>} />
     </>}
     {formulario && <FormularioUsuario usuario={formulario.usuario} usuarios={usuarios} alGuardar={guardarUsuario} alCerrar={() => establecerFormulario(null)} />}
-    {eliminando && <Modal className="logout-dialog" idTitulo="titulo-eliminar-usuario" alCerrar={() => { if (!procesando) establecerEliminando(null) }}>
-      <h2 id="titulo-eliminar-usuario">Eliminar usuario</h2>
-      <p>¿Deseas eliminar a {eliminando.nombre}? Esta cuenta se retirará de la lista de usuarios.</p>
+    {cambiandoEstado && <Modal className={estilos.confirmacion} idTitulo="titulo-cambiar-estado" alCerrar={() => { if (!procesando) establecerCambiandoEstado(null) }}>
+      <h2 id="titulo-cambiar-estado">{cambiandoEstado.estado === 'Activo' ? 'Bloquear usuario' : 'Habilitar usuario'}</h2>
+      <p>{cambiandoEstado.estado === 'Activo' ? <>¿Deseas bloquear a <strong>{cambiandoEstado.nombre}</strong>? No podrá iniciar sesión hasta ser habilitado.</> : <>¿Deseas habilitar a <strong>{cambiandoEstado.nombre}</strong>?</>}</p>
       {errorAccion && <p role="alert">{errorAccion}</p>}
-      <div className="dialog-actions">
-        <button type="button" className="button-secondary" disabled={procesando} onClick={() => establecerEliminando(null)}>Cancelar</button>
-        <button type="button" className="button-primary" disabled={procesando} onClick={confirmarEliminacion}>{procesando ? 'Eliminando…' : 'Eliminar usuario'}</button>
+      <div className={estilos.confirmacionAcciones}>
+        <button type="button" className={cambiandoEstado.estado === 'Activo' ? estilos.confirmarPeligro : estilos.confirmar} disabled={procesando} onClick={() => cambiarEstado(cambiandoEstado)}>{procesando ? 'Guardando…' : cambiandoEstado.estado === 'Activo' ? 'Bloquear' : 'Habilitar'}</button>
+        <button type="button" className={estilos.cancelarConfirmacion} disabled={procesando} onClick={() => establecerCambiandoEstado(null)}>Cancelar</button>
+      </div>
+    </Modal>}
+    {eliminando && <Modal className={estilos.confirmacion} idTitulo="titulo-eliminar-usuario" alCerrar={() => { if (!procesando) establecerEliminando(null) }}>
+      <h2 id="titulo-eliminar-usuario">Eliminar usuario</h2>
+      <p>¿Estás seguro de que deseas eliminar a <strong>{eliminando.nombre}</strong>? Esta acción no se puede deshacer.</p>
+      {errorAccion && <p role="alert">{errorAccion}</p>}
+      <div className={estilos.confirmacionAcciones}>
+        <button type="button" className={estilos.confirmarPeligro} disabled={procesando} onClick={confirmarEliminacion}>{procesando ? 'Eliminando…' : 'Eliminar usuario'}</button>
+        <button type="button" className={estilos.cancelarConfirmacion} disabled={procesando} onClick={() => establecerEliminando(null)}>Cancelar</button>
       </div>
     </Modal>}
     {usuarioSeleccionado && <ModalDetalleUsuario usuario={usuarioSeleccionado} alCerrar={() => establecerUsuarioSeleccionado(null)} />}

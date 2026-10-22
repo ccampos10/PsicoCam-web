@@ -72,8 +72,7 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
 
   return <Modal className={estilos.modal} idTitulo="titulo-formulario-usuario" alCerrar={() => { if (!envioEnCurso.current) alCerrar() }}>
     <header className={estilos.encabezado}>
-      <h2 id="titulo-formulario-usuario">{usuario ? 'Editar usuario' : 'Crear usuario'}</h2>
-      <p>{usuario ? 'Modifica los datos y el acceso de la cuenta seleccionada.' : 'Registra una nueva cuenta y define sus credenciales y rol de acceso.'}</p>
+      <h2 id="titulo-formulario-usuario">{usuario ? 'Editar usuario' : 'Agregar usuario'}</h2>
       <button type="button" className={estilos.iconoCerrar} aria-label="Cerrar formulario" disabled={guardando} onClick={alCerrar}><X size={20} /></button>
     </header>
     <form onSubmit={guardar} noValidate aria-busy={guardando}>
@@ -95,12 +94,11 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
               <option>Activo</option><option>Inactivo</option>
             </select></div>
         </div>
-        <p className={estilos.nota}>El rol seleccionado define los privilegios disponibles dentro de la plataforma clínica.</p>
         {error && <p className={estilos.error} role="alert">{error}</p>}
       </div>
       <footer className={estilos.pie}>
-        <button type="button" className={estilos.cancelar} disabled={guardando} onClick={alCerrar}>Cancelar</button>
         <button type="submit" className={estilos.guardar} disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar usuario'}</button>
+        <button type="button" className={estilos.cancelar} disabled={guardando} onClick={alCerrar}>Cancelar</button>
       </footer>
     </form>
   </Modal>

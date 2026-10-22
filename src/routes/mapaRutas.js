@@ -3,7 +3,7 @@ import Dashboard from '../pages/Dashboard'
 import Bitacora from '../pages/Bitacora'
 import HistorialAlertas from '../pages/HistorialAlertas'
 import DetalleAlerta from '../pages/DetalleAlerta'
-import ModuloPendiente from '../pages/ModuloPendiente'
+import MiCuenta from '../pages/MiCuenta'
 import PaginaConfiguracion from '../pages/PaginaConfiguracion'
 import Usuarios from '../pages/Usuarios'
 import Alertas from '../pages/Alertas'
@@ -17,7 +17,7 @@ export const mapaRutas = {
   bitacora: { ruta: '/bitacora', titulo: 'Bitácora', componente: Bitacora },
   detalleAlerta: { ruta: '/alertas/:idAlerta', titulo: 'Detalle de alerta', componente: DetalleAlerta },
   configuracion: { ruta: '/configuracion', titulo: 'Configuración', componente: PaginaConfiguracion },
-  cuenta: { ruta: '/mi-cuenta', titulo: 'Mi cuenta', componente: ModuloPendiente },
+  cuenta: { ruta: '/mi-cuenta', titulo: 'Mi cuenta', componente: MiCuenta },
 }
 
 export const rutasInternas = Object.values(mapaRutas).filter((opcion) => opcion !== mapaRutas.acceso)

@@ -26,15 +26,17 @@ function agruparPorNivel(alertas) {
 
 function agruparPorCategoria(alertas) {
   const conteo = alertas.reduce((acumulado, alerta) => {
-    acumulado[alerta.categoria] = (acumulado[alerta.categoria] ?? 0) + 1
+    const categoria = alerta.categoria || 'Sin categoría'
+    acumulado[categoria] = (acumulado[categoria] ?? 0) + 1
     return acumulado
   }, {})
+  for (const categoria of Object.keys(NOMBRES_CATEGORIA)) conteo[categoria] ??= 0
   return Object.entries(conteo).map(([categoria, cantidad]) => ({ categoria, cantidad }))
 }
 
 function agruparEvaluaciones(alertas) {
   return alertas.reduce((acumulado, alerta) => {
-    if (alerta.estado_evaluacion === 'neutro') acumulado.pendientes += 1
+    if (!alerta.estado_evaluacion || alerta.estado_evaluacion === 'neutro') acumulado.pendientes += 1
     else acumulado.evaluadas += 1
     return acumulado
   }, { pendientes: 0, evaluadas: 0 })
@@ -50,20 +52,22 @@ function contarAtencionesPorSupervisor(alertas) {
 export default function Dashboard({ titulo }) {
   const [alertas, setAlertas] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState('')
+  const [intento, setIntento] = useState(0)
 
   useEffect(() => {
     let activo = true
     repositorioAlertas.getAll()
       .then(datos => { if (activo) setAlertas(datos) })
-      .catch(() => { if (activo) setAlertas([]) })
+      .catch(fallo => { if (activo) setError(fallo.message || 'Comprueba la conexión con el servidor e inténtalo nuevamente.') })
       .finally(() => { if (activo) setCargando(false) })
     return () => { activo = false }
-  }, [])
+  }, [intento])
 
   const totalAlertas = alertas.length
   const nivelRiesgo = agruparPorNivel(alertas)
   const detecciones = agruparPorCategoria(alertas).map(({ categoria, cantidad }) => ({
-    ...NOMBRES_CATEGORIA[categoria],
+    ...(NOMBRES_CATEGORIA[categoria] || { nombre: categoria, abreviatura: categoria, color: 'var(--text-secondary)' }),
     alertas: cantidad,
   }))
   const evaluaciones = agruparEvaluaciones(alertas)
@@ -79,7 +83,7 @@ export default function Dashboard({ titulo }) {
   const alertasRecientes = [...alertas]
     .sort((a, b) => `${b.fecha}T${b.hora}`.localeCompare(`${a.fecha}T${a.hora}`))
     .slice(0, 3)
-    .map(alerta => ({ box: alerta.box, tipo: alerta.categoria, nivel: alerta.nivel.toLowerCase(), hora: alerta.hora }))
+    .map(alerta => ({ id: alerta.id, box: alerta.box, tipo: alerta.categoria, nivel: (alerta.nivel || '').toLowerCase(), hora: alerta.hora }))
 
   const resumenAlertas = {
     registradas: totalAlertas,
@@ -95,10 +99,10 @@ export default function Dashboard({ titulo }) {
         <h1 id="dashboard-titulo" className="dashboard-titulo">{titulo}</h1>
         <p className="dashboard-subtitulo">Visión general del estado de alertas y monitoreo de los boxes clínicos.</p>
       </div>
-      <span className="dashboard-estado"><span className="dashboard-estado-punto" aria-hidden="true"></span>Monitoreo activo</span>
     </section>
     {cargando
       ? <p className="dashboard-cargando">Cargando alertas…</p>
+      : error ? <div role="alert" className="dashboard-error"><h2>No se pudieron cargar las alertas</h2><p>{error}</p><button className="button-primary" type="button" onClick={() => { setCargando(true); setError(''); setIntento(valor => valor + 1) }}>Reintentar</button></div>
       : <>
           <section className="dashboard-metricas" aria-label="Métricas principales">
             <TarjetaMetrica etiqueta="Alertas registradas" valor={resumenAlertas.registradas} nota="Total de detecciones" color="var(--secondary)" icono={Bell} />

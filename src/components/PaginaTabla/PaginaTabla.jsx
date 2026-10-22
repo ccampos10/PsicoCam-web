@@ -58,10 +58,12 @@ export function PaginaTabla({
   columnas,
   filtros = [],
   headerFiltros,
+  pieFiltros,
   headerTabla,
   itemsPorPagina = 10,
   mensajeVacio = "No hay registros para mostrar.",
   className = "",
+  classNameFiltros = "",
   resumenPaginacion = false,
   alSeleccionarFila,
   onFiltrosChange,
@@ -154,7 +156,7 @@ return String(valorRegistro) === String(valor);
         <div className={styles.contenedor}>
           {headerFiltros}
 
-          <div className={styles.filtros}>
+          <div className={`${styles.filtros} ${classNameFiltros}`}>
             {filtros.map((filtro) => {
               const valor = valoresFiltro[filtro.clave] ?? "";
 
@@ -265,6 +267,7 @@ return String(valorRegistro) === String(valor);
               );
             })}
           </div>
+          {pieFiltros}
         </div>
       )}
 

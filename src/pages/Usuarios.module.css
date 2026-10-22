@@ -1,4 +1,4 @@
-.pagina { min-width: 0; padding: 14px 16px; color: #193849; }
+.pagina { min-width: 0; padding: 0; color: #193849; }
 .listado tbody tr[tabindex] { cursor: pointer; }
 .listado tbody tr[tabindex]:hover { background: #eef6fa; }
 .listado tbody tr[tabindex]:focus-visible { outline: 2px solid var(--secondary); outline-offset: -2px; }
@@ -21,6 +21,17 @@
 .busqueda > span:focus-within { outline: 2px solid var(--secondary); outline-offset: 2px; }
 .agregar { display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; background: #113c4d; color: white; border: 0; border-radius: 8px; font-size: 14px; font-weight: 600; }
 .herramientas .resultados { margin-top: 22px; }
+.herramientas .aviso { margin-top: 12px; }
+.confirmacion { width: min(400px, calc(100vw - 32px)); box-sizing: border-box; padding: 30px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: var(--text-primary); }
+.confirmacion::backdrop { background: rgb(25 46 56 / 46%); }
+.confirmacion h2 { margin: 0 0 12px; font-size: 20px; }
+.confirmacion p { color: var(--text-secondary); line-height: 1.5; font-size: 14px; }
+.confirmacion strong { color: var(--text-primary); }
+.confirmacionAcciones { display: flex; gap: 12px; margin-top: 24px; }
+.confirmacionAcciones button { flex: 1; min-height: 46px; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+.confirmarPeligro { border: 0; background: #d94e4e; color: white; }
+.confirmar { border: 0; background: #113c4d; color: white; }
+.cancelarConfirmacion { border: 1px solid var(--border); background: var(--card); color: var(--text-secondary); }
 .listado > div { padding: 0; margin-bottom: 0; border: 1px solid #d6e2f5; border-radius: 12px; overflow: hidden; background: white; }
 .tituloTabla { padding: 15px 23px 24px; }
 .listado table { min-width: 850px; table-layout: fixed; }

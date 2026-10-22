@@ -42,7 +42,7 @@
 .popover-link:focus-visible { outline-offset: -3px; }
 .notifications .popover-panel { width: 360px; }
 .notification-empty { padding: 32px 20px; font-size: 13px; color: var(--text-secondary); text-align: center; }
-.main-content { padding: 16px 24px; min-width: 0; }
+.main-content { padding: 28px 40px 48px; min-width: 0; }
 .main-content:focus { outline: none; }
 .content-container { width: 100%; min-width: 0; overflow-wrap: anywhere; }
 .page-title { font-size: 22px; font-weight: 600; margin-bottom: 16px; }

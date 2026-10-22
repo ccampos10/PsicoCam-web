@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Alertas from '../src/pages/Alertas';
+import { api } from '../src/services/api';
 
 // Datos de prueba independientes del mockData.json.
 const alertasPrueba = [
@@ -53,6 +54,14 @@ beforeEach(() => {
 });
 
 describe('SCRUM-602 - Página Alertas', () => {
+  it('muestra un error sin afirmar que hay cero alertas o monitoreo activo', async () => {
+    repositorioPrueba.getAll.mockRejectedValueOnce(new Error('Sesión no válida'));
+    render(<Alertas repositorio={repositorioPrueba} />);
+    expect((await screen.findByRole('alert')).textContent).toContain('Sesión no válida');
+    expect(screen.queryByText('0 alertas pendientes de evaluación')).toBeNull();
+    expect(screen.queryByText('Monitoreo activo')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeTruthy();
+  });
   it('muestra solamente las alertas pendientes', async () => {
     render(<Alertas repositorio={repositorioPrueba} />);
 
@@ -148,6 +157,36 @@ describe('SCRUM-602 - Página Alertas', () => {
     await usuario.click(supervisor);
 
     expect(screen.getByRole('dialog')).toBeTruthy();
+    const modal = screen.getByRole('dialog', { name: 'Detalle de alerta' });
+    expect(within(modal).getByText('Riesgo Suicida (RS)')).toBeTruthy();
+    expect(within(modal).getByRole('button', { name: 'Ver transcripción' })).toBeTruthy();
+    expect(within(modal).getByText('2026-10-07')).toBeTruthy();
+  });
+
+  it('solicita la transcripción al abrirla y muestra el contenido autorizado', async () => {
+    const obtener = vi.spyOn(api, 'obtenerTranscripcion').mockResolvedValue({ conversacion: [{ persona: 'Profesional', frase: 'Texto de prueba', detectado: false }] });
+    const usuario = userEvent.setup();
+    render(<Alertas repositorio={repositorioPrueba} />);
+    await usuario.click(await screen.findByText('supervisor1@psicocam.cl'));
+    const modal = screen.getByRole('dialog');
+    expect(obtener).not.toHaveBeenCalled();
+    await usuario.click(within(modal).getByRole('button', { name: 'Ver transcripción' }));
+    expect(await within(modal).findByText('Texto de prueba')).toBeTruthy();
+    expect(obtener).toHaveBeenCalledWith(101);
+    await usuario.click(within(modal).getByRole('button', { name: 'Ocultar transcripción' }));
+    expect(within(modal).queryByText('Texto de prueba')).toBeNull();
+    obtener.mockRestore();
+  });
+
+  it('informa si el acceso a la transcripción es denegado', async () => {
+    const obtener = vi.spyOn(api, 'obtenerTranscripcion').mockRejectedValue(new Error('No tienes permisos'));
+    const usuario = userEvent.setup();
+    render(<Alertas repositorio={repositorioPrueba} />);
+    await usuario.click(await screen.findByText('supervisor1@psicocam.cl'));
+    const modal = screen.getByRole('dialog');
+    await usuario.click(within(modal).getByRole('button', { name: 'Ver transcripción' }));
+    expect((await within(modal).findByRole('alert')).textContent).toContain('No tienes permisos');
+    obtener.mockRestore();
   });
 
   it('clasifica una alerta y la elimina del listado de pendientes', async () => {

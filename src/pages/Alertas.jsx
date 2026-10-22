@@ -37,17 +37,17 @@ export default function Alertas({ repositorio = repositorioPredeterminado }) {
   const alertasPendientes = alertas.filter((alerta) => !alerta.estado_evaluacion || alerta.estado_evaluacion === 'neutro')
   const filtros = [
     { clave: 'busqueda', etiqueta: 'Buscar', tipo: 'texto', campos: ['box', 'supervisor'], placeholder: 'Box o supervisor...' },
-    { clave: 'fecha', etiqueta: 'Fecha detección', tipo: 'fecha' },
     { clave: 'categoria', etiqueta: 'Categoría', tipo: 'select', opciones: ['RS', 'VD'] },
     { clave: 'nivel', etiqueta: 'Nivel', tipo: 'select', opciones: ['Bajo', 'Medio', 'Alto'] },
   ]
   const columnas = [
-    { clave: 'box', encabezado: 'Box' },
-    { clave: 'categoria', encabezado: 'Categoría' },
+    { clave: 'box', encabezado: 'Box', renderizar: (valor, item) => <span className={styles.box}><span className={`${styles.punto} ${styles['punto' + item.nivel] || ''}`} />{valor}</span> },
+    { clave: 'categoria', encabezado: 'Categoría', renderizar: valor => <span className={styles.categoria}>{valor}</span> },
     { clave: 'nivel', encabezado: 'Nivel de alerta', renderizar: (valor) => <ColorUrgencia valor={valor} /> },
     { clave: 'fecha', encabezado: 'Fecha' },
     { clave: 'hora', encabezado: 'Hora' },
     { clave: 'supervisor', encabezado: 'Supervisor' },
+    { clave: 'detalle', encabezado: '', renderizar: () => <span aria-hidden="true">›</span> },
   ]
 
   async function guardarEvaluacion(alerta, evaluacion) {
@@ -62,15 +62,14 @@ export default function Alertas({ repositorio = repositorioPredeterminado }) {
 
   return <div className={styles.pagina}>
     <div className={styles.encabezado}>
-      <div><h1>Alertas</h1><p>{alertasPendientes.length} alertas pendientes de evaluación</p></div>
-      <span className={styles.estadoMonitoreo}><span className={styles.puntoActivo} />Monitoreo activo</span>
+      <div><h1>Alertas pendientes</h1><p>{cargando ? 'Cargando alertas…' : error ? 'No se pudo obtener el número de alertas.' : `${alertasPendientes.length} alertas pendientes de evaluación`}</p></div>
     </div>
     {mensajeExito && <div className={styles.exito} role="status"><span>{mensajeExito}</span><button type="button" onClick={() => establecerMensajeExito('')} aria-label="Cerrar mensaje">×</button></div>}
     {cargando
-      ? <p>Cargando alertas...</p>
+      ? <p className={styles.cargando} role="status">Cargando alertas...</p>
       : error
-        ? <div role="alert"><p>{error}</p><button type="button" onClick={() => establecerIntento((valor) => valor + 1)}>Reintentar</button></div>
-        : <><PaginaTabla datos={alertasPendientes} columnas={columnas} filtros={filtros} itemsPorPagina={6} headerFiltros={headerFiltros} headerTabla={headerTabla} mensajeVacio="No hay alertas pendientes de clasificación." resumenPaginacion alSeleccionarFila={establecerAlertaSeleccionada} onResultadosChange={establecerTotalMostrado} /><div className={styles.pieFiltros}>Mostrando {totalMostrado ?? alertasPendientes.length} de {alertasPendientes.length}</div></>}
+        ? <div className={styles.error} role="alert"><h2>No se pudieron cargar las alertas</h2><p>{error}</p><button className="button-primary" type="button" onClick={() => establecerIntento((valor) => valor + 1)}>Reintentar</button></div>
+        : <PaginaTabla className={styles.tablaAlertas} datos={alertasPendientes} columnas={columnas} filtros={filtros} itemsPorPagina={6} headerFiltros={headerFiltros} headerTabla={headerTabla} pieFiltros={<div className={styles.pieFiltros}><span>Mostrando {totalMostrado ?? alertasPendientes.length} de {alertasPendientes.length}</span><div className={styles.leyenda}><span><i className={styles.puntoBajo} />Bajo</span><span><i className={styles.puntoMedio} />Medio</span><span><i className={styles.puntoAlto} />Alto</span></div></div>} mensajeVacio="No hay alertas pendientes de clasificación." resumenPaginacion alSeleccionarFila={establecerAlertaSeleccionada} onResultadosChange={establecerTotalMostrado} />}
     <ModalDetalle alerta={alertaSeleccionada} onCerrar={() => establecerAlertaSeleccionada(null)} onGuardar={guardarEvaluacion} />
   </div>
 }

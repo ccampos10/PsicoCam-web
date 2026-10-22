@@ -1,266 +1,40 @@
-
-h1, h2 {
-  color: var(--text-primary);
-}
-
-.titulo {
-  margin: 10px 0;
-}
-
-.subtitulo {
-  color: var(--text-secondary);
-}
-
-.header {
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
-
-.panelFecha {
-  background: #ffffff;
-  border: 1px solid #d5e0f0;
-  border-radius: 12px;
-  padding: 20px 22px;
-  margin-bottom: 20px;
-}
-
-.tituloFiltros {
-  color: #16384d;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 6px;
-}
-
-.panelFecha > .subtitulo {
-  font-size: 13px;
-  margin: 0;
-  color: #6e7d91;
-}
-
-.camposFiltros {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 20px;
-}
-
-.campoFecha,
-.campoFiltro {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  min-width: 0;
-}
-
-.campoFecha label,
-.campoFiltro label {
-  color: #6e7d91;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.contenedorFecha {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 44px;
-  border: 1px solid #d5e0f0;
-  border-radius: 10px;
-  background: #ffffff;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.contenedorFecha:focus-within {
-  border-color: #7196c4;
-}
-
-.campoFecha .contenedorFecha .entradaFecha {
-  flex: 1;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  padding: 0 12px;
-  margin: 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  color: #172a45;
-  font-size: 13px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.entradaFecha::placeholder {
-  color: #94a3b8;
-}
-
-
-.campoFecha .contenedorFecha .selectorCalendario {
-  display: block;
-  flex: 0 0 42px;
-  width: 42px;
-  min-width: 42px;
-  max-width: 42px;
-  height: 100%;
-  padding: 0 8px;
-  margin: 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  color: #16384d;
-  outline: none;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-
-.selectorCalendario::-webkit-datetime-edit {
-  display: none;
-}
-
-.selectorCalendario::-webkit-calendar-picker-indicator {
-  display: block;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-
-.limpiarFecha {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 24px;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #64748b;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.limpiarFecha:hover {
-  color: #16384d;
-}
-
-
-.campoFiltro select {
-  width: 100%;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid #d5e0f0;
-  border-radius: 10px;
-  background: #ffffff;
-  color: #172a45;
-  font-size: 13px;
-  box-sizing: border-box;
-  outline: none;
-  cursor: pointer;
-}
-
-.campoFiltro select:focus {
-  border-color: #7196c4;
-}
-
-
-.contadorFiltros {
-  margin: 22px 0 0;
-  color: #6e7d91;
-  font-size: 12px;
-}
-
-
-.masDetallesButton {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.masDetallesButton:hover {
-  transform: scale(1.5);
-}
-
-.modal {
-  border-radius: 10px;
-  min-width: 500px;
-  padding: 30px;
-}
-
-.modalDetalle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0;
-  padding: 10px 10px;
-  border-bottom: 1px solid var(--border);
-}
-
-.modalDetalle .modalTitulo {
-  color: var(--text-secondary);
-}
-
-.modalButton {
-  width: 100%;
-  background-color: var(--card);
-  border: 2px solid var(--text-secondary);
-  color: var(--text-secondary);
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 15px;
-  margin: 10px 0;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.modalButton:hover {
-  color: var(--card);
-  background-color: var(--text-secondary);
-}
-
-.modalAlertaContenedor {
-  background-color: var(--canvas);
-  border: 2px solid var(--border);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.modalAlertaDetalle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3px 0px;
-}
-
-.modalAlertaDetalle .modalAlertaTitulo {
-  color: var(--text-secondary);
-}
-
-
-@media (max-width: 768px) {
-  .camposFiltros {
-    grid-template-columns: 1fr;
-  }
-
-  .panelFecha {
-    padding: 16px;
-  }
-
-  .campoFecha,
-  .campoFiltro {
-    width: 100%;
-  }
-
-  .header {
-    margin-bottom: 24px;
-  }
-
-  .modal {
-    min-width: 0;
-    width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
-  }
-}
+.header { margin-bottom: 28px; }
+.header h1 { margin: 0 0 6px; color: var(--text-primary); font-size: 30px; font-weight: 600; }
+.header p, .panel p { color: var(--text-secondary); }
+.header p { margin: 0; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.panel h2 { margin: 0 0 6px; color: var(--text-primary); font-size: 16px; font-weight: 600; }
+.panel p { margin: 0; font-size: 13px; }
+.filtros { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+.filtros label { display: flex; flex-direction: column; gap: 8px; min-width: 0; color: var(--text-secondary); font-size: 12px; }
+.filtros input, .filtros select { width: 100%; min-width: 0; height: 44px; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px; background: var(--card); padding: 0 10px; color: var(--text-primary); font: inherit; font-size: 13px; }
+.filtros input:focus-visible, .filtros select:focus-visible, .detalleBoton:focus-visible, .cerrar:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+.panel .contador { margin-top: 16px; }
+.panel .aviso { margin-top: 12px; color: #a43131; }
+.fecha { display: inline-flex; flex-direction: column; white-space: nowrap; }
+.fechaConPunto { display: inline-flex; align-items: center; gap: 10px; }
+.punto { display: inline-block; width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #99a8b3; }
+.clinico { background: #49c38a; }
+.tecnico { background: #e9bb3e; }
+.sistema { background: #487bb0; }
+.sinCategoria { background: #99a8b3; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 12px 22px; padding: 0 4px 16px; color: var(--text-secondary); font-size: 12px; }
+.leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+.fecha small { color: var(--text-secondary); font-size: 12px; }
+.nivel { display: inline-block; background: var(--canvas); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; }
+.detalleBoton { display: inline-flex; align-items: center; border: 0; background: transparent; color: var(--text-secondary); cursor: pointer; }
+.error { padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+.modal { width: min(480px, calc(100% - 32px)); max-height: calc(100% - 32px); box-sizing: border-box; border: 1px solid var(--border); border-radius: 14px; padding: 0; color: var(--text-primary); }
+.modalCabecera { display: flex; justify-content: space-between; gap: 16px; padding: 20px; background: var(--card); color: var(--text-primary); border-bottom: 1px solid var(--border); }
+.modalEtiqueta { margin: 0 0 8px; color: var(--text-secondary); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.modalCabecera h2 { margin: 0; font-size: 18px; }
+.modalAccion { margin: 5px 0 10px; font-size: 14px; }
+.modalCategoria { display: flex; align-items: center; gap: 7px; margin: 0; color: var(--text-secondary); font-size: 12px; }
+.cerrarIcono { align-self: flex-start; display: inline-flex; padding: 7px; border: 0; border-radius: 8px; background: var(--canvas); color: var(--text-secondary); cursor: pointer; }
+.modalContenido { padding: 20px; }
+.modalDetalle { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.modalDetalle span:first-child { color: var(--text-secondary); }
+.modalDetalle span:last-child { text-align: right; overflow-wrap: anywhere; }
+.cerrar { display: block; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px; background: #103b4d; color: white; font-weight: 600; cursor: pointer; }
+@media (max-width: 1000px) { .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .filtros { grid-template-columns: 1fr; } .panel { padding: 16px; } }

@@ -16,6 +16,9 @@ async function solicitar(ruta, opciones = {}) {
 
   const cuerpo = await respuesta.json().catch(() => null)
   if (!respuesta.ok) {
+    if (respuesta.status === 401 && ruta !== '/api/login') {
+      throw new Error('La sesión no es válida o ha expirado. Cierra sesión e inicia sesión para consultar los datos.')
+    }
     throw new Error(cuerpo?.error || 'No se pudo completar la solicitud.')
   }
   return cuerpo
@@ -67,9 +70,19 @@ export const api = {
     }
   },
 
+  obtenerCuenta: () => solicitar('/api/cuenta'),
+  async actualizarCuenta(datos) {
+    const sesion = await solicitar('/api/cuenta', { method: 'PATCH', body: JSON.stringify(datos) })
+    return guardarSesion(sesion)
+  },
+  cambiarContrasena: datos => solicitar('/api/cuenta/contrasena', {
+    method: 'PUT', body: JSON.stringify(datos),
+  }),
+
   listarBitacora: () => solicitar('/api/bitacora'),
   listarAlertas: () => solicitar('/api/alertas'),
   obtenerAlerta: id => solicitar(`/api/alertas/id?${new URLSearchParams({ id: String(id) })}`),
+  obtenerTranscripcion: id => solicitar(`/api/alertas/transcripcion?${new URLSearchParams({ id: String(id) })}`, { cache: 'no-store' }),
   actualizarEvaluacion: (id, estadoEvaluacion) => solicitar(
     `/api/alertas/clasificar?${new URLSearchParams({
       id: String(id),

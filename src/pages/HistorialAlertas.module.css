@@ -1,10 +1,9 @@
 
-h1, h2 {
-  color: var(--text-primary);
-}
-
 .titulo {
-  margin: 10px 0;
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 600;
 }
 
 .subtitulo {
@@ -12,9 +11,32 @@ h1, h2 {
 }
 
 .header {
-  margin-top: 20px;
-  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
 }
+.estado { padding: 8px 18px; border-radius: 999px; background: #e8eef4; color: var(--text-secondary); font-size: 12px; white-space: nowrap; }
+.filtrosHistorial { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.filtrosHistorial > div { min-width: 0; }
+.tablaHistorial table { min-width: 760px; }
+.tablaHistorial th { text-transform: uppercase; font-size: 11px; }
+.tablaHistorial td { padding-top: 16px; padding-bottom: 16px; }
+.box { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; white-space: nowrap; }
+.punto { width: 9px; height: 9px; border-radius: 50%; background: var(--text-secondary); }
+.puntoAlto { background: var(--risk-high); }
+.puntoMedio { background: var(--risk-medium); }
+.puntoBajo { background: var(--risk-low); }
+.categoria { display: inline-block; padding: 3px 7px; border-radius: 4px; background: #e8eef4; color: var(--text-primary); font-size: 11px; font-weight: 600; }
+.resultadoCorrecto, .resultadoFalso { display: inline-block; padding: 5px 9px; border-radius: 5px; font-size: 12px; white-space: nowrap; }
+.resultadoCorrecto { background: #e7f6ee; color: #1f8a5b; }
+.resultadoFalso { background: #fff4df; color: #a76d08; }
+.error { padding: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+.error h2 { margin: 0 0 8px; font-size: 16px; }
+.error p { margin: 0 0 16px; color: var(--text-secondary); }
+
+.header h1 { margin: 0 0 6px; color: var(--text-primary); font-size: 30px; font-weight: 600; }
 
 .loadingText {
   font-size: 14px;
@@ -22,6 +44,9 @@ h1, h2 {
   text-align: center;
   padding: 40px 0;
   margin: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
 
@@ -330,12 +355,15 @@ h1, h2 {
 
 
 @media (max-width: 1000px) {
+  .filtrosHistorial { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .camposFiltros {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 700px) {
+  .filtrosHistorial { grid-template-columns: minmax(0, 1fr); }
+  .header { align-items: flex-start; flex-wrap: wrap; }
   .camposFiltros {
     grid-template-columns: 1fr;
   }

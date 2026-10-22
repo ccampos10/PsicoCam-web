@@ -9,7 +9,7 @@ function adaptarRegistro(registro: Record<string, unknown>) {
     String(registro.fecha || ''),
     String(registro.hora || ''),
     String(registro.usuario || ''),
-  ), { id: registro.id, alertaId: registro.alertaId })
+  ), { id: registro.id, alertaId: registro.alertaId, accion: String(registro.accion || '') })
 }
 
 export class ApiBitacoraRepository implements IBitacoraRepository {

@@ -25,6 +25,7 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
         <FormularioInicioSesion alEnviar={alEnviar || iniciarSesion} />
         {vistaPreviaDisponible && <details className="acceso-desarrollo">
           <summary>Vista previa de desarrollo</summary>
+          <p>Solo permite revisar la interfaz: no inicia sesión ni da acceso a datos protegidos. Para consultar datos, inicia sesión con una cuenta del backend.</p>
           <button className="button-secondary" onClick={iniciarVistaPrevia}>Abrir vista previa</button>
         </details>}
       </div>

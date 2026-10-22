@@ -48,6 +48,11 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
   }
   const valor = {
     usuario, iniciarSesion, cerrarSesion, cerrandoSesion, errorCierreSesion,
+    actualizarPerfil: async datos => {
+      const perfil = asignarRutasPermitidas(await api.actualizarCuenta(datos))
+      establecerUsuario(perfil)
+      return perfil
+    },
     vistaPreviaDisponible: import.meta.env.DEV,
     iniciarVistaPrevia: () => { if (import.meta.env.DEV) establecerUsuario(usuarioVistaPrevia) },
   }

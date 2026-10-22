@@ -32,7 +32,7 @@ describe('Integración de SCRUM-27', () => {
     const barraLateral = screen.getByRole('complementary')
     for (const { titulo } of navegacion) {
       await interaccion.click(within(barraLateral).getByRole('link', { name: titulo }))
-      expect(await screen.findByRole('heading', { level: 1, name: titulo })).toBeTruthy()
+      expect(await screen.findByRole('heading', { level: 1, name: titulo === 'Alertas' ? 'Alertas pendientes' : titulo })).toBeTruthy()
       expect(within(barraLateral).getByRole('link', { name: titulo }).getAttribute('aria-current')).toBe('page')
       expect(barraLateral.querySelectorAll('[aria-current="page"]').length).toBe(1)
       expect(screen.getByRole('banner')).toBe(encabezado)
@@ -44,14 +44,14 @@ describe('Integración de SCRUM-27', () => {
 
   it.each(navegacion)('permite entrar directamente a $ruta', async ({ ruta, titulo }) => {
     prepararPrueba({ rutaInicial: ruta })
-    expect(await screen.findByRole('heading', { level: 1, name: titulo })).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: titulo === 'Alertas' ? 'Alertas pendientes' : titulo })).toBeTruthy()
   })
 
   it('redirige la ruta inicial y permite navegar a Alertas', async () => {
     const interaccion = await prepararPrueba({ rutaInicial: '/' })
     expect(await screen.findByRole('heading', { name: 'Dashboard' })).toBeTruthy()
     await interaccion.click(screen.getByRole('link', { name: 'Alertas', exact: true }))
-    expect(await screen.findByRole('heading', { name: 'Alertas' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Alertas pendientes' })).toBeTruthy()
   })
 
   it('muestra la página no encontrada dentro del Layout y permite volver', async () => {
@@ -80,7 +80,7 @@ describe('Integración de SCRUM-27', () => {
     expect(document.activeElement).toBe(botonNotificaciones)
     await interaccion.click(botonNotificaciones)
     await interaccion.click(screen.getByRole('link', { name: 'Ver alertas' }))
-    expect(await screen.findByRole('heading', { name: 'Alertas', level: 1 })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Alertas pendientes', level: 1 })).toBeTruthy()
     expect(botonNotificaciones.getAttribute('aria-expanded')).toBe('false')
   })
 
