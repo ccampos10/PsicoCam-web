@@ -119,10 +119,10 @@ export default function Usuarios({ servicio = MockService, alAgregar, alEditar, 
   ]
 
   return <section className={estilos.pagina} aria-labelledby="titulo-usuarios">
-    <header className={estilos.encabezado}>
+    <div className={estilos.encabezado}>
       <div><h1 id="titulo-usuarios">Gestión de usuarios</h1><p>Administra las cuentas del personal clínico y administrativo con acceso a PsicoCam.</p></div>
       <span className={estilos.contador}>{usuarios.length} usuarios</span>
-    </header>
+    </div>
     {mensaje && <p role="status">{mensaje}</p>}
     {errorAccion && !eliminando && <p role="alert">{errorAccion}</p>}
     {cargando ? <p role="status">Cargando usuarios…</p> : error ? <div role="alert">

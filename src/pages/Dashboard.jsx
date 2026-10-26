@@ -33,7 +33,7 @@ function agruparPorCategoria(alertas) {
 
 function agruparEvaluaciones(alertas) {
   return alertas.reduce((acumulado, alerta) => {
-    if (alerta.estado_evaluacion === 'neutro') acumulado.pendientes += 1
+    if (alerta.estado_evaluacion === null || alerta.estado_evaluacion === undefined || alerta.estado_evaluacion === 'neutro') acumulado.pendientes += 1
     else acumulado.evaluadas += 1
     return acumulado
   }, { pendientes: 0, evaluadas: 0 })

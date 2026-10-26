@@ -6,7 +6,7 @@ import { MockService } from "../services/MockService";
 import { ColorUrgencia } from "../components/Pilas";
 import styles from "./Alertas.module.css";
 
-export default function Alertas() {
+export default function Alertas({ titulo = 'Alertas' }) {
   const [alertas, setAlertas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -129,9 +129,9 @@ export default function Alertas() {
   return (
     <div className={styles.pagina}>
       {/* Encabezado */}
-      <header className={styles.encabezado}>
+      <div className={styles.encabezado}>
         <div>
-          <h1>Alertas</h1>
+          <h1>{titulo}</h1>
           <p>
             {alertasPendientes.length} alertas pendientes de evaluación
           </p>
@@ -141,7 +141,7 @@ export default function Alertas() {
           <span className={styles.puntoActivo}></span>
           Monitoreo activo
         </span>
-      </header>
+      </div>
 
       {/* Mensaje de clasificación */}
       {mensajeExito && (
