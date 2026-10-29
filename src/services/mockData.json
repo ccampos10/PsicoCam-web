@@ -1,17 +1,17 @@
 [
-  { "id": 1,  "box": "Box 1", "fecha": "2026-09-15", "hora": "08:42", "categoria": "RS", "nivel": "Alto",  "supervisor": "gabriela.sanchez@psicocam.cl", "estado_evaluacion": "neutro" },
+  { "id": 1,  "box": "Box 1", "fecha": "2026-09-15", "hora": "08:42", "categoria": "RS", "nivel": "Alto",  "supervisor": "gabriela.sanchez@psicocam.cl", "estado_evaluacion": null },
   { "id": 2,  "box": "Box 2", "fecha": "2026-09-15", "hora": "09:10", "categoria": "VD", "nivel": "Medio", "supervisor": "jorge.mendez@psicocam.cl",     "estado_evaluacion": "correcta" },
   { "id": 3,  "box": "Box 3", "fecha": "2026-09-15", "hora": "10:05", "categoria": "RS", "nivel": "Bajo",  "supervisor": "lucia.ramos@psicocam.cl",      "estado_evaluacion": "falso positivo" },
   { "id": 4,  "box": "Box 4", "fecha": "2026-09-16", "hora": "11:22", "categoria": "VD", "nivel": "Alto",  "supervisor": "marco.salazar@psicocam.cl",    "estado_evaluacion": "correcta" },
-  { "id": 5,  "box": "Box 5", "fecha": "2026-09-16", "hora": "12:47", "categoria": "RS", "nivel": "Medio", "supervisor": "cecilia.ortiz@psicocam.cl",    "estado_evaluacion": "neutro" },
+  { "id": 5,  "box": "Box 5", "fecha": "2026-09-16", "hora": "12:47", "categoria": "RS", "nivel": "Medio", "supervisor": "cecilia.ortiz@psicocam.cl",    "estado_evaluacion": null },
   { "id": 6,  "box": "Box 1", "fecha": "2026-09-16", "hora": "13:15", "categoria": "VD", "nivel": "Bajo",  "supervisor": "gabriela.sanchez@psicocam.cl", "estado_evaluacion": "falso positivo" },
   { "id": 7,  "box": "Box 2", "fecha": "2026-09-17", "hora": "14:32", "categoria": "RS", "nivel": "Alto",  "supervisor": "jorge.mendez@psicocam.cl",     "estado_evaluacion": "correcta" },
   { "id": 8,  "box": "Box 2", "fecha": "2026-09-17", "hora": "14:58", "categoria": "RS", "nivel": "Medio", "supervisor": "jorge.mendez@psicocam.cl",     "estado_evaluacion": "falso positivo" },
-  { "id": 9,  "box": "Box 3", "fecha": "2026-09-17", "hora": "15:40", "categoria": "VD", "nivel": "Alto",  "supervisor": "lucia.ramos@psicocam.cl",      "estado_evaluacion": "neutro" },
+  { "id": 9,  "box": "Box 3", "fecha": "2026-09-17", "hora": "15:40", "categoria": "VD", "nivel": "Alto",  "supervisor": "lucia.ramos@psicocam.cl",      "estado_evaluacion": null },
   { "id": 10, "box": "Box 4", "fecha": "2026-09-18", "hora": "09:05", "categoria": "RS", "nivel": "Bajo",  "supervisor": "marco.salazar@psicocam.cl",    "estado_evaluacion": "correcta" },
-  { "id": 11, "box": "Box 5", "fecha": "2026-09-18", "hora": "10:26", "categoria": "VD", "nivel": "Medio", "supervisor": "cecilia.ortiz@psicocam.cl",    "estado_evaluacion": "neutro" },
+  { "id": 11, "box": "Box 5", "fecha": "2026-09-18", "hora": "10:26", "categoria": "VD", "nivel": "Medio", "supervisor": "cecilia.ortiz@psicocam.cl",    "estado_evaluacion": null },
   { "id": 12, "box": "Box 1", "fecha": "2026-09-18", "hora": "16:12", "categoria": "RS", "nivel": "Alto",  "supervisor": "gabriela.sanchez@psicocam.cl", "estado_evaluacion": "correcta" },
   { "id": 13, "box": "Box 3", "fecha": "2026-09-19", "hora": "08:50", "categoria": "VD", "nivel": "Bajo",  "supervisor": "lucia.ramos@psicocam.cl",      "estado_evaluacion": "falso positivo" },
-  { "id": 14, "box": "Box 4", "fecha": "2026-09-19", "hora": "11:38", "categoria": "RS", "nivel": "Medio", "supervisor": "marco.salazar@psicocam.cl",    "estado_evaluacion": "neutro" },
+  { "id": 14, "box": "Box 4", "fecha": "2026-09-19", "hora": "11:38", "categoria": "RS", "nivel": "Medio", "supervisor": "marco.salazar@psicocam.cl",    "estado_evaluacion": null },
   { "id": 15, "box": "Box 5", "fecha": "2026-09-19", "hora": "17:05", "categoria": "VD", "nivel": "Alto",  "supervisor": "cecilia.ortiz@psicocam.cl",    "estado_evaluacion": "correcta" }
 ]

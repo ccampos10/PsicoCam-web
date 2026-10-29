@@ -28,7 +28,7 @@ describe('Enrutamiento principal: SCRUM-222 a SCRUM-225', () => {
     expect(screen.queryByRole('banner')).toBeNull()
     await interaccion.click(screen.getByText('Vista previa de desarrollo'))
     await interaccion.click(screen.getByRole('button', { name: 'Abrir vista previa' }))
-    expect(await screen.findByRole('heading', { name: 'Historial' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Historial de Alertas' })).toBeTruthy()
     expect(screen.getByRole('banner')).toBeTruthy()
   })
 
