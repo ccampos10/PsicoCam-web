@@ -1,23 +1,27 @@
 .contenedor {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 30px;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
+
+.contenedor h2 { margin: 0 0 6px; font-size: 16px; font-weight: 600; color: var(--text-primary); }
+.contenedor h2 + p { margin: 0 0 18px; color: var(--text-secondary); font-size: 13px; }
 
 .filtros {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 20px;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
 .filtro {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.85rem;
+  gap: 8px;
+  font-size: 12px;
   color: var(--text-secondary);
 }
 
@@ -26,11 +30,11 @@
 .filtro input {
   padding: 0.4rem 0.6rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--canvas);
+  border-radius: 8px;
+  background: var(--card);
   color: var(--text-primary);
   font: inherit;
-  min-height: 34px;
+  min-height: 44px;
   box-sizing: border-box;
 }
 
@@ -51,6 +55,7 @@
 
 .desplazamientoTabla {
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
 }
 
 .tabla {
@@ -71,7 +76,14 @@
   padding: 0.75rem;
   border-bottom: 1px solid var(--border);
   color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.5;
 }
+
+.tabla tbody tr[tabindex] { cursor: pointer; }
+.tabla tbody tr[tabindex]:hover { background: var(--canvas); }
+.tabla tbody tr[tabindex]:focus-visible { outline: 2px solid var(--secondary); outline-offset: -2px; }
+.tabla tbody tr:last-child td { border-bottom: 0; }
 
 .paginacion {
   display: flex;
@@ -80,6 +92,7 @@
   margin-top: 1rem;
   color: var(--text-secondary);
   font-size: 0.85rem;
+  flex-wrap: wrap;
 }
 
 .paginacion button {
@@ -93,6 +106,8 @@
 .paginacion button:disabled {
   opacity: 0.5;
 }
+.paginacion button:not(:disabled) { cursor: pointer; }
+.paginacion button:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
 
 .puntoNivel {
   display: inline-flex;
@@ -114,10 +129,10 @@
   align-items: center;
   width: 100%;
   min-width: 190px;
-  height: 40px;
+  height: 44px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--canvas);
+  background: var(--card);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -189,4 +204,10 @@
 .filtro {
   flex: 1 1 190px;
   min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .contenedor { padding: 16px; }
+  .filtro, .filtro input[type="text"], .filtro input[type="date"], .contenedorFecha { min-width: 0; }
+  .tabla { min-width: 620px; }
 }

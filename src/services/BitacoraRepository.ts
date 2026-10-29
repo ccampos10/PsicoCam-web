@@ -1,7 +1,7 @@
 import { IBitacoraRepository, RegistroBitacora } from "./IBitacoraRepository"
 
 export default class BitacoraRepository implements IBitacoraRepository {
-  ObtenerRegistros(): RegistroBitacora[] {
+  async ObtenerRegistros(): Promise<RegistroBitacora[]> {
     return [
       new RegistroBitacora(
         "Información",
@@ -53,7 +53,7 @@ export default class BitacoraRepository implements IBitacoraRepository {
       ),
     ]
   }
-  RegistroPorId(id: String): RegistroBitacora | null {
+  async RegistroPorId(id: String): Promise<RegistroBitacora | null> {
     return null
   }
 }

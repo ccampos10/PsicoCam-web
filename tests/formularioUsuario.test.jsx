@@ -1,14 +1,41 @@
 import { describe, expect, it, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Usuarios from '../src/pages/Usuarios'
 import FormularioUsuario from '../src/components/FormularioUsuario'
 import { MockService } from '../src/services/MockService'
 
 describe('Creación, edición y administración de usuarios', () => {
+  it('mantiene el formulario al pulsar fuera o Escape y permite cerrarlo con sus botones', async () => {
+    const alCerrar = vi.fn()
+    const interaccion = userEvent.setup()
+    render(<FormularioUsuario usuarios={[]} alGuardar={vi.fn()} alCerrar={alCerrar} />)
+    const dialogo = screen.getByRole('dialog')
+    await interaccion.type(screen.getByLabelText('Nombre completo'), 'Nombre conservado')
+    vi.spyOn(dialogo, 'getBoundingClientRect').mockReturnValue({ left: 100, right: 500, top: 100, bottom: 500 })
+    fireEvent.click(dialogo, { clientX: 20, clientY: 20 })
+    fireEvent(dialogo, new Event('cancel', { bubbles: false, cancelable: true }))
+    expect(alCerrar).not.toHaveBeenCalled()
+    expect(screen.getByLabelText('Nombre completo').value).toBe('Nombre conservado')
+    await interaccion.click(screen.getByRole('button', { name: 'Cerrar formulario' }))
+    expect(alCerrar).toHaveBeenCalledTimes(1)
+    await interaccion.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(alCerrar).toHaveBeenCalledTimes(2)
+  })
+
+  it('explica la longitud de la contraseña sin términos técnicos', async () => {
+    const interaccion = userEvent.setup()
+    render(<FormularioUsuario usuarios={[]} alGuardar={vi.fn()} alCerrar={vi.fn()} />)
+    const contrasena = screen.getByLabelText('Contraseña', { exact: true })
+    await interaccion.type(contrasena, 'corta')
+    expect(screen.getByText('La contraseña debe tener al menos 6 caracteres.')).toBeTruthy()
+    await interaccion.clear(contrasena)
+    await interaccion.type(contrasena, 'á'.repeat(37))
+    expect(screen.getByText('La contraseña es demasiado larga. Acórtala e inténtalo nuevamente.')).toBeTruthy()
+  })
   it('crea, edita sin contraseña, bloquea, habilita y elimina mediante MockService', async () => {
     const interaccion = userEvent.setup()
-    render(<Usuarios />)
+    render(<Usuarios servicio={MockService} />)
     await screen.findByRole('button', { name: 'Agregar Usuario' })
     await interaccion.click(screen.getByRole('button', { name: 'Agregar Usuario' }))
     let modal = screen.getByRole('dialog')
@@ -29,9 +56,12 @@ describe('Creación, edición y administración de usuarios', () => {
     await interaccion.click(within(modal).getByRole('button', { name: 'Guardar usuario' }))
     await screen.findByText('Usuario guardado correctamente.')
     await interaccion.click(screen.getByRole('button', { name: 'Bloquear a Cuenta de prueba' }))
+    expect(screen.getByRole('dialog', { name: 'Bloquear usuario' })).toBeTruthy()
+    await interaccion.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Bloquear' }))
     await screen.findByText('Usuario bloqueado.')
     expect(screen.queryByRole('dialog')).toBeNull()
     await interaccion.click(screen.getByRole('button', { name: 'Habilitar a Cuenta de prueba' }))
+    await interaccion.click(within(screen.getByRole('dialog', { name: 'Habilitar usuario' })).getByRole('button', { name: 'Habilitar' }))
     await screen.findByText('Usuario habilitado.')
     await interaccion.click(screen.getByRole('button', { name: 'Eliminar a Cuenta de prueba' }))
     await interaccion.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Cancelar' }))
@@ -67,6 +97,6 @@ describe('Creación, edición y administración de usuarios', () => {
     await interaccion.click(screen.getByRole('button', { name: 'Guardar usuario' }))
     expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'Error de conexión')
     expect(screen.getByLabelText('Nombre completo').value).toBe('Nueva cuenta')
-    expect(alGuardar).toHaveBeenCalledWith({ nombre: 'Nueva cuenta', correo: 'nuevo@example.com', contrasena: 'Prueba-123', rol: 'Profesional', estado: 'Activo' })
+    expect(alGuardar).toHaveBeenCalledWith({ nombre: 'Nueva cuenta', correo: 'nuevo@example.com', contrasena: 'Prueba-123', rol: 'Supervisor', estado: 'Activo' })
   })
 })

@@ -1,7 +1,37 @@
 
 .pagina {
-  padding: 20px 0;
+  padding: 0;
+  min-width: 0;
 }
+.box { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; white-space: nowrap; }
+.punto { width: 10px; height: 10px; border-radius: 50%; background: var(--text-secondary); }
+.puntoAlto { background: var(--risk-high); }
+.puntoMedio { background: var(--risk-medium); }
+.puntoBajo { background: var(--risk-low); }
+.categoria { display: inline-block; padding: 3px 7px; border-radius: 4px; background: #e8eef4; color: var(--text-primary); font-size: 11px; font-weight: 600; }
+.tablaAlertas table { min-width: 720px; }
+.tablaAlertas th { text-transform: uppercase; font-size: 11px; }
+.tablaAlertas td { padding-top: 16px; padding-bottom: 16px; }
+
+.cargando {
+  margin: 0;
+  padding: 40px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.error {
+  padding: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+}
+.error h2 { margin: 0 0 8px; font-size: 16px; }
+.error p { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; }
 
 /* ENCABEZADO */
 
@@ -15,8 +45,8 @@
 
 .encabezado h1 {
   color: #16384d;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 30px;
+  font-weight: 600;
   margin: 0 0 8px;
 }
 

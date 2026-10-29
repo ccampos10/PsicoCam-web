@@ -148,6 +148,39 @@ Iniciar el entorno de desarrollo:
 ```bash
 npm run dev
 ```
+La aplicación estará disponible en la dirección local indicada por Vite en la terminal.
+
+Para usar datos reales durante el desarrollo, inicia también PsicoCam-Backend en
+`http://localhost:3000`. Vite redirige las solicitudes `/api` a ese servidor; no
+es necesario compilar el frontend para desarrollar. Si usas `VITE_API_URL`, esa
+dirección reemplaza las rutas relativas y puede requerir configuración de CORS.
+El backend debe tener su almacenamiento configurado o su modo de desarrollo en
+memoria activado. Sin backend, la vista previa no proporciona datos reales.
+
+Entorno verificado: Node 24.14.1 y npm 11.11.0. Usa `npm ci` para reproducir las versiones del lockfile.
+
+
+### Arquitectura y rutas
+
+```text
+BrowserRouter (main.jsx)
+└── ProveedorSesion (App.jsx)
+    └── RutasAplicacion
+        ├── /login -> AccesoPendiente (sin formulario de login aun)
+        └── RequiereSesion
+            └── Layout
+                ├── Sidebar
+                ├── Navbar
+                └── main -> Outlet
+                    ├── / -> redirección a la primera ruta permitida
+                    ├── /dashboard
+                    ├── /alertas
+                    ├── /alertas/:idAlerta -> DetalleAlerta
+                    ├── /historial
+                    ├── /configuracion
+                    ├── /mi-cuenta
+                    └── * -> PaginaNoEncontrada
+```
 
 La aplicación queda disponible en la dirección que Vite indica en la terminal (por defecto, `http://localhost:5173`).
 

@@ -1,5 +1,5 @@
 export interface ISettingsRepository {
-    ObtenerConfiguracion(): {horaInicio: String, horaTermino: String, correo: String}
-    CambiarHora(horaInicio: String, horaTermino: String): null
-    CambiarCorreo(correo: String): null
+    ObtenerConfiguracion(): Promise<{ horaInicio: string, horaTermino: string, correo: string }>
+    CambiarHora(horaInicio: string, horaTermino: string): Promise<null>
+    CambiarCorreo(correo: string): Promise<null>
 }

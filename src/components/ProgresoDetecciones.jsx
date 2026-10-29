@@ -9,7 +9,7 @@ export default function ProgresoDetecciones({ datos }) {
         return <div className="progreso-item" key={dato.abreviatura}>
           <div className="progreso-fila">
             <span className="progreso-nombre">{dato.nombre} <span className="progreso-abreviatura">({dato.abreviatura})</span></span>
-            <span className="progreso-cantidad">{dato.alertas} alertas</span>
+            <span className="progreso-cantidad">{dato.alertas} {dato.alertas === 1 ? 'alerta' : 'alertas'}</span>
           </div>
           <div className="progreso-pista"><div className="progreso-relleno" style={{ width: `${porcentaje}%`, '--progreso-color': dato.color }}></div></div>
         </div>

@@ -3,14 +3,14 @@ import usuariosMock from "./usuariosMock.json";
 import { Usuario } from "../models/Usuario";
 
 const LATENCIA_MS = 400;
-let usuariosActuales = usuariosMock.map((usuario) => new Usuario(usuario));
+let usuariosActuales = usuariosMock.map((usuario) => new Usuario({ ...usuario, rol: usuario.rol === 'Profesional' ? 'Supervisor' : usuario.rol }));
 let siguienteIdUsuario = Math.max(...usuariosActuales.map((usuario) => usuario.id)) + 1;
 
 // Comprueba los datos del perfil y evita correos duplicados.
 function validarUsuario(datos, id) {
   if (!datos.nombre?.trim()) throw new Error('Ingresa el nombre completo.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo?.trim() ?? '')) throw new Error('Ingresa un correo válido.');
-  if (!['Administrador', 'Profesional'].includes(datos.rol)) throw new Error('Selecciona un rol válido.');
+  if (!['Administrador', 'Supervisor'].includes(datos.rol)) throw new Error('Selecciona un rol válido.');
   if (!['Activo', 'Inactivo'].includes(datos.estado)) throw new Error('Selecciona un estado válido.');
   if (usuariosActuales.some((usuario) => usuario.id !== id && usuario.correo.toLowerCase() === datos.correo.trim().toLowerCase())) {
     throw new Error('Ya existe un usuario con ese correo.');

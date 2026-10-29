@@ -1,263 +1,102 @@
+import { useEffect, useState } from 'react'
+import { ChevronRight, X } from 'lucide-react'
+import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
+import Modal from '../components/Modal'
+import { ApiBitacoraRepository } from '../repositories/ApiBitacoraRepository'
+import styles from './Bitacora.module.css'
 
-import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+const repositorioBitacora = new ApiBitacoraRepository()
 
-import { PaginaTabla } from "../components/PaginaTabla/PaginaTabla";
-import { ColorUrgencia, ColorNivel } from "../components/Pilas";
-import Modal from "../components/Modal";
-import BitacoraRepository from "../services/BitacoraRepository";
+function fechaVisible(fecha) {
+  const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(fecha || '')
+  return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : fecha || 'No registrada'
+}
 
-import styles from "./Bitacora.module.css";
+function textoAccion(accion) {
+  return accion ? accion.replaceAll('_', ' ') : 'No registrada'
+}
 
-// Modal con el detalle completo de un registro.
-const Registro = ({ item }) => {
-  const [verModal, setVerModal] = useState(false);
+function categoriaEvento(item) {
+  if (item.accion === 'clasificar_alerta') return { nombre: 'Evento clínico', estilo: styles.clinico }
+  return { nombre: 'Sin categoría', estilo: styles.sinCategoria }
+}
 
-  return (
-    <>
-      <div>
-        <ChevronRight
-          className={styles.masDetallesButton}
-          onClick={() => setVerModal(true)}
-        />
-      </div>
+export default function Bitacora({ titulo = 'Bitácora', repositorio = repositorioBitacora }) {
+  const [datos, establecerDatos] = useState([])
+  const [error, establecerError] = useState('')
+  const [cargando, establecerCargando] = useState(true)
+  const [intento, establecerIntento] = useState(0)
+  const [seleccionado, establecerSeleccionado] = useState(null)
+  const [filtros, establecerFiltros] = useState({ desde: '', hasta: '', usuario: '', nivel: '', accion: '' })
 
-      {verModal && (
-        <Modal
-          alCerrar={() => setVerModal(false)}
-          className={styles.modal}
-        >
-          <div>
-            <h1>Detalles del registro</h1>
-            <p>Registro completo del evento.</p>
+  useEffect(() => {
+    let activo = true
+    establecerCargando(true)
+    repositorio.listarRegistros()
+      .then((registros) => { if (activo) { establecerDatos(registros); establecerError('') } })
+      .catch((fallo) => { if (activo) establecerError(fallo.message || 'No se pudo cargar la bitácora.') })
+      .finally(() => { if (activo) establecerCargando(false) })
+    return () => { activo = false }
+  }, [intento, repositorio])
 
-            <div className={styles.modalDetalle}>
-              <p className={styles.modalTitulo}>Fecha</p>
-              <p className={styles.modalDato}>{item.fecha}</p>
-            </div>
+  const opciones = (campo) => [...new Set(datos.map(item => item[campo]).filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b), 'es'))
+  const registros = datos.filter(item =>
+    (!filtros.desde || (item.fecha && item.fecha >= filtros.desde)) &&
+    (!filtros.hasta || (item.fecha && item.fecha <= filtros.hasta)) &&
+    (!filtros.usuario || item.usuario === filtros.usuario) &&
+    (!filtros.nivel || item.nivel === filtros.nivel) &&
+    (!filtros.accion || item.accion === filtros.accion)
+  ).sort((a, b) => `${b.fecha || ''} ${b.hora || ''}`.localeCompare(`${a.fecha || ''} ${a.hora || ''}`))
 
-            <div className={styles.modalDetalle}>
-              <p className={styles.modalTitulo}>Hora</p>
-              <p className={styles.modalDato}>{item.hora}</p>
-            </div>
-
-            <div className={styles.modalDetalle}>
-              <p className={styles.modalTitulo}>Nivel</p>
-              <ColorNivel valor={item.nivel} />
-            </div>
-
-            <div className={styles.modalDetalle}>
-              <p className={styles.modalTitulo}>Usuario</p>
-              <p className={styles.modalDato}>{item.usuario}</p>
-            </div>
-
-            <div className={styles.modalDetalle}>
-              <p className={styles.modalTitulo}>Descripción</p>
-              <p className={styles.modalDato}>
-                {item.descripcion}
-              </p>
-            </div>
-
-            {item.alerta && (
-              <>
-                <h3>Detalle de la alerta asociada</h3>
-
-                <div className={styles.modalAlertaContenedor}>
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>Box</p>
-                    <p className={styles.modalAlertaDato}>Box 5</p>
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Tipo de detección
-                    </p>
-                    <p className={styles.modalAlertaDato}>
-                      Vulneración de derechos (VD)
-                    </p>
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Fecha de detección
-                    </p>
-                    <p className={styles.modalAlertaDato}>
-                      27/03/2026
-                    </p>
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Hora de detección
-                    </p>
-                    <p className={styles.modalAlertaDato}>
-                      13:32
-                    </p>
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Supervisor
-                    </p>
-                    <p className={styles.modalAlertaDato}>
-                      roberto.rober2@psicocam.cl
-                    </p>
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Nivel de urgencia
-                    </p>
-                    <ColorUrgencia valor={"Bajo"} />
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Nivel de urgencia
-                    </p>
-                    <ColorUrgencia valor={"Medio"} />
-                  </div>
-
-                  <div className={styles.modalAlertaDetalle}>
-                    <p className={styles.modalAlertaTitulo}>
-                      Nivel de urgencia
-                    </p>
-                    <ColorUrgencia valor={"Alto"} />
-                  </div>
-                </div>
-              </>
-            )}
-
-            <button
-              type="button"
-              className={styles.modalButton}
-              onClick={() => setVerModal(false)}
-            >
-              Cerrar
-            </button>
-          </div>
-        </Modal>
-      )}
-    </>
-  );
-};
-
-export default function Bitacora({
-  titulo = 'Bitácora y auditoría',
-  rutasDisponibles = [],
-  alEnviar,
-}) {
-  // Únicamente se guarda la cantidad de resultados.
-  // PaginaTabla administra los filtros.
-  const [totalMostrado, setTotalMostrado] = useState(null);
-
-  const rep = new BitacoraRepository();
-  const datos = rep.ObtenerRegistros();
-
-  const usuariosDisponibles = [
-    ...new Set(datos.map((registro) => registro.usuario)),
-  ].filter(Boolean);
-
-  // Configuración de filtros.
-  // La lógica se ejecuta dentro de PaginaTabla.
-  const filtros = [
-    {
-      clave: "fecha",
-      etiqueta: "Fecha del evento",
-      tipo: "fecha",
-    },
-    {
-      clave: "usuario",
-      etiqueta: "Usuario",
-      tipo: "select",
-      opciones: usuariosDisponibles,
-    },
-    {
-      clave: "nivel",
-      etiqueta: "Nivel",
-      tipo: "select",
-      opciones: [
-        "Información",
-        "Advertencia",
-        "Grave",
-      ],
-    },
-  ];
+  function cambiarFiltro(evento) {
+    const { name, value } = evento.target
+    establecerFiltros(actual => ({ ...actual, [name]: value }))
+  }
 
   const columnas = [
-    {
-      clave: "fechaHora",
-      encabezado: "Fecha/Hora",
-    },
-    {
-      clave: "usuario",
-      encabezado: "Usuario",
-    },
-    {
-      clave: "nivel",
-      encabezado: "Nivel",
-      renderizar: (valor) => (
-        <ColorNivel valor={valor} />
-      ),
-    },
-    {
-      clave: "descripcion",
-      encabezado: "Descripción",
-    },
-    {
-      clave: "noExiste",
-      encabezado: "Más Detalles",
-      renderizar: (_, item) => (
-        <Registro item={item} />
-      ),
-    },
-  ];
+    { clave: 'fecha', encabezado: 'Fecha / hora', renderizar: (_, item) => <span className={styles.fechaConPunto}><span className={`${styles.punto} ${categoriaEvento(item).estilo}`} aria-label={categoriaEvento(item).nombre} /><span className={styles.fecha}>{fechaVisible(item.fecha)}<small>{item.hora || '—'}</small></span></span> },
+    { clave: 'usuario', encabezado: 'Usuario', renderizar: valor => valor || 'No registrado' },
+    { clave: 'nivel', encabezado: 'Nivel', renderizar: valor => <span className={styles.nivel}>{valor || 'No registrado'}</span> },
+    { clave: 'accion', encabezado: 'Acción', renderizar: textoAccion },
+    { clave: 'descripcion', encabezado: 'Detalle del evento', renderizar: valor => valor || 'Sin detalle' },
+    { clave: 'detalles', encabezado: '', renderizar: (_, item) => <button type="button" className={styles.detalleBoton} onClick={() => establecerSeleccionado(item)} aria-label={`Ver detalles de ${textoAccion(item.accion)}`}><ChevronRight size={18} /></button> },
+  ]
 
-  const headerFiltros = (
-    <div>
-      <h2 className={styles.tituloFiltros}>Filtros</h2>
-      <p className={styles.subtitulo}>
-        Consulta eventos por fecha, usuarios o nivel del evento.
-      </p>
-    </div>
-  );
-
-  const headerTabla = (
-    <div className={styles.titulo}>
-      <h2>Registro de eventos</h2>
-      <p className={styles.subtitulo}>
-        Cada registro identifica cuándo ocurrió el evento,
-        su responsable y el detalle.
-      </p>
-    </div>
-  );
-
-  return (
-    <div>
-      {/* Encabezado */}
-      <div className={styles.header}>
-        <h1>{titulo}</h1>
-        <p className={styles.subtitulo}>
-          Trazabilidad de alertas, notificaciones, evaluaciones
-          y eventos técnicos del sistema.
-        </p>
+  return <div>
+    <div className={styles.header}><h1>{titulo}</h1><p>Trazabilidad de alertas, notificaciones, evaluaciones y eventos técnicos.</p></div>
+    {cargando ? <p role="status">Cargando registros...</p> : error
+      ? <div className={styles.error} role="alert"><p>{error}</p><button type="button" onClick={() => establecerIntento(valor => valor + 1)}>Reintentar</button></div>
+      : <>
+        <section className={styles.panel} aria-labelledby="titulo-filtros-bitacora">
+          <h2 id="titulo-filtros-bitacora">Filtrar registros</h2>
+          <p>Consulta eventos por fecha, usuario, nivel o acción.</p>
+          <div className={styles.filtros}>
+            <label>Desde<input type="date" name="desde" value={filtros.desde} onChange={cambiarFiltro} /></label>
+            <label>Hasta<input type="date" name="hasta" value={filtros.hasta} onChange={cambiarFiltro} /></label>
+            <label>Usuario<select name="usuario" value={filtros.usuario} onChange={cambiarFiltro}><option value="">Todos los usuarios</option>{opciones('usuario').map(valor => <option key={valor} value={valor}>{valor}</option>)}</select></label>
+            <label>Nivel<select name="nivel" value={filtros.nivel} onChange={cambiarFiltro}><option value="">Todos los niveles</option>{opciones('nivel').map(valor => <option key={valor} value={valor}>{valor}</option>)}</select></label>
+            <label>Acción<select name="accion" value={filtros.accion} onChange={cambiarFiltro}><option value="">Todas las acciones</option>{opciones('accion').map(valor => <option key={valor} value={valor}>{textoAccion(valor)}</option>)}</select></label>
+          </div>
+          {filtros.desde && filtros.hasta && filtros.desde > filtros.hasta && <p className={styles.aviso} role="alert">La fecha inicial debe ser anterior o igual a la fecha final.</p>}
+          <p className={styles.contador}>Mostrando {registros.length} de {datos.length} eventos</p>
+        </section>
+        <PaginaTabla datos={registros} columnas={columnas} itemsPorPagina={6} resumenPaginacion mensajeVacio="No hay registros para mostrar." alSeleccionarFila={establecerSeleccionado} headerTabla={<div><h2>Registro de eventos</h2><p>Cada registro identifica cuándo ocurrió el evento, su responsable y el detalle.</p></div>} />
+        <div className={styles.leyenda} aria-label="Categorías de eventos">
+          <span><i className={`${styles.punto} ${styles.clinico}`} />Evento clínico</span>
+          <span><i className={`${styles.punto} ${styles.tecnico}`} />Evento técnico / integración</span>
+          <span><i className={`${styles.punto} ${styles.sistema}`} />Evento del sistema</span>
+          {registros.some(item => categoriaEvento(item).nombre === 'Sin categoría') && <span><i className={`${styles.punto} ${styles.sinCategoria}`} />Sin categoría</span>}
+        </div>
+      </>}
+    {seleccionado && <Modal alCerrar={() => establecerSeleccionado(null)} className={styles.modal} idTitulo="titulo-detalle-bitacora">
+      <div className={styles.modalCabecera}>
+        <div><p className={styles.modalEtiqueta}>Detalle del evento</p><h2 id="titulo-detalle-bitacora">Detalles del registro</h2><p className={styles.modalAccion}>{textoAccion(seleccionado.accion)}</p><p className={styles.modalCategoria}><i className={`${styles.punto} ${categoriaEvento(seleccionado).estilo}`} />{categoriaEvento(seleccionado).nombre}</p></div>
+        <button type="button" className={styles.cerrarIcono} onClick={() => establecerSeleccionado(null)} aria-label="Cerrar detalle"><X size={18} /></button>
       </div>
-
-      {/* Filtros y tabla administrados por PaginaTabla */}
-      <PaginaTabla
-        datos={datos}
-        columnas={columnas}
-        filtros={filtros}
-        headerFiltros={headerFiltros}
-        headerTabla={headerTabla}
-        onResultadosChange={setTotalMostrado}
-      />
-
-      {/* Contador de resultados */}
-      <p className={styles.contadorFiltros}>
-        Mostrando {totalMostrado ?? datos.length} de{" "}
-        {datos.length} registros
-      </p>
-    </div>
-  );
+      <div className={styles.modalContenido}>
+        {[['ID de registro', seleccionado.id || 'No registrado'], ['Fecha', fechaVisible(seleccionado.fecha)], ['Hora', seleccionado.hora || 'No registrada'], ['Usuario responsable', seleccionado.usuario || 'No registrado'], ['Nivel', seleccionado.nivel || 'No registrado'], ['Acción', textoAccion(seleccionado.accion)], ['Detalle del evento', seleccionado.descripcion || 'Sin detalle']].map(([etiqueta, valor]) => <div className={styles.modalDetalle} key={etiqueta}><span>{etiqueta}</span><span>{valor}</span></div>)}
+        <button type="button" className={styles.cerrar} onClick={() => establecerSeleccionado(null)}>Cerrar</button>
+      </div>
+    </Modal>}
+  </div>
 }

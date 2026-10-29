@@ -4,6 +4,7 @@ import estilos from './ModalDetalleUsuario.module.css'
 
 const formatoFecha = new Intl.DateTimeFormat('es-CL', {
   day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Santiago',
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
 })
 
 // Muestra los datos de la cuenta seleccionada sin permitir modificaciones.

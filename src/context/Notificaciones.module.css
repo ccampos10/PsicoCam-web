@@ -1,0 +1,2 @@
+.aviso { position: fixed; z-index: 100; right: 24px; bottom: 24px; display: flex; gap: 16px; align-items: center; max-width: min(440px, calc(100vw - 32px)); padding: 16px 18px; background: #fff; color: #173445; border: 1px solid #c9dce4; border-left: 4px solid #2c8a88; border-radius: 10px; box-shadow: 0 8px 28px #17344530; }
+.aviso button { border: 0; background: transparent; color: #526d7d; font-size: 22px; cursor: pointer; }

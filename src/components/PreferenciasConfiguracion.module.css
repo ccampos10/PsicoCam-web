@@ -1,0 +1,32 @@
+.columnas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.panel { min-width: 0; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+.panel h2 { margin: 0 0 4px; color: var(--text-primary); font-size: 16px; font-weight: 600; }
+.descripcion { margin: 0 0 16px; color: var(--text-secondary); font-size: 13px; }
+.filas { display: grid; gap: 8px; }
+.fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; }
+.fila > span:first-child { display: grid; gap: 4px; min-width: 0; }
+.fila strong { color: var(--text-primary); font-size: 13px; font-weight: 500; }
+.fila small { color: var(--text-secondary); font-size: 12px; }
+.fila select { max-width: 53%; min-height: 34px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 7px; background: var(--card); color: var(--secondary); font-size: 12px; }
+.estado { display: flex; align-items: center; gap: 8px; flex-shrink: 0; color: var(--text-secondary); font-size: 12px; }
+.estado input { appearance: none; width: 42px; height: 23px; margin: 0; border-radius: 20px; background: #e4eaf1; position: relative; }
+.estado input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; border-radius: 50%; background: white; }
+.estado input { cursor: pointer; }
+.estado input:checked { background: #2c8a88; }
+.estado input:checked::after { left: 22px; }
+.estado input:focus-visible { outline: 2px solid #173445; outline-offset: 3px; }
+.probarSonido { margin-top: 12px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); color: var(--text-primary); cursor: pointer; }
+.nota { margin-top: 12px; color: var(--text-secondary); font-size: 12px; }
+.vista { display: grid; gap: 8px; }
+.vistaFila { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 15px; min-height: 50px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); font-size: 12px; }
+.grande .vistaFila { font-size: 14px; }
+.mayor .vistaFila { font-size: 16px; }
+.alto .vistaFila { color: #10252d; border-color: #50656f; }
+.insignia { border-radius: 16px; padding: 4px 10px; font-size: inherit; font-weight: 600; }
+.riesgoBajo { color: #075c88; background: #e1f1fa; }
+.riesgoMedio { color: #765000; background: #fff2d6; }
+.riesgoAlto { color: #702590; background: #f5e8fb; }
+.riesgoConIcono { display: inline-flex; align-items: center; gap: 6px; color: var(--text-primary); }
+.resumen { margin-top: 12px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--canvas); color: var(--text-secondary); font-size: 12px; }
+@media (max-width: 850px) { .columnas { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .fila { align-items: flex-start; flex-direction: column; } .fila select { max-width: 100%; width: 100%; } .panel { padding: 16px; } }

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { ProveedorSesion } from '../src/context/ProveedorSesion'
@@ -21,14 +21,14 @@ function renderizarConRuta(rutaInicial, sesion = usuario) {
 
 describe('Dashboard: SCRUM-221', () => {
   it('mapea los colores de semáforo a los niveles de riesgo', () => {
-    expect(colorNivel).toEqual({ Bajo: '#44c58a', Medio: '#f2c94c', Alto: '#d9534f' })
+    expect(colorNivel).toEqual({ Bajo: 'var(--risk-low)', Medio: 'var(--risk-medium)', Alto: 'var(--risk-high)' })
   })
 
-  it('maqueta la cabecera con el estado de monitoreo activo', () => {
+  it('muestra la cabecera sin afirmar un estado de monitoreo no verificado', () => {
     renderizarConRuta('/dashboard')
     expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeTruthy()
     expect(screen.getByText('Visión general del estado de alertas y monitoreo de los boxes clínicos.')).toBeTruthy()
-    expect(screen.getByText('Monitoreo activo')).toBeTruthy()
+    expect(screen.queryByText('Monitoreo activo')).toBeNull()
   })
 
   it('muestra las métricas globales en el grid principal', async () => {
@@ -46,6 +46,36 @@ describe('Dashboard: SCRUM-221', () => {
     expect(within(metricas).getByText('3')).toBeTruthy()
   })
 
+  it('muestra un error si no puede cargar las alertas', async () => {
+    vi.mocked(globalThis.fetch).mockRejectedValueOnce(new Error('Sin conexión'))
+    renderizarConRuta('/dashboard')
+    expect((await screen.findByRole('alert')).textContent).toContain('No se pudieron cargar las alertas')
+    expect(screen.queryByRole('region', { name: 'Métricas principales' })).toBeNull()
+  })
+
+  it('muestra estados vacíos sin inventar boxes ni alertas', async () => {
+    vi.mocked(globalThis.fetch).mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }))
+    renderizarConRuta('/dashboard')
+    expect(await screen.findByText('No hay alertas registradas.')).toBeTruthy()
+    expect(screen.getByText('No hay boxes con alertas registradas.')).toBeTruthy()
+    const panel = screen.getByRole('region', { name: 'Alertas por tipo de detección' })
+    expect(within(panel).getByText(/Riesgo Suicida/)).toBeTruthy()
+    expect(within(panel).getByText(/Vulneración de Derechos/)).toBeTruthy()
+    expect(within(panel).getAllByText('0 alertas')).toHaveLength(2)
+    expect(screen.getByRole('link', { name: 'Ver todas las alertas' }).getAttribute('href')).toBe('/alertas')
+  })
+
+  it('considera pendiente una alerta sin evaluación', async () => {
+    vi.mocked(globalThis.fetch).mockResolvedValueOnce(new Response(JSON.stringify([{
+      id: '1', box: 'Box 1', fecha: '2026-10-21', hora: '10:00',
+      categoria: 'RS', nivel: 'Alto', supervisor: 'Ana', estado_evaluacion: null,
+    }]), { status: 200 }))
+    renderizarConRuta('/dashboard')
+    const metricas = await screen.findByRole('region', { name: 'Métricas principales' })
+    const tarjeta = within(metricas).getByText('Pendientes').closest('article')
+    expect(tarjeta.textContent).toContain('1')
+  })
+
   it('define los contenedores de gráficos con su distribución por nivel de riesgo', async () => {
     renderizarConRuta('/dashboard')
     const grafico = await screen.findByRole('region', { name: 'Distribución por nivel de riesgo' })
@@ -57,7 +87,7 @@ describe('Dashboard: SCRUM-221', () => {
     await waitFor(() => {
       const colores = [...grafico.querySelectorAll('path')]
         .map(nodo => nodo.getAttribute('fill'))
-        .filter(relleno => /^#[0-9A-Fa-f]{6}$/.test(relleno || ''))
+        .filter(relleno => Object.values(colorNivel).includes(relleno))
       expect(new Set(colores)).toEqual(new Set(Object.values(colorNivel)))
     })
   })
@@ -75,11 +105,11 @@ describe('Dashboard: SCRUM-221', () => {
   it('lista los boxes clínicos en monitoreo', async () => {
     renderizarConRuta('/dashboard')
     const panel = await screen.findByRole('region', { name: 'Boxes clínicos' })
-    expect(within(panel).getByText('5 boxes designados para monitoreo')).toBeTruthy()
+    expect(within(panel).getByText('5 boxes con alertas registradas')).toBeTruthy()
     for (const nombre of ['Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5']) {
       expect(within(panel).getByText(nombre)).toBeTruthy()
     }
-    expect(within(panel).getAllByText('Monitoreando')).toHaveLength(5)
+    expect(within(panel).queryByText('Monitoreando')).toBeNull()
   })
 
   it('muestra las alertas recientes con su nivel de riesgo', async () => {

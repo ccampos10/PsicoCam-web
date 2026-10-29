@@ -1,0 +1,23 @@
+/* Los ajustes de color y contraste se combinan en toda la interfaz, incluidas imágenes. */
+html {
+  --filtro-vision: hue-rotate(0deg);
+  --filtro-contraste: contrast(1);
+}
+html[data-contraste='alto'] { --filtro-contraste: contrast(1.3); }
+html[data-paleta='protanopia'] { --filtro-vision: hue-rotate(35deg); --risk-low: #0876a4; --risk-medium: #bd7900; --risk-high: #823ea6; }
+html[data-paleta='deuteranopia'] { --filtro-vision: hue-rotate(-25deg); --risk-low: #0876a4; --risk-medium: #bd7900; --risk-high: #a33778; }
+html[data-paleta='tritanopia'] { --filtro-vision: hue-rotate(90deg); --risk-low: #087e64; --risk-medium: #b15a14; --risk-high: #ad3565; }
+html[data-paleta='monocromatico'] { --filtro-vision: grayscale(1); --risk-low: #41616a; --risk-medium: #715c30; --risk-high: #583647; }
+html[data-contraste='alto'],
+html[data-paleta='protanopia'],
+html[data-paleta='deuteranopia'],
+html[data-paleta='tritanopia'],
+html[data-paleta='monocromatico'] { filter: var(--filtro-vision) var(--filtro-contraste); }
+html[data-paleta]:not([data-paleta='predeterminada']) .urgBajo { color: var(--risk-low); background: color-mix(in srgb, var(--risk-low) 12%, white); border-color: var(--risk-low); }
+html[data-paleta]:not([data-paleta='predeterminada']) .urgMedio { color: var(--risk-medium); background: color-mix(in srgb, var(--risk-medium) 12%, white); border-color: var(--risk-medium); }
+html[data-paleta]:not([data-paleta='predeterminada']) .urgAlto { color: var(--risk-high); background: color-mix(in srgb, var(--risk-high) 12%, white); border-color: var(--risk-high); }
+.iconoUrgencia { font-size: 13px; line-height: 1; }
+html[data-indicador='texto'] .iconoUrgencia { display: none; }
+html[data-indicador='texto'] .pill.urgBajo,
+html[data-indicador='texto'] .pill.urgMedio,
+html[data-indicador='texto'] .pill.urgAlto { color: #173445; background: transparent; border-color: #bdcbd3; }

@@ -28,6 +28,6 @@ export class RegistroBitacora {
 }
 
 export interface IBitacoraRepository {
-  ObtenerRegistros(): RegistroBitacora[]
-  RegistroPorId(id: String): RegistroBitacora | null
+  ObtenerRegistros(): Promise<RegistroBitacora[]>
+  RegistroPorId(id: String): Promise<RegistroBitacora | null>
 }

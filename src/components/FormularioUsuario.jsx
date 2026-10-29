@@ -6,7 +6,7 @@ import estilos from './FormularioUsuario.module.css'
 // Crea o edita una cuenta con validación inmediata antes del guardado.
 export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerrar }) {
   const [datos, establecerDatos] = useState({ nombre: usuario?.nombre ?? '', correo: usuario?.correo ?? '',
-    contrasena: '', confirmacion: '', rol: usuario?.rol ?? 'Profesional', estado: usuario?.estado ?? 'Activo' })
+    contrasena: '', confirmacion: '', rol: usuario?.rol ?? 'Supervisor', estado: usuario?.estado ?? 'Activo' })
   const [tocados, establecerTocados] = useState({})
   const [enviado, establecerEnviado] = useState(false)
   const [guardando, establecerGuardando] = useState(false)
@@ -17,8 +17,10 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo.trim())) errores.correo = 'Ingresa un correo válido.'
   else if (usuarios.some(perfil => perfil.id !== usuario?.id && perfil.correo.toLowerCase() === datos.correo.trim().toLowerCase())) errores.correo = 'Ya existe un usuario con ese correo.'
   if (!usuario && !datos.contrasena) errores.contrasena = 'Ingresa una contraseña.'
+  else if (datos.contrasena && datos.contrasena.trim().length < 6) errores.contrasena = 'La contraseña debe tener al menos 6 caracteres.'
+  else if (datos.contrasena && new TextEncoder().encode(datos.contrasena).length > 72) errores.contrasena = 'La contraseña es demasiado larga. Acórtala e inténtalo nuevamente.'
   if (datos.contrasena !== datos.confirmacion) errores.confirmacion = 'Las contraseñas no coinciden.'
-  if (!['Administrador', 'Profesional'].includes(datos.rol)) errores.rol = 'Selecciona un rol válido.'
+  if (!['Administrador', 'Supervisor'].includes(datos.rol)) errores.rol = 'Selecciona un rol válido.'
   if (!['Activo', 'Inactivo'].includes(datos.estado)) errores.estado = 'Selecciona un estado válido.'
 
   // Actualiza los campos y permite mostrar su validación mientras se escribe.
@@ -70,10 +72,9 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
     </div>
   }
 
-  return <Modal className={estilos.modal} idTitulo="titulo-formulario-usuario" alCerrar={() => { if (!envioEnCurso.current) alCerrar() }}>
+  return <Modal className={estilos.modal} idTitulo="titulo-formulario-usuario" cierreExplicito alCerrar={() => { if (!envioEnCurso.current) alCerrar() }}>
     <header className={estilos.encabezado}>
-      <h2 id="titulo-formulario-usuario">{usuario ? 'Editar usuario' : 'Crear usuario'}</h2>
-      <p>{usuario ? 'Modifica los datos y el acceso de la cuenta seleccionada.' : 'Registra una nueva cuenta y define sus credenciales y rol de acceso.'}</p>
+      <h2 id="titulo-formulario-usuario">{usuario ? 'Editar usuario' : 'Agregar usuario'}</h2>
       <button type="button" className={estilos.iconoCerrar} aria-label="Cerrar formulario" disabled={guardando} onClick={alCerrar}><X size={20} /></button>
     </header>
     <form onSubmit={guardar} noValidate aria-busy={guardando}>
@@ -88,19 +89,18 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
         <div className={estilos.columnas}>
           <div className={estilos.campo}><label htmlFor="usuario-rol">Rol de acceso</label>
             <select id="usuario-rol" name="rol" value={datos.rol} onChange={cambiar} disabled={guardando}>
-              <option>Administrador</option><option>Profesional</option>
+              <option>Administrador</option><option>Supervisor</option>
             </select></div>
           <div className={estilos.campo}><label htmlFor="usuario-estado">Estado</label>
             <select id="usuario-estado" name="estado" value={datos.estado} onChange={cambiar} disabled={guardando}>
               <option>Activo</option><option>Inactivo</option>
             </select></div>
         </div>
-        <p className={estilos.nota}>El rol seleccionado define los privilegios disponibles dentro de la plataforma clínica.</p>
         {error && <p className={estilos.error} role="alert">{error}</p>}
       </div>
       <footer className={estilos.pie}>
-        <button type="button" className={estilos.cancelar} disabled={guardando} onClick={alCerrar}>Cancelar</button>
         <button type="submit" className={estilos.guardar} disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar usuario'}</button>
+        <button type="button" className={estilos.cancelar} disabled={guardando} onClick={alCerrar}>Cancelar</button>
       </footer>
     </form>
   </Modal>

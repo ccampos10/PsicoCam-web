@@ -22,7 +22,7 @@ describe('Página Usuarios', () => {
     expect(screen.getByText('Dra. Gabriela Sánchez')).toBeTruthy()
     expect(screen.getByText('Página 1 de 1 - 1 registros')).toBeTruthy()
     await interaccion.clear(screen.getByRole('searchbox'))
-    await interaccion.selectOptions(screen.getByLabelText('Rol'), 'Profesional')
+    await interaccion.selectOptions(screen.getByLabelText('Rol'), 'Supervisor')
     await interaccion.selectOptions(screen.getByLabelText('Estado'), 'Inactivo')
     expect(screen.getByText('Dr. Luis Pérez')).toBeTruthy()
     expect(screen.queryByText('Dra. Gabriela Sánchez')).toBeNull()
