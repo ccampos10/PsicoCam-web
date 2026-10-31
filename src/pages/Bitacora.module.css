@@ -10,14 +10,14 @@
 .filtros input, .filtros select { width: 100%; min-width: 0; height: 44px; box-sizing: border-box; border: 1px solid var(--border); border-radius: 8px; background: var(--card); padding: 0 10px; color: var(--text-primary); font: inherit; font-size: 13px; }
 .filtros input:focus-visible, .filtros select:focus-visible, .detalleBoton:focus-visible, .cerrar:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
 .panel .contador { margin-top: 16px; }
-.panel .aviso { margin-top: 12px; color: #a43131; }
+.panel .aviso { margin-top: 12px; color: var(--risk-high-text); }
 .fecha { display: inline-flex; flex-direction: column; white-space: nowrap; }
 .fechaConPunto { display: inline-flex; align-items: center; gap: 10px; }
-.punto { display: inline-block; width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #99a8b3; }
-.clinico { background: #49c38a; }
-.tecnico { background: #e9bb3e; }
-.sistema { background: #487bb0; }
-.sinCategoria { background: #99a8b3; }
+.punto { display: inline-block; width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--text-muted); }
+.clinico { background: var(--risk-low); }
+.tecnico { background: var(--risk-medium); }
+.sistema { background: var(--secondary); }
+.sinCategoria { background: var(--text-muted); }
 .leyenda { display: flex; flex-wrap: wrap; gap: 12px 22px; padding: 0 4px 16px; color: var(--text-secondary); font-size: 12px; }
 .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
 .fecha small { color: var(--text-secondary); font-size: 12px; }
@@ -35,6 +35,6 @@
 .modalDetalle { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
 .modalDetalle span:first-child { color: var(--text-secondary); }
 .modalDetalle span:last-child { text-align: right; overflow-wrap: anywhere; }
-.cerrar { display: block; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px; background: #103b4d; color: white; font-weight: 600; cursor: pointer; }
+.cerrar { display: block; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px; background: var(--primary); color: var(--card); font-weight: 600; cursor: pointer; }
 @media (max-width: 1000px) { .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .filtros { grid-template-columns: 1fr; } .panel { padding: 16px; } }

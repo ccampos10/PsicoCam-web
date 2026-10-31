@@ -1,6 +1,4 @@
 .inicio-sesion {
-  --acceso-borde-campo: #dfe6ef;
-  --acceso-texto-ejemplo: #8797ad;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   min-height: 100dvh;
@@ -8,10 +6,10 @@
 .acceso-panel-marca { background: var(--primary); color: var(--card); position: relative; min-width: 0; padding: 108px 52px 64px; display: flex; flex-direction: column; }
 .acceso-logo-ua { display: block; width: 141px; height: 197px; margin-left: 4px; object-fit: contain; flex-shrink: 0; }
 .acceso-presentacion { margin-top: 29px; }
-.acceso-antetitulo { color: #72c5c4; font-size: 12px; font-weight: 600; margin-bottom: 20px; }
-.acceso-presentacion h2 { color: #fff; font-size: 46px; font-weight: 700; line-height: 1.14; letter-spacing: -0.6px; }
-.acceso-presentacion h2 span { color: #64bdba; }
-.acceso-descripcion { color: #d2dfe7; font-size: 16px; line-height: 28px; margin-top: 28px; }
+.acceso-antetitulo { color: var(--primary-accent); font-size: 12px; font-weight: 600; margin-bottom: 20px; }
+.acceso-presentacion h2 { color: var(--card); font-size: 46px; font-weight: 700; line-height: 1.14; letter-spacing: -0.6px; }
+.acceso-presentacion h2 span { color: var(--primary-accent); }
+.acceso-descripcion { color: var(--text-on-primary-strong); font-size: 16px; line-height: 28px; margin-top: 28px; }
 .acceso-area-formulario { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 96px 32px 64px; background: var(--canvas); }
 .acceso-contenedor { width: 440px; max-width: 100%; position: relative; }
 .acceso-tarjeta { padding: 29px 32px 28px; border-radius: 16px; background: var(--card); }
@@ -30,7 +28,7 @@
 .acceso-mostrar-contrasena img { display: block; width: 22px; height: 22px; }
 .acceso-opciones { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 28px; margin-bottom: 28px; font-size: 12px; }
 .acceso-recordarme { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); cursor: pointer; }
-.acceso-recordarme input { appearance: none; width: 16px; height: 16px; margin: 0; border: 1px solid #cbd5e1; border-radius: 4px; background: var(--card); display: grid; place-content: center; cursor: pointer; }
+.acceso-recordarme input { appearance: none; width: 16px; height: 16px; margin: 0; border: 1px solid var(--border-strong); border-radius: 4px; background: var(--card); display: grid; place-content: center; cursor: pointer; }
 .acceso-recordarme input:checked { appearance: auto; accent-color: var(--secondary); }
 .acceso-recordarme input:focus-visible { outline: 2px solid var(--secondary); outline-offset: 3px; }
 .acceso-recuperar { color: var(--secondary); font-size: 12px; font-weight: 500; border: 0; background: transparent; padding: 0; }

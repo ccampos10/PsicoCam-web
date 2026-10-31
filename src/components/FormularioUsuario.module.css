@@ -1,22 +1,22 @@
-.modal { width: min(440px, calc(100vw - 32px)); max-width: calc(100vw - 32px); max-height: calc(100dvh - 40px); box-sizing: border-box; margin: auto; padding: 30px; overflow-y: auto; border: 1px solid #d6e2f5; border-radius: 14px; background: white; color: #193849; }
-.modal::backdrop { background: rgb(25 46 56 / 46%); }
+.modal { width: min(440px, calc(100vw - 32px)); max-width: calc(100vw - 32px); max-height: calc(100dvh - 40px); box-sizing: border-box; margin: auto; padding: 30px; overflow-y: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: var(--text-primary); }
+.modal::backdrop { background: color-mix(in srgb, var(--primary) 46%, transparent); }
 .encabezado { position: relative; padding: 0 32px 0 0; }
 .encabezado h2 { font-size: 20px; font-weight: 600; margin: 0; }
-.encabezado p, .ayuda { color: #627f99; font-size: 13px; }
-.iconoCerrar { position: absolute; right: -6px; top: 0; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 6px; color: #627f99; background: transparent; }
+.encabezado p, .ayuda { color: var(--text-secondary); font-size: 13px; }
+.iconoCerrar { position: absolute; right: -6px; top: 0; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 6px; color: var(--text-secondary); background: transparent; }
 .campos { display: flex; flex-direction: column; gap: 16px; padding: 24px 0; }
 .columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .campo { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.campo label { color: #54728b; font-size: 12px; }
-.campo input, .campo select { width: 100%; min-height: 46px; padding: 10px 13px; border: 1px solid #cbdcf7; border-radius: 8px; background: white; color: #193849; font-size: 13px; }
+.campo label { color: var(--text-secondary); font-size: 12px; }
+.campo input, .campo select { width: 100%; min-height: 46px; padding: 10px 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text-primary); font-size: 13px; }
 .campo input:focus-visible, .campo select:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
-.campo .invalido { border-color: #fa4348; }
-.campo .valido { border-color: #009b53; }
-.error { color: #c83238; font-size: 12px; }
-.exito { color: #008947; font-size: 11px; }
-.nota { background: #f3fafc; border: 1px solid #c7e1eb; border-radius: 8px; padding: 22px 15px; color: #627f99; font-size: 12px; }
+.campo .invalido { border-color: var(--risk-high); }
+.campo .valido { border-color: var(--risk-low); }
+.error { color: var(--risk-high-text); font-size: 12px; }
+.exito { color: var(--risk-low-text); font-size: 11px; }
+.nota { background: var(--canvas); border: 1px solid var(--border); border-radius: 8px; padding: 22px 15px; color: var(--text-secondary); font-size: 12px; }
 .pie { display: flex; gap: 12px; }
-.cancelar, .guardar { flex: 1; min-width: 0; min-height: 46px; padding: 10px 15px; border: 1px solid #cbdcf7; border-radius: 10px; background: white; color: #193849; font-size: 13px; font-weight: 600; }
-.guardar { border-color: #113c4d; background: #113c4d; color: white; }
+.cancelar, .guardar { flex: 1; min-width: 0; min-height: 46px; padding: 10px 15px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); color: var(--text-primary); font-size: 13px; font-weight: 600; }
+.guardar { border-color: var(--primary); background: var(--primary); color: var(--card); }
 .modal button:disabled { opacity: .6; cursor: wait; }
 @media (max-width: 639px) { .modal { padding: 24px 20px; } .columnas { grid-template-columns: 1fr; } .pie { flex-wrap: wrap; } .encabezado h2 { font-size: 23px; } }

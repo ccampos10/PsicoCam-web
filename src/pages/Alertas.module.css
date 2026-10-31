@@ -8,7 +8,7 @@
 .puntoAlto { background: var(--risk-high); }
 .puntoMedio { background: var(--risk-medium); }
 .puntoBajo { background: var(--risk-low); }
-.categoria { display: inline-block; padding: 3px 7px; border-radius: 4px; background: #e8eef4; color: var(--text-primary); font-size: 11px; font-weight: 600; }
+.categoria { display: inline-block; padding: 3px 7px; border-radius: 4px; background: var(--surface-muted); color: var(--text-primary); font-size: 11px; font-weight: 600; }
 .tablaAlertas table { min-width: 720px; }
 .tablaAlertas th { text-transform: uppercase; font-size: 11px; }
 .tablaAlertas td { padding-top: 16px; padding-bottom: 16px; }
@@ -44,14 +44,14 @@
 }
 
 .encabezado h1 {
-  color: #16384d;
+  color: var(--text-primary);
   font-size: 30px;
   font-weight: 600;
   margin: 0 0 8px;
 }
 
 .encabezado p {
-  color: #6e7d91;
+  color: var(--text-secondary);
   font-size: 14px;
   margin: 0;
 }
@@ -61,10 +61,10 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  background: white;
-  border: 1px solid #e2e8f0;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 20px;
-  color: #475569;
+  color: var(--text-secondary);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -72,15 +72,15 @@
 .puntoActivo {
   width: 7px;
   height: 7px;
-  background: #44c58a;
+  background: var(--risk-low);
   border-radius: 50%;
 }
 
 /* PANEL DE FILTROS */
 
 .panelFiltros {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 18px;
@@ -89,7 +89,7 @@
 .panelFiltros h2 {
   font-size: 16px;
   font-weight: 700;
-  color: #16384d;
+  color: var(--text-primary);
   margin: 0 0 20px;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .campo label {
-  color: #6e7d91;
+  color: var(--text-secondary);
   font-size: 12px;
   font-weight: 500;
 }
@@ -118,10 +118,10 @@
   width: 100%;
   height: 42px;
   padding: 0 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 9px;
-  background: #ffffff;
-  color: #172a45;
+  background: var(--card);
+  color: var(--text-primary);
   font-size: 13px;
   box-sizing: border-box;
   outline: none;
@@ -129,11 +129,11 @@
 
 .campo input:focus,
 .campo select:focus {
-  border-color: #16384d;
+  border-color: var(--primary);
 }
 
 .campo input::placeholder {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* FILTRO DE FECHA */
@@ -143,15 +143,15 @@
   align-items: center;
   width: 100%;
   height: 42px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 9px;
-  background: #ffffff;
+  background: var(--card);
   box-sizing: border-box;
   overflow: hidden;
 }
 
 .contenedorFecha:focus-within {
-  border-color: #16384d;
+  border-color: var(--primary);
 }
 
 .campo .contenedorFecha .entradaFecha {
@@ -187,7 +187,7 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #16384d;
+  color: var(--primary);
   outline: none;
   cursor: pointer;
   box-sizing: border-box;
@@ -221,13 +221,13 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 18px;
   cursor: pointer;
 }
 
 .limpiarFecha:hover {
-  color: #16384d;
+  color: var(--primary);
 }
 
 /* RESULTADOS Y LEYENDA */
@@ -239,7 +239,7 @@
   gap: 12px;
   margin-top: 26px;
   font-size: 12px;
-  color: #6e7d91;
+  color: var(--text-secondary);
 }
 
 .leyenda {
@@ -262,15 +262,15 @@
 }
 
 .puntoBajo {
-  background: #44c58a;
+  background: var(--risk-low);
 }
 
 .puntoMedio {
-  background: #f2c84c;
+  background: var(--risk-medium);
 }
 
 .puntoAlto {
-  background: #d9534f;
+  background: var(--risk-high);
 }
 
 /* MENSAJE DE ÉXITO */
@@ -280,9 +280,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
   border-radius: 8px;
   margin-bottom: 20px;
 }

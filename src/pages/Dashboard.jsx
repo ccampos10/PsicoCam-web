@@ -13,7 +13,7 @@ const repositorioAlertas = new ApiAlertaRepository()
 
 const NOMBRES_CATEGORIA = {
   RS: { nombre: 'Riesgo Suicida', abreviatura: 'RS', color: 'var(--secondary)' },
-  VD: { nombre: 'Vulneración de Derechos', abreviatura: 'VD', color: '#5d7a88' },
+  VD: { nombre: 'Vulneración de Derechos', abreviatura: 'VD', color: 'var(--categoria-vd)' },
 }
 
 function agruparPorNivel(alertas) {

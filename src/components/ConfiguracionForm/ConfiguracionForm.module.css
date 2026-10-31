@@ -21,7 +21,7 @@
 .encabezadoSeccion { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .etiquetaAdmin { flex-shrink: 0; padding: 4px 10px; border-radius: 20px; background: var(--canvas); color: var(--text-secondary); font-size: 12px; }
 .marcasHora { display: flex; justify-content: space-between; margin: -4px 0 12px; color: var(--text-secondary); font-size: 11px; }
-.horarioEstado { margin: 0 0 16px; padding: 10px 14px; border: 1px solid #bce8d5; border-radius: 8px; background: #edf9f4; color: #267b6b; font-size: 13px; }
+.horarioEstado { margin: 0 0 16px; padding: 10px 14px; border: 1px solid var(--success-border); border-radius: 8px; background: var(--success-bg); color: var(--success-fg); font-size: 13px; }
 .opcionesCorreo { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
 .opcionesCorreo legend { margin-bottom: 10px; color: var(--text-primary); font-size: 13px; font-weight: 600; }
 .opcionesCorreo label { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 9px; font-size: 13px; }
@@ -59,7 +59,7 @@
   border-radius: 8px;
   font-size: 0.85rem;
   color: var(--text-primary);
-  background: #fff;
+  background: var(--card);
 }
 
 .opcional {
@@ -159,13 +159,13 @@
   font-size: 0.8rem;
   font-weight: 600;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--card);
   color: var(--text-secondary);
 }
 
 .botonPrimario {
   background: var(--primary) !important;
-  color: #fff !important;
+  color: var(--card) !important;
   border: none !important;
 }
 
@@ -178,9 +178,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ecfdf5;
+  background: var(--success-bg);
   border: 1px solid var(--risk-low);
-  color: #065f46;
+  color: var(--success-text);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   font-size: 0.85rem;
