@@ -1,4 +1,4 @@
-.modal { padding: 0; width: min(540px, calc(100vw - 32px)); max-width: 100%; max-height: calc(100dvh - 32px); border-radius: 16px; background: var(--card); box-shadow: 0 25px 50px rgb(15 23 42 / 25%); }
+.modal { padding: 0; width: min(540px, calc(100vw - 32px)); max-width: 100%; max-height: calc(100dvh - 32px); border-radius: 16px; background: var(--card); box-shadow: 0 25px 50px color-mix(in srgb, var(--overlay) 25%, transparent); }
 .contenido { display: flex; flex-direction: column; max-height: calc(100dvh - 32px); }
 .header { display: flex; justify-content: space-between; gap: 20px; padding: 30px 32px 16px; }
 .header h2 { margin: 0; color: var(--text-primary); font-size: 23px; font-weight: 600; }
@@ -20,9 +20,9 @@
 .fragmento + .fragmento { margin-top: 16px; }
 .fragmento strong { color: var(--secondary); font-size: 12px; }
 .fragmento p { margin-top: 5px; color: var(--text-primary); font-size: 13px; }
-.fragmento mark { background: #fff0bd; color: inherit; }
+.fragmento mark { background: var(--adver-bg); color: inherit; }
 .evidenciaCaja p { margin: 4px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
-.icono { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; color: var(--secondary); background: #e8f7f2; border-radius: 8px; }
+.icono { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; color: var(--secondary); background: var(--success-bg); border-radius: 8px; }
 .evaluacion { display: grid; gap: 8px; margin: 24px 0 0; padding: 0; border: 0; }
 .evaluacion legend { margin-bottom: 12px; }
 .opcion { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; font-size: 13px; }
@@ -30,11 +30,11 @@
 .opcion strong, .opcion small { display: block; }
 .opcion small { margin-top: 4px; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
 .aviso, .error { color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
-.error { color: #b43a36; }
+.error { color: var(--risk-high-text); }
 .footer { display: flex; gap: 12px; padding: 16px 32px 24px; border-top: 1px solid var(--border); }
 .footer button { flex: 1; min-height: 46px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.guardar { color: white; background: var(--primary); border: 1px solid var(--primary); }
+.guardar { color: var(--card); background: var(--primary); border: 1px solid var(--primary); }
 .guardar:disabled { opacity: .55; cursor: not-allowed; }
-.cancelar { color: var(--text-secondary); background: white; border: 1px solid var(--border); }
+.cancelar { color: var(--text-secondary); background: var(--card); border: 1px solid var(--border); }
 @media (max-width: 480px) { .header { padding: 22px 20px 14px; } .body { padding: 0 20px 20px; } .footer { padding: 14px 20px 20px; } .lista > div { flex-wrap: wrap; } }
 

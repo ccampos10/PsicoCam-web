@@ -1,14 +1,91 @@
 ﻿:root {
+  /* Paleta base */
   --primary: #103b4d;
   --secondary: #2e8c8a;
   --canvas: #f5f8fb;
   --card: #fff;
   --text-primary: #173445;
   --text-secondary: #6e8794;
+  --text-muted: #8797ad;
   --risk-low: #44c58a;
   --risk-medium: #f2c94c;
   --risk-high: #d9534f;
   --border: #e4eaf1;
+  --border-strong: #cbd5e1;
+  --surface-muted: #eef2f6;
+  --overlay: #0f172a;
+  --shadow-color: #000;
+
+  /* Texto y acentos sobre superficies --primary */
+  --text-on-primary: #a8c4cc;
+  --text-on-primary-strong: #d2dfe7;
+  --primary-accent: #72c5c4;
+
+  /* Texto de riesgo sobre fondos tintados */
+  --risk-low-text: #1f8a5b;
+  --risk-medium-text: #96790a;
+  --risk-high-text: #b43a36;
+
+  /* Éxito / confirmación */
+  --success-bg: #ecfdf5;
+  --success-border: #a7f3d0;
+  --success-icon-bg: #d1fae5;
+  --success-fg: #047857;
+  --success-text: #065f46;
+  --success-accent: #34d399;
+
+  /* Gráficos del dashboard */
+  --categoria-vd: #5d7a88;
+
+  /* Niveles de alerta (trasladados desde pilas.css) */
+  --info-bg: #dfe9f7;
+  --info-fg: #3e4e64;
+  --adver-bg: #f7efc5;
+  --adver-fg: #746523;
+  --grave-bg: #f8dddd;
+  --grave-fg: #742323;
+  --bajo-bg: #ceebde;
+  --bajo-fg: #26a16a;
+  --medio-bg: #f5ecd1;
+  --medio-fg: #b18c1e;
+  --alto-bg: #fcdedc;
+  --alto-fg: var(--risk-high);
+
+  /* Acceso (trasladados desde inicioSesion.css y homologados) */
+  --acceso-borde-campo: var(--border);
+  --acceso-texto-ejemplo: var(--text-muted);
+
+  /* Notificaciones (trasladados desde Notificacion.module.css) */
+  --notificacion-borde: #99f6e4;
+  --notificacion-fondo: #f0fdfa;
+  --notificacion-icono-fondo: #ccfbf1;
+  --notificacion-icono: #0f766e;
+  --notificacion-titulo: #115e59;
+  --notificacion-mensaje: rgba(15, 118, 110, 0.8);
+  --notificacion-cerrar: #5eead4;
+  --notificacion-cerrar-hover: #0f766e;
+
+  /* Notificación advertencia */
+  --notificacion-advertencia-borde: #fde68a;
+  --notificacion-advertencia-fondo: #fffbeb;
+  --notificacion-advertencia-icono-fondo: #fef3c7;
+  --notificacion-advertencia-icono: #b45309;
+  --notificacion-advertencia-titulo: #92400e;
+  --notificacion-advertencia-mensaje: rgba(180, 83, 9, 0.8);
+  --notificacion-advertencia-cerrar: #fcd34d;
+  --notificacion-advertencia-cerrar-hover: #b45309;
+
+  /* Notificación error */
+  --notificacion-error-borde: #fecaca;
+  --notificacion-error-fondo: #fef2f2;
+  --notificacion-error-icono-fondo: #fee2e2;
+  --notificacion-error-icono: #dc2626;
+  --notificacion-error-titulo: #b91c1c;
+  --notificacion-error-mensaje: rgba(220, 38, 38, 0.8);
+  --notificacion-error-cerrar: #fca5a5;
+  --notificacion-error-cerrar-hover: #b91c1c;
+
+  /* Dimensiones */
   --sidebar-width: 248px;
   --navbar-height: 75px;
 }

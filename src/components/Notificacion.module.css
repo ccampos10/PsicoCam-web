@@ -1,13 +1,4 @@
 .notificacion {
-  --notificacion-borde: #99f6e4;
-  --notificacion-fondo: #f0fdfa;
-  --notificacion-icono-fondo: #ccfbf1;
-  --notificacion-icono: #0f766e;
-  --notificacion-titulo: #115e59;
-  --notificacion-mensaje: rgba(15, 118, 110, 0.8);
-  --notificacion-cerrar: #5eead4;
-  --notificacion-cerrar-hover: #0f766e;
-
   position: fixed;
   right: 2rem;
   bottom: 2rem;
@@ -20,52 +11,45 @@
   border: 1px solid var(--notificacion-borde);
   border-radius: 12px;
   background-color: var(--notificacion-fondo);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--shadow-color) 10%, transparent), 0 4px 6px -4px color-mix(in srgb, var(--shadow-color) 10%, transparent);
   animation: aparecer 200ms ease-out;
 }
 
 .exito {
-  --notificacion-borde: #a7f3d0;
-  --notificacion-fondo: #ecfdf5;
-  --notificacion-icono-fondo: #d1fae5;
-  --notificacion-icono: #047857;
-  --notificacion-titulo: #065f46;
-  --notificacion-mensaje: rgba(4, 120, 87, 0.8);
-  --notificacion-cerrar: #34d399;
-  --notificacion-cerrar-hover: #047857;
+  --notificacion-borde: var(--success-border);
+  --notificacion-fondo: var(--success-bg);
+  --notificacion-icono-fondo: var(--success-icon-bg);
+  --notificacion-icono: var(--success-fg);
+  --notificacion-titulo: var(--success-text);
+  --notificacion-mensaje: color-mix(in srgb, var(--success-fg) 80%, transparent);
+  --notificacion-cerrar: var(--success-accent);
+  --notificacion-cerrar-hover: var(--success-fg);
 }
 
 .advertencia {
-  --notificacion-borde: #fde68a;
-  --notificacion-fondo: #fffbeb;
-  --notificacion-icono-fondo: #fef3c7;
-  --notificacion-icono: #b45309;
-  --notificacion-titulo: #92400e;
-  --notificacion-mensaje: rgba(180, 83, 9, 0.8);
-  --notificacion-cerrar: #fcd34d;
-  --notificacion-cerrar-hover: #b45309;
+  --notificacion-borde: var(--notificacion-advertencia-borde);
+  --notificacion-fondo: var(--notificacion-advertencia-fondo);
+  --notificacion-icono-fondo: var(--notificacion-advertencia-icono-fondo);
+  --notificacion-icono: var(--notificacion-advertencia-icono);
+  --notificacion-titulo: var(--notificacion-advertencia-titulo);
+  --notificacion-mensaje: var(--notificacion-advertencia-mensaje);
+  --notificacion-cerrar: var(--notificacion-advertencia-cerrar);
+  --notificacion-cerrar-hover: var(--notificacion-advertencia-cerrar-hover);
 }
 
 .error {
-  --notificacion-borde: #fecaca;
-  --notificacion-fondo: #fef2f2;
-  --notificacion-icono-fondo: #fee2e2;
-  --notificacion-icono: #dc2626;
-  --notificacion-titulo: #b91c1c;
-  --notificacion-mensaje: rgba(220, 38, 38, 0.8);
-  --notificacion-cerrar: #fca5a5;
-  --notificacion-cerrar-hover: #b91c1c;
+  --notificacion-borde: var(--notificacion-error-borde);
+  --notificacion-fondo: var(--notificacion-error-fondo);
+  --notificacion-icono-fondo: var(--notificacion-error-icono-fondo);
+  --notificacion-icono: var(--notificacion-error-icono);
+  --notificacion-titulo: var(--notificacion-error-titulo);
+  --notificacion-mensaje: var(--notificacion-error-mensaje);
+  --notificacion-cerrar: var(--notificacion-error-cerrar);
+  --notificacion-cerrar-hover: var(--notificacion-error-cerrar-hover);
 }
 
 .informacion {
-  --notificacion-borde: #99f6e4;
-  --notificacion-fondo: #f0fdfa;
-  --notificacion-icono-fondo: #ccfbf1;
-  --notificacion-icono: #0f766e;
-  --notificacion-titulo: #115e59;
-  --notificacion-mensaje: rgba(15, 118, 110, 0.8);
-  --notificacion-cerrar: #5eead4;
-  --notificacion-cerrar-hover: #0f766e;
+  /* Usa los valores por defecto de :root */
 }
 
 .icono {

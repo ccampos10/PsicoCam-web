@@ -8,12 +8,12 @@ export default function GraficoDistribucionRiesgo({ datos }) {
     <div className="grafico-barras" role="img" aria-label={`Distribución por nivel de riesgo: ${descripcionAccesible}`}>
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={datos} margin={{ top: 26, right: 8, bottom: 0, left: -18 }}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef1f5" />
-          <XAxis dataKey="nivel" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#6e8794' }} />
-          <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#6e8794' }} />
-          <Tooltip cursor={{ fill: '#f3f6f9' }} labelFormatter={(etiqueta) => `Nivel: ${etiqueta}`} formatter={() => 'alertas'} />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--surface-muted)" />
+          <XAxis dataKey="nivel" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: 'var(--text-secondary)' }} />
+          <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} />
+          <Tooltip cursor={{ fill: 'var(--canvas)' }} labelFormatter={(etiqueta) => `Nivel: ${etiqueta}`} formatter={() => 'alertas'} />
           <Bar dataKey="cantidad" radius={[6, 6, 0, 0]} maxBarSize={56} isAnimationActive={false}>
-            <LabelList dataKey="cantidad" position="top" style={{ fontSize: 12, fontWeight: 600, fill: '#173445' }} />
+            <LabelList dataKey="cantidad" position="top" style={{ fontSize: 12, fontWeight: 600, fill: 'var(--text-primary)' }} />
             {datos.map(dato => <Cell key={dato.nivel} fill={colorNivel[dato.nivel]} />)}
           </Bar>
         </BarChart>

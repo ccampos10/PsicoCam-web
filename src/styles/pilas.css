@@ -1,18 +1,3 @@
-:root {
-  --info-bg: #dfe9f7;
-  --info-fg: #3e4e64;
-  --adver-bg: #f7efc5;
-  --adver-fg: #746523;
-  --grave-bg: #f8dddd;
-  --grave-fg: #742323;
-  --bajo-bg: #ceebde;
-  --bajo-fg: #26a16a;
-  --medio-bg: #f5ecd1;
-  --medio-fg: #b18c1e;
-  --alto-bg: #fcdedc;
-  --alto-fg: #d9534f;
-}
-
 .pill {
   display: inline-flex;
   align-items: center;
@@ -33,25 +18,25 @@
 }
 
 .urgAlto {
-  background-color: rgba(217, 83, 79, 0.10);
-  color: #B43A36;
-  border-color: rgba(217, 83, 79, 0.35);
+  background-color: color-mix(in srgb, var(--risk-high) 10%, transparent);
+  color: var(--risk-high-text);
+  border-color: color-mix(in srgb, var(--risk-high) 35%, transparent);
 }
-.dotAlto { background-color: #D9534F; }
+.dotAlto { background-color: var(--risk-high); }
 
 .urgMedio {
-  background-color: rgba(242, 200, 76, 0.16);
-  color: #96790A;
-  border-color: rgba(242, 200, 76, 0.48);
+  background-color: color-mix(in srgb, var(--risk-medium) 16%, transparent);
+  color: var(--risk-medium-text);
+  border-color: color-mix(in srgb, var(--risk-medium) 48%, transparent);
 }
-.dotMedio { background-color: #F2C84C; }
+.dotMedio { background-color: var(--risk-medium); }
 
 .urgBajo {
-  background-color: rgba(68, 197, 138, 0.12);
-  color: #1F8A5B;
-  border-color: rgba(68, 197, 138, 0.35);
+  background-color: color-mix(in srgb, var(--risk-low) 12%, transparent);
+  color: var(--risk-low-text);
+  border-color: color-mix(in srgb, var(--risk-low) 35%, transparent);
 }
-.dotBajo { background-color: #44C58A; }
+.dotBajo { background-color: var(--risk-low); }
 
 .nivelInfo {
   border: 1px solid var(--info-fg);
