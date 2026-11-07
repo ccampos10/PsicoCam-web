@@ -1,4 +1,4 @@
-import { createContext, useContext, useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import '../styles/accesibilidad.css'
 
 const opciones = {
@@ -8,7 +8,7 @@ const opciones = {
   indicador: ['completo', 'texto'],
 }
 const inicial = { texto: 'normal', contraste: 'normal', paleta: 'predeterminada', indicador: 'completo' }
-const ContextoAccesibilidad = createContext(null)
+import { ContextoAccesibilidad } from './ContextoAccesibilidad'
 
 export function ProveedorAccesibilidad({ usuario, children }) {
   const identificador = usuario?.id ?? usuario?.correo
@@ -40,8 +40,4 @@ export function ProveedorAccesibilidad({ usuario, children }) {
     if (opciones[campo]?.includes(valor)) establecerPreferencias(actual => ({ ...actual, [campo]: valor }))
   }
   return <ContextoAccesibilidad.Provider value={{ preferencias, actualizarPreferencia }}>{children}</ContextoAccesibilidad.Provider>
-}
-
-export function useAccesibilidad() {
-  return useContext(ContextoAccesibilidad)
 }

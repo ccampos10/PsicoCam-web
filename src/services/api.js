@@ -1,10 +1,19 @@
 const API_BASE = import.meta.env.VITE_API_URL || ''
-const CLAVE_TOKEN = 'psicocam_token'
-const CLAVE_USUARIO = 'psicocam_usuario'
+import { leerSesion, guardarSesion, borrarSesion } from './sesionStorage'
+import { EVENTO_ALERTAS, EVENTO_EVALUACION } from './eventosAlertas'
 
-let token = sessionStorage.getItem(CLAVE_TOKEN) || ''
+function objeto(valor) { return valor !== null && typeof valor === 'object' && !Array.isArray(valor) }
+function validarObjeto(valor, nombre) {
+  if (!objeto(valor)) throw new Error('El servidor devolvió '+nombre+' con un formato inesperado. Inténtalo nuevamente.')
+  return valor
+}
+function validarLista(valor, nombre) {
+  if (!Array.isArray(valor) || valor.some(item => !objeto(item) || !['string','number'].includes(typeof item.id))) throw new Error('El servidor devolvió la lista de '+nombre+' con un formato inesperado. Inténtalo nuevamente.')
+  return valor
+}
 
 async function solicitar(ruta, opciones = {}) {
+  const token = leerSesion()?.token
   const respuesta = await fetch(`${API_BASE}${ruta}`, {
     ...opciones,
     headers: {
@@ -19,17 +28,12 @@ async function solicitar(ruta, opciones = {}) {
     if (respuesta.status === 401 && ruta !== '/api/login') {
       throw new Error('La sesión no es válida o ha expirado. Cierra sesión e inicia sesión para consultar los datos.')
     }
-    throw new Error(cuerpo?.error || 'No se pudo completar la solicitud.')
+    throw new Error((typeof cuerpo?.error === 'string' && cuerpo.error) || cuerpo?.mensaje || 'No se pudo completar la solicitud.')
   }
+  if (cuerpo === null) throw new Error('El servidor devolvió una respuesta inválida. Inténtalo nuevamente.')
   return cuerpo
 }
 
-function guardarSesion(datos) {
-  token = datos.token
-  sessionStorage.setItem(CLAVE_TOKEN, token)
-  sessionStorage.setItem(CLAVE_USUARIO, JSON.stringify(datos.usuario))
-  return datos.usuario
-}
 
 function normalizarClasificacion(estadoEvaluacion) {
   const estado = String(estadoEvaluacion || '').trim().toLowerCase()
@@ -66,23 +70,15 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ correo: credenciales.usuario, password: credenciales.contrasena }),
     })
-    return guardarSesion(datos)
+    return guardarSesion(datos, credenciales.recordarme === true)
   },
 
   async cerrarSesion() {
     // El backend usa JWT sin ruta de revocación; cerrar sesión elimina el token local.
-    token = ''
-    sessionStorage.removeItem(CLAVE_TOKEN)
-    sessionStorage.removeItem(CLAVE_USUARIO)
+    borrarSesion()
   },
 
-  sesionActual() {
-    try {
-      return JSON.parse(sessionStorage.getItem(CLAVE_USUARIO) || 'null')
-    } catch {
-      return null
-    }
-  },
+  sesionActual() { return leerSesion()?.usuario || null },
 
   obtenerCuenta: () => solicitar('/api/cuenta'),
   async actualizarCuenta(datos) {
@@ -93,17 +89,23 @@ export const api = {
     method: 'PUT', body: JSON.stringify(datos),
   }),
 
-  listarBitacora: () => solicitar('/api/bitacora'),
-  listarAlertas: () => solicitar('/api/alertas'),
-  obtenerAlerta: id => solicitar(`/api/alertas/id?${new URLSearchParams({ id: String(id) })}`),
+  listarBitacora: async () => validarLista(await solicitar('/api/bitacora', { cache: 'no-store' }), 'eventos'),
+  async listarAlertas() {
+    const alertas = validarLista(await solicitar('/api/alertas', { cache: 'no-store' }), 'alertas')
+    window.dispatchEvent(new CustomEvent(EVENTO_ALERTAS, { detail: alertas }))
+    return alertas
+  },
+  obtenerAlerta: async id => validarObjeto(await solicitar(`/api/alertas/id?${new URLSearchParams({ id: String(id) })}`, { cache: 'no-store' }), 'una alerta'),
   obtenerTranscripcion: id => solicitar(`/api/alertas/transcripcion?${new URLSearchParams({ id: String(id) })}`, { cache: 'no-store' }),
-  actualizarEvaluacion: (id, estadoEvaluacion) => solicitar(
-    `/api/alertas/clasificar?${new URLSearchParams({
-      id: String(id),
-      clasificacion: normalizarClasificacion(estadoEvaluacion),
-    })}`,
-  ),
-  obtenerConfiguracion: async () => normalizarConfiguracion(await solicitar('/api/configuracion')),
+  async actualizarEvaluacion(id, estadoEvaluacion, notasClinicas) {
+    const actualizada = validarObjeto(await solicitar('/api/alertas/'+encodeURIComponent(id)+'/evaluacion', {
+      method: 'PATCH', body: JSON.stringify({ clasificacion: normalizarClasificacion(estadoEvaluacion), ...(notasClinicas !== undefined && { notasClinicas }) }),
+    }), 'la evaluación')
+    window.dispatchEvent(new CustomEvent(EVENTO_EVALUACION, { detail: actualizada }))
+    return actualizada
+  },
+  obtenerAuditoriaAlerta: async id => validarLista(await solicitar('/api/alertas/bitacora?'+new URLSearchParams({ id: String(id) }), { cache: 'no-store' }), 'eventos de auditoría'),
+  obtenerConfiguracion: async () => normalizarConfiguracion(validarObjeto(await solicitar('/api/configuracion'), 'la configuración')),
   actualizarConfiguracion: async (datos) => normalizarConfiguracion(await solicitar('/api/configuracion', {
     method: 'PUT',
     body: JSON.stringify({
@@ -115,7 +117,7 @@ export const api = {
       notificacionesCorreo: { modo: datos.modoCorreo, incluirAdministradores: datos.incluirAdministradores },
     }),
   })),
-  listarUsuarios: () => solicitar('/api/usuarios'),
+  listarUsuarios: async () => validarLista(await solicitar('/api/usuarios'), 'usuarios'),
   crearUsuario: datos => solicitar('/api/usuarios', {
     method: 'POST',
     body: JSON.stringify(datosUsuario(datos)),

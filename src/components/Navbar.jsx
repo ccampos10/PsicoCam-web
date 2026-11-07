@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useSesion } from '../hooks/useSesion'
 import { navegacion, puedeAcceder } from '../routes/navegacion'
 import PanelDesplegable from './PanelDesplegable'
-import { useNotificaciones } from '../context/Notificaciones'
+import { useNotificaciones } from '../hooks/useNotificaciones'
 import { ColorUrgencia } from './Pilas'
 
 const formatoFechaAlerta = new Intl.DateTimeFormat('es-CL', {

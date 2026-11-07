@@ -5,7 +5,7 @@ import { ProveedorNotificaciones } from './Notificaciones'
 import { rutasInternas } from '../routes/mapaRutas'
 import { api } from '../services/api'
 
-// Perfil de prueba para la vista previa, TODAVIA NO HAY BD
+// Vista previa de la interfaz; no autentica las peticiones a la API.
 const usuarioVistaPrevia = {
   nombre: 'Usuario', rol: 'Supervisor',
   rutasPermitidas: rutasInternas.map(({ ruta }) => ruta),
@@ -23,12 +23,16 @@ function asignarRutasPermitidas(usuario) {
 }
 
 export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesion }) {
-  const [usuario, establecerUsuario] = useState(usuarioInicial)
+  const [usuario, establecerUsuario] = useState(() => asignarRutasPermitidas(usuarioInicial ?? api.sesionActual()))
   const [errorCierreSesion, establecerErrorCierreSesion] = useState('')
   const [cerrandoSesion, establecerCerrandoSesion] = useState(false)
   useEffect(() => {
-    if (usuarioInicial === null) establecerUsuario(asignarRutasPermitidas(api.sesionActual()))
-  }, [usuarioInicial])
+    const sincronizar = evento => {
+      if (evento.key === null || evento.key === 'psicocam_token' || evento.key === 'psicocam_usuario') establecerUsuario(asignarRutasPermitidas(api.sesionActual()))
+    }
+    window.addEventListener('storage', sincronizar)
+    return () => window.removeEventListener('storage', sincronizar)
+  }, [])
 
   async function iniciarSesion(credenciales) {
     const perfil = asignarRutasPermitidas(await api.iniciarSesion(credenciales))

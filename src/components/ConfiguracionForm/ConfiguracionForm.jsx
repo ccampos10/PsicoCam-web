@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import styles from "./ConfiguracionForm.module.css";
 
 const MIN_OPERACION = 480; // 08:00 en minutos
@@ -26,22 +26,18 @@ function aMinutos(valor) {
  * @param {(nuevaConfig: Object) => Promise<void>} onGuardar
  */
 export function ConfiguracionForm({ valoresIniciales, onGuardar, esAdmin = false }) {
+  const [guardadoReciente, setGuardadoReciente] = useState(false);
+  return <EditorConfiguracion key={JSON.stringify(valoresIniciales)} valoresIniciales={valoresIniciales} onGuardar={onGuardar} esAdmin={esAdmin} guardadoReciente={guardadoReciente} setGuardadoReciente={setGuardadoReciente} />;
+}
+function EditorConfiguracion({ valoresIniciales, onGuardar, esAdmin, guardadoReciente, setGuardadoReciente }) {
   const [horaInicio, setHoraInicio] = useState(valoresIniciales.horaInicio);
   const [horaTermino, setHoraTermino] = useState(valoresIniciales.horaTermino);
   const [correo, setCorreo] = useState(valoresIniciales.correoCliente);
   const [modoCorreo, setModoCorreo] = useState(valoresIniciales.modoCorreo || 'asignado');
   const [incluirAdministradores, setIncluirAdministradores] = useState(valoresIniciales.incluirAdministradores === true);
   const [guardando, setGuardando] = useState(false);
-  const [guardadoReciente, setGuardadoReciente] = useState(false);
   const [errorGuardado, setErrorGuardado] = useState('');
 
-  useEffect(() => {
-    setHoraInicio(valoresIniciales.horaInicio);
-    setHoraTermino(valoresIniciales.horaTermino);
-    setCorreo(valoresIniciales.correoCliente);
-    setModoCorreo(valoresIniciales.modoCorreo || 'asignado');
-    setIncluirAdministradores(valoresIniciales.incluirAdministradores === true);
-  }, [valoresIniciales]);
 
   const opcionesInicio = useMemo(
     () => TODAS_LAS_HORAS.filter((h) => aMinutos(h) < aMinutos(horaTermino)),

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useListadoAlertas } from '../hooks/useListadoAlertas'
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
 import ModalDetalle from '../components/ModalDetalle'
 import { ApiAlertaRepository } from '../repositories/ApiAlertaRepository'
@@ -8,31 +9,11 @@ import styles from './Alertas.module.css'
 const repositorioPredeterminado = new ApiAlertaRepository()
 
 export default function Alertas({ repositorio = repositorioPredeterminado }) {
-  const [alertas, establecerAlertas] = useState([])
-  const [cargando, establecerCargando] = useState(true)
-  const [error, establecerError] = useState('')
+  const { alertas, establecerAlertas, cargando, error, reintentar } = useListadoAlertas(repositorio)
   const [alertaSeleccionada, establecerAlertaSeleccionada] = useState(null)
   const [mensajeExito, establecerMensajeExito] = useState('')
   const [totalMostrado, establecerTotalMostrado] = useState(null)
-  const [intento, establecerIntento] = useState(0)
 
-  useEffect(() => {
-    let activo = true
-    async function cargarAlertas() {
-      try {
-        establecerCargando(true)
-        establecerError('')
-        const datos = await repositorio.getAll()
-        if (activo) establecerAlertas(datos)
-      } catch (fallo) {
-        if (activo) establecerError(fallo.message || 'No se pudieron cargar las alertas.')
-      } finally {
-        if (activo) establecerCargando(false)
-      }
-    }
-    cargarAlertas()
-    return () => { activo = false }
-  }, [repositorio, intento])
 
   const alertasPendientes = alertas.filter((alerta) => !alerta.estado_evaluacion || alerta.estado_evaluacion === 'neutro')
   const filtros = [
@@ -50,8 +31,8 @@ export default function Alertas({ repositorio = repositorioPredeterminado }) {
     { clave: 'detalle', encabezado: '', renderizar: () => <span aria-hidden="true">›</span> },
   ]
 
-  async function guardarEvaluacion(alerta, evaluacion) {
-    const actualizada = await repositorio.actualizarEstadoEvaluacion(alerta.id, evaluacion)
+  async function guardarEvaluacion(alerta, evaluacion, notasClinicas) {
+    const actualizada = await repositorio.actualizarEstadoEvaluacion(alerta.id, evaluacion, notasClinicas)
     establecerAlertas((anteriores) => anteriores.map((item) => item.id === actualizada.id ? actualizada : item))
     establecerAlertaSeleccionada(null)
     establecerMensajeExito('Alerta clasificada correctamente.')
@@ -68,7 +49,7 @@ export default function Alertas({ repositorio = repositorioPredeterminado }) {
     {cargando
       ? <p className={styles.cargando} role="status">Cargando alertas...</p>
       : error
-        ? <div className={styles.error} role="alert"><h2>No se pudieron cargar las alertas</h2><p>{error}</p><button className="button-primary" type="button" onClick={() => establecerIntento((valor) => valor + 1)}>Reintentar</button></div>
+        ? <div className={styles.error} role="alert"><h2>No se pudieron cargar las alertas</h2><p>{error}</p><button className="button-primary" type="button" onClick={reintentar}>Reintentar</button></div>
         : <PaginaTabla className={styles.tablaAlertas} datos={alertasPendientes} columnas={columnas} filtros={filtros} itemsPorPagina={6} headerFiltros={headerFiltros} headerTabla={headerTabla} pieFiltros={<div className={styles.pieFiltros}><span>Mostrando {totalMostrado ?? alertasPendientes.length} de {alertasPendientes.length}</span><div className={styles.leyenda}><span><i className={styles.puntoBajo} />Bajo</span><span><i className={styles.puntoMedio} />Medio</span><span><i className={styles.puntoAlto} />Alto</span></div></div>} mensajeVacio="No hay alertas pendientes de clasificación." resumenPaginacion alSeleccionarFila={establecerAlertaSeleccionada} onResultadosChange={establecerTotalMostrado} />}
     <ModalDetalle alerta={alertaSeleccionada} onCerrar={() => establecerAlertaSeleccionada(null)} onGuardar={guardarEvaluacion} />
   </div>

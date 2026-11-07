@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useListadoAlertas } from '../hooks/useListadoAlertas'
+import { lazy, Suspense } from 'react'
 import { Bell, CircleCheck, Clock, TriangleAlert, Users } from 'lucide-react'
-import GraficoDistribucionRiesgo from '../components/GraficoDistribucionRiesgo'
 import ListaAlertasRecientes from '../components/ListaAlertasRecientes'
 import ListaBoxes from '../components/ListaBoxes'
 import ProgresoDetecciones from '../components/ProgresoDetecciones'
@@ -9,6 +9,7 @@ import { ApiAlertaRepository } from '../repositories/ApiAlertaRepository'
 import '../styles/dashboard.css'
 
 const ORDEN_NIVELES = ['Bajo', 'Medio', 'Alto']
+const GraficoDistribucionRiesgo = lazy(() => import('../components/GraficoDistribucionRiesgo'))
 const repositorioAlertas = new ApiAlertaRepository()
 
 const NOMBRES_CATEGORIA = {
@@ -50,19 +51,7 @@ function contarAtencionesPorSupervisor(alertas) {
 }
 
 export default function Dashboard({ titulo }) {
-  const [alertas, setAlertas] = useState([])
-  const [cargando, setCargando] = useState(true)
-  const [error, setError] = useState('')
-  const [intento, setIntento] = useState(0)
-
-  useEffect(() => {
-    let activo = true
-    repositorioAlertas.getAll()
-      .then(datos => { if (activo) setAlertas(datos) })
-      .catch(fallo => { if (activo) setError(fallo.message || 'Comprueba la conexión con el servidor e inténtalo nuevamente.') })
-      .finally(() => { if (activo) setCargando(false) })
-    return () => { activo = false }
-  }, [intento])
+  const { alertas, cargando, error, reintentar } = useListadoAlertas(repositorioAlertas)
 
   const totalAlertas = alertas.length
   const nivelRiesgo = agruparPorNivel(alertas)
@@ -102,7 +91,7 @@ export default function Dashboard({ titulo }) {
     </section>
     {cargando
       ? <p className="dashboard-cargando">Cargando alertas…</p>
-      : error ? <div role="alert" className="dashboard-error"><h2>No se pudieron cargar las alertas</h2><p>{error}</p><button className="button-primary" type="button" onClick={() => { setCargando(true); setError(''); setIntento(valor => valor + 1) }}>Reintentar</button></div>
+      : error ? <div role="alert" className="dashboard-error"><h2>No se pudieron cargar las alertas</h2><p>{error}</p><button className="button-primary" type="button" onClick={reintentar}>Reintentar</button></div>
       : <>
           <section className="dashboard-metricas" aria-label="Métricas principales">
             <TarjetaMetrica etiqueta="Alertas registradas" valor={resumenAlertas.registradas} nota="Total de detecciones" color="var(--secondary)" icono={Bell} />
@@ -112,7 +101,7 @@ export default function Dashboard({ titulo }) {
             <TarjetaMetrica etiqueta="Promedio por supervisor" valor={resumenAlertas.mediaAtenciones} nota="Media de atenciones" color="var(--secondary)" icono={Users} />
           </section>
           <section className="dashboard-fila" aria-label="Estadísticas de alertas">
-            <GraficoDistribucionRiesgo datos={nivelRiesgo} />
+            <Suspense fallback={<p className="dashboard-cargando" role="status">Cargando gráfico...</p>}><GraficoDistribucionRiesgo datos={nivelRiesgo} /></Suspense>
             <ProgresoDetecciones datos={detecciones} />
           </section>
           <section className="dashboard-fila" aria-label="Boxes y alertas recientes">
