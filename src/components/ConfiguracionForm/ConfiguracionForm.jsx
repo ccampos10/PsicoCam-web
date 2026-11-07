@@ -167,6 +167,30 @@ export function ConfiguracionForm({ valoresIniciales, onGuardar, esAdmin = false
         {!esAdmin && <p className={styles.descripcion}>Solo un administrador puede cambiar esta configuración.</p>}
       </section>
 
+      {/* Sección */}
+      <section className={styles.seccion}>
+        <div className={styles.encabezadoSeccion}>
+          <h2>Correo de respaldo</h2>
+          <span className={styles.etiquetaAdmin}>Administrador</span>
+        </div>
+        <p className={styles.descripcion}>
+          Ingresa un correo secundario para recibir respaldo de las notificaciones o alertas.
+        </p>
+        <label className={styles.campo}>
+          Correo electrónico
+          <input
+            type="email"
+            disabled={!esAdmin || guardando}
+            value={correo}
+            onChange={(e) => {
+              setCorreo(e.target.value);
+              setGuardadoReciente(false);
+            }}
+            placeholder="ejemplo@psicocam.cl"
+          />
+        </label>
+      </section>
+
       <div className={styles.acciones}>
         {errorGuardado && <p role="alert">{errorGuardado}</p>}
         <span className={hayCambiosTotales ? styles.chipPendiente : styles.chipSinCambios}>
