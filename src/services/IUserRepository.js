@@ -1,11 +1,11 @@
 export default class IUserRepository {
   // Busca por correo (texto); devuelve el usuario o null si no existe.
-  async buscarPorCorreo(correo) {
+  async buscarPorCorreo() {
     throw new Error('La búsqueda de usuarios por correo todavía no está implementada.')
   }
 
   // Busca por ID (texto o número); devuelve el usuario o null si no existe.
-  async buscarPorId(id) {
+  async buscarPorId() {
     throw new Error('La búsqueda de usuarios por ID todavía no está implementada.')
   }
 
@@ -15,7 +15,7 @@ export default class IUserRepository {
   }
 
   // Recibe usuario, contrasena y recordarme; inicia sesión y devuelve el perfil o null si las credenciales son inválidas.
-  async verificarCredenciales(credenciales) {
+  async verificarCredenciales() {
     throw new Error('La verificación de credenciales todavía no está implementada.')
   }
 

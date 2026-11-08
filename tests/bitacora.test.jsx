@@ -23,7 +23,7 @@ describe('Bitácora', () => {
     await usuario.click(screen.getByRole('button', { name: 'Ver detalles de envio notificacion' }))
     expect(within(screen.getByRole('dialog', { name: 'Detalles del registro' })).getByText('Error de envío')).toBeTruthy()
     expect(within(screen.getByRole('dialog')).getByText('2')).toBeTruthy()
-    expect(within(screen.getByRole('dialog')).getByText('Sin categoría')).toBeTruthy()
+    expect(within(screen.getByRole('dialog')).getByText('Evento técnico / integración')).toBeTruthy()
     await usuario.click(screen.getByRole('button', { name: 'Cerrar' }))
     expect(screen.queryByRole('dialog')).toBeNull()
   })
@@ -39,7 +39,7 @@ describe('Bitácora', () => {
 
   it('conserva la acción que entrega la API', async () => {
     const fetchOriginal = globalThis.fetch
-    globalThis.fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify([{ fecha: '2026-09-24', hora: '09:00', usuario: 'Ana', nivel: 'Información', detalle: 'Detalle', accion: 'clasificar_alerta' }]), { status: 200 }))
+    globalThis.fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify([{ id: 'qa-1', fecha: '2026-09-24', hora: '09:00', usuario: 'Ana', nivel: 'Información', detalle: 'Detalle', accion: 'clasificar_alerta' }]), { status: 200 }))
     try {
       const datos = await new ApiBitacoraRepository().listarRegistros()
       expect(datos[0].accion).toBe('clasificar_alerta')

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ChevronRight, X } from 'lucide-react'
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
 import Modal from '../components/Modal'
+import { metadatosEvento } from '../utils/eventosBitacora'
 import { ApiBitacoraRepository } from '../repositories/ApiBitacoraRepository'
 import styles from './Bitacora.module.css'
 
@@ -17,8 +18,9 @@ function textoAccion(accion) {
 }
 
 function categoriaEvento(item) {
-  if (item.accion === 'clasificar_alerta') return { nombre: 'Evento clínico', estilo: styles.clinico }
-  return { nombre: 'Sin categoría', estilo: styles.sinCategoria }
+  const {categoria} = metadatosEvento(item)
+  const nombres = {clinico:'Evento clínico', tecnico:'Evento técnico / integración', sistema:'Evento del sistema', sinCategoria:'Sin categoría'}
+  return {nombre:nombres[categoria], estilo:styles[categoria]}
 }
 
 export default function Bitacora({ titulo = 'Bitácora', repositorio = repositorioBitacora }) {
@@ -27,15 +29,17 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
   const [cargando, establecerCargando] = useState(true)
   const [intento, establecerIntento] = useState(0)
   const [seleccionado, establecerSeleccionado] = useState(null)
-  const [filtros, establecerFiltros] = useState({ desde: '', hasta: '', usuario: '', nivel: '', accion: '' })
+  const [filtros, establecerFiltros] = useState({ desde: '', hasta: '', usuario: '', tipo: '', resultado: '' })
 
   useEffect(() => {
     let activo = true
-    establecerCargando(true)
-    repositorio.listarRegistros()
-      .then((registros) => { if (activo) { establecerDatos(registros); establecerError('') } })
-      .catch((fallo) => { if (activo) establecerError(fallo.message || 'No se pudo cargar la bitácora.') })
-      .finally(() => { if (activo) establecerCargando(false) })
+    async function cargar() {
+      establecerCargando(true)
+      try { const registros = await repositorio.listarRegistros(); if (activo) { establecerDatos(registros.map(item => ({...item, ...metadatosEvento(item)}))); establecerError('') } }
+      catch (fallo) { if (activo) establecerError(fallo.message || 'No se pudo cargar la bitácora.') }
+      finally { if (activo) establecerCargando(false) }
+    }
+    cargar()
     return () => { activo = false }
   }, [intento, repositorio])
 
@@ -44,8 +48,8 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
     (!filtros.desde || (item.fecha && item.fecha >= filtros.desde)) &&
     (!filtros.hasta || (item.fecha && item.fecha <= filtros.hasta)) &&
     (!filtros.usuario || item.usuario === filtros.usuario) &&
-    (!filtros.nivel || item.nivel === filtros.nivel) &&
-    (!filtros.accion || item.accion === filtros.accion)
+    (!filtros.tipo || item.tipo === filtros.tipo) &&
+    (!filtros.resultado || item.resultado === filtros.resultado)
   ).sort((a, b) => `${b.fecha || ''} ${b.hora || ''}`.localeCompare(`${a.fecha || ''} ${a.hora || ''}`))
 
   function cambiarFiltro(evento) {
@@ -56,9 +60,10 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
   const columnas = [
     { clave: 'fecha', encabezado: 'Fecha / hora', renderizar: (_, item) => <span className={styles.fechaConPunto}><span className={`${styles.punto} ${categoriaEvento(item).estilo}`} aria-label={categoriaEvento(item).nombre} /><span className={styles.fecha}>{fechaVisible(item.fecha)}<small>{item.hora || '—'}</small></span></span> },
     { clave: 'usuario', encabezado: 'Usuario', renderizar: valor => valor || 'No registrado' },
-    { clave: 'nivel', encabezado: 'Nivel', renderizar: valor => <span className={styles.nivel}>{valor || 'No registrado'}</span> },
+    { clave: 'tipo', encabezado: 'Tipo', renderizar: valor => <span className={styles.nivel}>{valor || 'Sin categoría'}</span> },
     { clave: 'accion', encabezado: 'Acción', renderizar: textoAccion },
     { clave: 'descripcion', encabezado: 'Detalle del evento', renderizar: valor => valor || 'Sin detalle' },
+    { clave: 'resultado', encabezado: 'Resultado' },
     { clave: 'detalles', encabezado: '', renderizar: (_, item) => <button type="button" className={styles.detalleBoton} onClick={() => establecerSeleccionado(item)} aria-label={`Ver detalles de ${textoAccion(item.accion)}`}><ChevronRight size={18} /></button> },
   ]
 
@@ -69,13 +74,13 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
       : <>
         <section className={styles.panel} aria-labelledby="titulo-filtros-bitacora">
           <h2 id="titulo-filtros-bitacora">Filtrar registros</h2>
-          <p>Consulta eventos por fecha, usuario, nivel o acción.</p>
+          <p>Consulta eventos por fecha, usuario, tipo de evento o resultado.</p>
           <div className={styles.filtros}>
             <label>Desde<input type="date" name="desde" value={filtros.desde} onChange={cambiarFiltro} /></label>
             <label>Hasta<input type="date" name="hasta" value={filtros.hasta} onChange={cambiarFiltro} /></label>
             <label>Usuario<select name="usuario" value={filtros.usuario} onChange={cambiarFiltro}><option value="">Todos los usuarios</option>{opciones('usuario').map(valor => <option key={valor} value={valor}>{valor}</option>)}</select></label>
-            <label>Nivel<select name="nivel" value={filtros.nivel} onChange={cambiarFiltro}><option value="">Todos los niveles</option>{opciones('nivel').map(valor => <option key={valor} value={valor}>{valor}</option>)}</select></label>
-            <label>Acción<select name="accion" value={filtros.accion} onChange={cambiarFiltro}><option value="">Todas las acciones</option>{opciones('accion').map(valor => <option key={valor} value={valor}>{textoAccion(valor)}</option>)}</select></label>
+            <label>Tipo de evento<select name="tipo" value={filtros.tipo} onChange={cambiarFiltro}><option value="">Todos los eventos</option>{opciones('tipo').map(valor => <option key={valor} value={valor}>{valor}</option>)}</select></label>
+            <label>Resultado<select name="resultado" value={filtros.resultado} onChange={cambiarFiltro}><option value="">Todos</option>{opciones('resultado').map(valor => <option key={valor} value={valor}>{valor}</option>)}</select></label>
           </div>
           {filtros.desde && filtros.hasta && filtros.desde > filtros.hasta && <p className={styles.aviso} role="alert">La fecha inicial debe ser anterior o igual a la fecha final.</p>}
           <p className={styles.contador}>Mostrando {registros.length} de {datos.length} eventos</p>
@@ -94,7 +99,7 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
         <button type="button" className={styles.cerrarIcono} onClick={() => establecerSeleccionado(null)} aria-label="Cerrar detalle"><X size={18} /></button>
       </div>
       <div className={styles.modalContenido}>
-        {[['ID de registro', seleccionado.id || 'No registrado'], ['Fecha', fechaVisible(seleccionado.fecha)], ['Hora', seleccionado.hora || 'No registrada'], ['Usuario responsable', seleccionado.usuario || 'No registrado'], ['Nivel', seleccionado.nivel || 'No registrado'], ['Acción', textoAccion(seleccionado.accion)], ['Detalle del evento', seleccionado.descripcion || 'Sin detalle']].map(([etiqueta, valor]) => <div className={styles.modalDetalle} key={etiqueta}><span>{etiqueta}</span><span>{valor}</span></div>)}
+        {[['ID de registro', seleccionado.id || 'No registrado'], ['Fecha', fechaVisible(seleccionado.fecha)], ['Hora', seleccionado.hora || 'No registrada'], ['Usuario responsable', seleccionado.usuario || 'No registrado'], ['Tipo de evento', seleccionado.tipo || 'Sin categoría'], ['Nivel', seleccionado.nivel || 'No registrado'], ['Resultado', seleccionado.resultado || 'No registrado'], ['Acción', textoAccion(seleccionado.accion)], ['Detalle del evento', seleccionado.descripcion || 'Sin detalle']].map(([etiqueta, valor]) => <div className={styles.modalDetalle} key={etiqueta}><span>{etiqueta}</span><span>{valor}</span></div>)}
         <button type="button" className={styles.cerrar} onClick={() => establecerSeleccionado(null)}>Cerrar</button>
       </div>
     </Modal>}

@@ -1,5 +1,5 @@
-import { useAccesibilidad } from '../context/Accesibilidad'
-import { useNotificaciones } from '../context/Notificaciones'
+import { useAccesibilidad } from '../hooks/useAccesibilidad'
+import { useNotificaciones } from '../hooks/useNotificaciones'
 import { ColorUrgencia } from './Pilas'
 import styles from './PreferenciasConfiguracion.module.css'
 

@@ -18,11 +18,13 @@ export default function PaginaConfiguracion({ titulo }) {
   useEffect(() => {
     if (!esAdmin) return
     let activo = true
-    setCargando(true)
-    repositorioConfiguracion.obtenerConfiguracion()
-      .then((datos) => { if (activo) setConfiguracion(datos) })
-      .catch((fallo) => { if (activo) setError(fallo.message || 'No se pudo cargar la configuracion.') })
-      .finally(() => { if (activo) setCargando(false) })
+    async function cargar() {
+      setCargando(true)
+      try { const datos = await repositorioConfiguracion.obtenerConfiguracion(); if (activo) setConfiguracion(datos) }
+      catch (fallo) { if (activo) setError(fallo.message || 'No se pudo cargar la configuración.') }
+      finally { if (activo) setCargando(false) }
+    }
+    cargar()
     return () => { activo = false }
   }, [esAdmin, intento])
 

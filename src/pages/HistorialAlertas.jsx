@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useListadoAlertas } from '../hooks/useListadoAlertas'
 import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
 import { ApiAlertaRepository } from '../repositories/ApiAlertaRepository'
 import ModalDetalle from '../components/ModalDetalle'
@@ -19,34 +20,14 @@ function formatearFechaEvaluacion(valor) {
 }
 
 export default function HistorialAlertas({ titulo = 'Historial', repositorio = repositorioAlertas }) {
-  const [alertas, establecerAlertas] = useState([])
-  const [cargando, establecerCargando] = useState(true)
+  const { alertas, establecerAlertas, cargando, error, reintentar } = useListadoAlertas(repositorio)
   const [alertaSeleccionada, establecerAlertaSeleccionada] = useState(null)
   const [mostrarExito, establecerMostrarExito] = useState(false)
-  const [error, establecerError] = useState('')
-  const [intento, establecerIntento] = useState(0)
   const [totalMostrado, establecerTotalMostrado] = useState(null)
 
-  useEffect(() => {
-    let activo = true
-    async function cargarAlertas() {
-      try {
-        establecerCargando(true)
-        establecerError('')
-        const datos = await repositorio.getAll()
-        if (activo) establecerAlertas(datos)
-      } catch (fallo) {
-        if (activo) establecerError(fallo.message || 'No se pudieron cargar las alertas.')
-      } finally {
-        if (activo) establecerCargando(false)
-      }
-    }
-    cargarAlertas()
-    return () => { activo = false }
-  }, [intento, repositorio])
 
-  async function guardarEvaluacion(alerta, evaluacion) {
-    const actualizada = await repositorio.actualizarEstadoEvaluacion(alerta.id, evaluacion)
+  async function guardarEvaluacion(alerta, evaluacion, notasClinicas) {
+    const actualizada = await repositorio.actualizarEstadoEvaluacion(alerta.id, evaluacion, notasClinicas)
     establecerAlertas((anteriores) => anteriores.map((item) => item.id === actualizada.id ? actualizada : item))
     establecerAlertaSeleccionada(null)
     establecerMostrarExito(true)
@@ -92,7 +73,7 @@ export default function HistorialAlertas({ titulo = 'Historial', repositorio = r
     {cargando
       ? <p className={styles.loadingText} role="status">Cargando alertas...</p>
       : error
-        ? <div className={styles.error} role="alert"><h2>No se pudo cargar el historial</h2><p>{error}</p><button className="button-primary" type="button" onClick={() => { establecerError(''); establecerIntento((valor) => valor + 1) }}>Reintentar</button></div>
+        ? <div className={styles.error} role="alert"><h2>No se pudo cargar el historial</h2><p>{error}</p><button className="button-primary" type="button" onClick={reintentar}>Reintentar</button></div>
         : <PaginaTabla className={styles.tablaHistorial} classNameFiltros={styles.filtrosHistorial} columnas={columnas} datos={alertasEvaluadas} filtros={filtros} headerFiltros={headerFiltros} headerTabla={headerTabla} pieFiltros={<div className={styles.pieFiltros}>Mostrando {totalMostrado ?? alertasEvaluadas.length} de {alertasEvaluadas.length} alertas evaluadas</div>} itemsPorPagina={6} resumenPaginacion mensajeVacio="No hay alertas evaluadas para mostrar." alSeleccionarFila={establecerAlertaSeleccionada} onResultadosChange={establecerTotalMostrado} />}
     <ModalDetalle alerta={alertaSeleccionada} onCerrar={() => establecerAlertaSeleccionada(null)} onGuardar={guardarEvaluacion} />
   </div>

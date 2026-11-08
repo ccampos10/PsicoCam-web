@@ -1,9 +1,10 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { api } from '../services/api'
 import styles from './Notificaciones.module.css'
 
 const predeterminadas = { pantalla: true, sonido: false, resumen: true }
-const ContextoNotificaciones = createContext(null)
+import { ContextoNotificaciones } from './ContextoNotificaciones'
+import { EVENTO_EVALUACION } from '../services/eventosAlertas'
 const INTERVALO = 15000
 
 export function ProveedorNotificaciones({ usuario, children }) {
@@ -29,7 +30,7 @@ export function ProveedorNotificaciones({ usuario, children }) {
   const anteriores = useRef(null)
   const audio = useRef(null)
   const opciones = useRef(preferencias)
-  opciones.current = preferencias
+  useEffect(() => { opciones.current = preferencias }, [preferencias])
 
   function cambiarPreferencia(nombre, valor) {
     if (!Object.hasOwn(predeterminadas, nombre) || typeof valor !== 'boolean') return
@@ -109,6 +110,14 @@ export function ProveedorNotificaciones({ usuario, children }) {
   }, [usuario?.id, usuario?.correo, usuario?.rol])
 
   useEffect(() => () => { if (audio.current) void audio.current.close().catch(() => {}) }, [])
+  useEffect(() => {
+    const actualizar = ({ detail }) => {
+      establecerAlertas(actuales => actuales.map(alerta => String(alerta.id) === String(detail.id) ? detail : alerta))
+      establecerPendientes(actuales => actuales.filter(alerta => String(alerta.id) !== String(detail.id)))
+    }
+    window.addEventListener(EVENTO_EVALUACION, actualizar)
+    return () => window.removeEventListener(EVENTO_EVALUACION, actualizar)
+  }, [])
   const valor = { preferencias, cambiarPreferencia, pendientes, alertas, leidas, marcarTodasLeidas, estado, probarSonido, errorSonido }
   return <ContextoNotificaciones.Provider value={valor}>{children}
     {aviso && <div className={styles.aviso} role="status">
@@ -117,5 +126,3 @@ export function ProveedorNotificaciones({ usuario, children }) {
     </div>}
   </ContextoNotificaciones.Provider>
 }
-
-export function useNotificaciones() { return useContext(ContextoNotificaciones) }

@@ -2,7 +2,7 @@ import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import alertas from '../src/services/mockData.json'
 
-afterEach(() => cleanup())
+afterEach(() => { cleanup(); sessionStorage.clear(); localStorage.clear() })
 window.scrollTo = vi.fn()
 window.matchMedia = vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }))
 // jsdom no implementa ResizeObserver; Recharts lo usa para medir sus contenedores.
@@ -31,6 +31,7 @@ const configuracion = {
 
 globalThis.fetch = vi.fn(async (ruta) => {
   const url = String(ruta)
+  if (url.includes('/api/alertas/id?')) { const id = new URL(url, 'http://localhost').searchParams.get('id'); return new Response(JSON.stringify({ id, box:'Box '+id, categoria:'RS', nivel:'Alto', fecha:'2026-11-06', hora:'10:00', supervisor:'qa@example.cl', estado_evaluacion:'neutro' }), {status:200}) }
   if (url.includes('/api/alertas')) return new Response(JSON.stringify(alertas), { status: 200 })
   if (url.includes('/api/bitacora')) return new Response(JSON.stringify(bitacora), { status: 200 })
   if (url.includes('/api/configuracion')) return new Response(JSON.stringify(configuracion), { status: 200 })

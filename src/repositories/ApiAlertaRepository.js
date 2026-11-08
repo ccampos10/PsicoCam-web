@@ -2,6 +2,7 @@ import { IAlertaRepository } from './IAlertaRepository'
 import { api } from '../services/api'
 
 export class ApiAlertaRepository extends IAlertaRepository {
+  actualizacionesEnVivo = true
   async getAll() {
     return api.listarAlertas()
   }
@@ -10,7 +11,7 @@ export class ApiAlertaRepository extends IAlertaRepository {
     return api.obtenerAlerta(id)
   }
 
-  async actualizarEstadoEvaluacion(id, estadoEvaluacion) {
-    return api.actualizarEvaluacion(id, estadoEvaluacion)
+  async actualizarEstadoEvaluacion(id, estadoEvaluacion, notasClinicas) {
+    return api.actualizarEvaluacion(id, estadoEvaluacion, notasClinicas)
   }
 }

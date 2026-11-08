@@ -85,8 +85,8 @@ La aplicación es una SPA construida con React y Vite, organizada por responsabi
 - **Navegación:** `BrowserRouter` (React Router) gestiona el historial del navegador. `Routes` elige la página según la URL y `Outlet` la inserta dentro del `Layout`, que mantiene la barra lateral y la superior. Los enlaces del menú usan `NavLink`, que actualiza la URL sin recargar la página y marca la opción activa.
 - **Sesión:** `ProveedorSesion` guarda el usuario autenticado y las rutas a las que tiene permiso (`rutasPermitidas`). Los componentes la consultan con el hook `useSesion`. Los permisos provienen de la sesión, no del nombre visible del rol.
 - **Páginas y componentes:** cada ruta muestra una página de `pages/`, que se compone de componentes reutilizables de `components/`. Los estilos están en archivos globales (`styles/`) y en CSS Modules por componente o página.
-- **Acceso a datos:** las páginas obtienen los datos mediante interfaces de repositorio (`repositories/` y `services/`), de modo que el origen de los datos se pueda cambiar sin modificar la interfaz. Actualmente el origen es un servicio simulado con datos de prueba.
-- **Integración con el backend:** el inicio de sesión y los datos reales mediante la API del backend (`/api`) aún no están integrados. El inicio de sesión funciona con una vista previa con un perfil de prueba, disponible solo en modo desarrollo.
+- **Acceso a datos:** las páginas obtienen los datos mediante interfaces de repositorio (`repositories/` y `services/`), de modo que el origen de los datos se pueda cambiar sin modificar la interfaz. Las pantallas usan los repositorios de la API real; los mocks quedan para pruebas.
+- **Integración con el backend:** el inicio de sesión, usuarios, alertas, historial, bitácora, configuración y perfil consumen la API real bajo `/api`. Vite incluye un proxy en desarrollo. La vista previa de desarrollo solo recorre la interfaz y no autentica las consultas.
 
 ### Protección de rutas
 
@@ -108,7 +108,7 @@ La aplicación es una SPA construida con React y Vite, organizada por responsabi
 | `/bitacora` | Bitácora | Sí |
 | `/usuarios` | Gestión de usuarios | Sí |
 | `/configuracion` | Configuración | Sí (grupo cuenta) |
-| `/mi-cuenta` | Mi cuenta (módulo pendiente) | Sí (grupo cuenta) |
+| `/mi-cuenta` | Mi cuenta y seguridad de la sesión | Sí (grupo cuenta) |
 | `*` | Página no encontrada | No |
 
 ### Integración con el backend
@@ -166,7 +166,7 @@ Entorno verificado: Node 24.14.1 y npm 11.11.0. Usa `npm ci` para reproducir las
 BrowserRouter (main.jsx)
 └── ProveedorSesion (App.jsx)
     └── RutasAplicacion
-        ├── /login -> AccesoPendiente (sin formulario de login aun)
+        ├── /login -> InicioSesion (autenticación mediante API)
         └── RequiereSesion
             └── Layout
                 ├── Sidebar
@@ -230,3 +230,14 @@ Las versiones corresponden a los rangos definidos en `package.json`; las version
 | @testing-library/user-event | ^14.6.7 | Simulación de interacciones en las pruebas. |
 
 **Software requerido:** Node.js 24 y npm 11.
+## Verificación y comportamiento de la integración
+
+Ejecuta `npm test`, `npm run lint` y `npm run build`. Las pruebas deben utilizar cuentas y bases de QA separadas.
+
+Las notificaciones consultan la API cada 15 segundos mientras la web está abierta; el dashboard, las alertas y el historial reciben esas actualizaciones sin perder sus filtros. Evaluar una alerta actualiza también la campana. Los fallos de la API muestran mensajes y permiten reintentar.
+
+La API limita las alertas al supervisor asignado; los administradores ven todas. El listado, historial, dashboard y campana utilizan esos datos autorizados. La ruta `/alertas/:idAlerta` carga el detalle real y devuelve «Alerta no encontrada» para una alerta ajena. Solo el supervisor asignado y los administradores pueden evaluar y acceder a notas clínicas, transcripciones y auditoría. El backend valida los permisos en cada petición. Las evaluaciones y notas se guardan mediante `PATCH /api/alertas/:id/evaluacion`.
+
+Sin Recordarme la sesión permanece en la pestaña. Al marcarlo, el token se conserva en este navegador hasta su vencimiento o cierre de sesión; la opción no amplía la vigencia del JWT. El cierre de sesión elimina ambas copias locales.
+
+Las horas con zona UTC u offset se presentan en America/Santiago; las fechas antiguas sin zona se conservan como hora local. La API mantiene la marca original de generación.

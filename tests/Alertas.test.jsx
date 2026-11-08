@@ -1,10 +1,12 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, within, waitFor } from '@testing-library/react';
+import { render as renderBase, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Alertas from '../src/pages/Alertas';
 import { api } from '../src/services/api';
 
+import { ContextoSesion } from '../src/context/ContextoSesion';
+function render(vista) { return renderBase(<ContextoSesion.Provider value={{usuario:{rol:'administrador',correo:'admin@example.cl'}}}>{vista}</ContextoSesion.Provider>) }
 // Datos de prueba independientes del mockData.json.
 const alertasPrueba = [
   {

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import Layout from '../layouts/Layout'
+import LimiteErrores from '../components/LimiteErrores'
 import PaginaNoEncontrada from '../pages/PaginaNoEncontrada'
 import { useSesion } from '../hooks/useSesion'
 import { puedeAcceder } from './navegacion'
@@ -12,11 +13,12 @@ function RequiereSesion() {
     state={{ rutaSolicitada: ubicacion.pathname + ubicacion.search + ubicacion.hash }} />
 }
 function RutaModulo({ opcion }) {
+  const ubicacion = useLocation()
   const { usuario } = useSesion()
   if (!puedeAcceder(usuario, opcion.ruta)) return <section className="placeholder-card"><h1>Acceso restringido</h1>
     <p>Tu cuenta no tiene permisos para acceder a esta sección.</p></section>
   const Componente = opcion.componente
-  return <Componente titulo={opcion.titulo} />
+  return <LimiteErrores key={ubicacion.pathname}><Componente titulo={opcion.titulo} /></LimiteErrores>
 }
 function RedireccionInicio() {
   const { usuario } = useSesion()

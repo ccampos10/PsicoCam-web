@@ -28,14 +28,14 @@ describe('Enrutamiento principal: SCRUM-222 a SCRUM-225', () => {
     expect(screen.queryByRole('banner')).toBeNull()
     await interaccion.click(screen.getByText('Vista previa de desarrollo'))
     await interaccion.click(screen.getByRole('button', { name: 'Abrir vista previa' }))
-    expect(await screen.findByRole('heading', { name: 'Historial de Alertas' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Historial' })).toBeTruthy()
     expect(screen.getByRole('banner')).toBeTruthy()
   })
 
-  it('resuelve el parámetro del detalle desde una URL directa', () => {
+  it('resuelve el parámetro del detalle desde una URL directa', async () => {
     prepararPrueba('/alertas/AL-456')
     expect(screen.getByRole('heading', { name: 'Detalle de alerta' })).toBeTruthy()
-    expect(screen.getByText('Identificador de alerta: AL-456')).toBeTruthy()
+    expect(await screen.findByText('Box AL-456')).toBeTruthy()
     const barraLateral = screen.getByRole('complementary')
     expect(within(barraLateral).getByRole('link', { name: 'Alertas' }).getAttribute('aria-current')).toBe('page')
     expect(within(barraLateral).queryByRole('link', { name: 'Detalle de alerta' })).toBeNull()
@@ -56,7 +56,7 @@ describe('Enrutamiento principal: SCRUM-222 a SCRUM-225', () => {
     expect(screen.queryByRole('heading', { name: 'Detalle de alerta' })).toBeNull()
     await interaccion.click(screen.getByText('Vista previa de desarrollo'))
     await interaccion.click(screen.getByRole('button', { name: 'Abrir vista previa' }))
-    expect(await screen.findByText('Identificador de alerta: AL-789')).toBeTruthy()
+    expect(await screen.findByText('Box AL-789')).toBeTruthy()
   })
 
   it('exige el permiso del detalle y no lo deduce del acceso al listado', () => {

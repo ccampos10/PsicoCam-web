@@ -1,5 +1,6 @@
 import { IBitacoraRepository, RegistroBitacora } from '../services/IBitacoraRepository'
 import { api } from '../services/api'
+import { metadatosEvento } from '../utils/eventosBitacora'
 
 function adaptarRegistro(registro: Record<string, unknown>) {
   return Object.assign(new RegistroBitacora(
@@ -9,7 +10,7 @@ function adaptarRegistro(registro: Record<string, unknown>) {
     String(registro.fecha || ''),
     String(registro.hora || ''),
     String(registro.usuario || ''),
-  ), { id: registro.id, alertaId: registro.alertaId, accion: String(registro.accion || '') })
+  ), { id: registro.id, alertaId: registro.alertaId, accion: String(registro.accion || ''), ...metadatosEvento(registro) })
 }
 
 export class ApiBitacoraRepository implements IBitacoraRepository {
