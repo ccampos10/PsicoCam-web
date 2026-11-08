@@ -29,7 +29,7 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
   const [cerrandoSesion, establecerCerrandoSesion] = useState(false)
   useEffect(() => {
     const sincronizar = evento => {
-      if (evento.key === null || evento.key === 'psicocam_token' || evento.key === 'psicocam_usuario') establecerUsuario(asignarRutasPermitidas(api.sesionActual()))
+      if (evento.key === null || evento.key === 'psicocam_usuario') establecerUsuario(asignarRutasPermitidas(api.sesionActual()))
     }
     const expirar = () => {
       establecerUsuario(null)

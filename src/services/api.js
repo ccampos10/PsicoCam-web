@@ -20,12 +20,11 @@ function validarLista(valor, nombre) {
 }
 
 async function solicitar(ruta, opciones = {}) {
-  const token = leerSesion()?.token
   const respuesta = await fetch(`${API_BASE}${ruta}`, {
+    credentials: 'same-origin',
     ...opciones,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...opciones.headers,
     },
   })
@@ -76,7 +75,11 @@ export const api = {
   async iniciarSesion(credenciales) {
     const datos = await solicitar('/api/login', {
       method: 'POST',
-      body: JSON.stringify({ correo: credenciales.usuario, password: credenciales.contrasena }),
+      body: JSON.stringify({
+        correo: credenciales.usuario,
+        password: credenciales.contrasena,
+        recordarme: credenciales.recordarme === true,
+      }),
     })
     return guardarSesion(datos, credenciales.recordarme === true)
   },

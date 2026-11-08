@@ -1,25 +1,31 @@
-const TOKEN = 'psicocam_token'
 const USUARIO = 'psicocam_usuario'
+const TOKEN_LEGADO = 'psicocam_token'
+
+// El perfil no es una credencial: el token vive únicamente en una cookie HttpOnly.
 export function leerSesion() {
   for (const tipo of ['sessionStorage', 'localStorage']) {
     try {
-      const token = window[tipo].getItem(TOKEN)
       const usuario = JSON.parse(window[tipo].getItem(USUARIO) || 'null')
-      if (token && usuario && typeof usuario.nombre === 'string' && typeof usuario.rol === 'string') return { token, usuario, tipo }
+      if (usuario && typeof usuario.nombre === 'string' && typeof usuario.rol === 'string') return { usuario, tipo }
     } catch { /* Un almacenamiento bloqueado o corrupto no impide abrir el login. */ }
   }
   return null
 }
+
 export function borrarSesion() {
   for (const tipo of ['sessionStorage', 'localStorage']) {
-    try { window[tipo].removeItem(TOKEN); window[tipo].removeItem(USUARIO) } catch { /* Almacenamiento bloqueado. */ }
+    try {
+      window[tipo].removeItem(TOKEN_LEGADO)
+      window[tipo].removeItem(USUARIO)
+    } catch { /* Almacenamiento bloqueado. */ }
   }
 }
+
 export function guardarSesion(datos, recordar = leerSesion()?.tipo === 'localStorage') {
-  if (!datos || typeof datos.token !== 'string' || !datos.token || !datos.usuario || typeof datos.usuario.nombre !== 'string' || typeof datos.usuario.rol !== 'string') throw new Error('No se recibió una sesión válida del servidor.')
+  const usuario = datos?.usuario
+  if (!usuario || typeof usuario.nombre !== 'string' || typeof usuario.rol !== 'string') throw new Error('No se recibió una sesión válida del servidor.')
   const almacenamiento = recordar ? localStorage : sessionStorage
   borrarSesion()
-  almacenamiento.setItem(TOKEN, datos.token)
-  almacenamiento.setItem(USUARIO, JSON.stringify(datos.usuario))
-  return datos.usuario
+  almacenamiento.setItem(USUARIO, JSON.stringify(usuario))
+  return usuario
 }
