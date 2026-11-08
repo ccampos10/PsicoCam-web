@@ -2,6 +2,13 @@ const API_BASE = import.meta.env.VITE_API_URL || ''
 import { leerSesion, guardarSesion, borrarSesion } from './sesionStorage'
 import { EVENTO_ALERTAS, EVENTO_EVALUACION } from './eventosAlertas'
 
+export const EVENTO_SESION_EXPIRADA = 'psicocam:sesion-expirada'
+
+function expirarSesion() {
+  borrarSesion()
+  window.dispatchEvent(new CustomEvent(EVENTO_SESION_EXPIRADA))
+}
+
 function objeto(valor) { return valor !== null && typeof valor === 'object' && !Array.isArray(valor) }
 function validarObjeto(valor, nombre) {
   if (!objeto(valor)) throw new Error('El servidor devolvió '+nombre+' con un formato inesperado. Inténtalo nuevamente.')
@@ -26,7 +33,8 @@ async function solicitar(ruta, opciones = {}) {
   const cuerpo = await respuesta.json().catch(() => null)
   if (!respuesta.ok) {
     if (respuesta.status === 401 && ruta !== '/api/login') {
-      throw new Error('La sesión no es válida o ha expirado. Cierra sesión e inicia sesión para consultar los datos.')
+      expirarSesion()
+      throw new Error('La sesión ha expirado. Inicia sesión nuevamente.')
     }
     throw new Error((typeof cuerpo?.error === 'string' && cuerpo.error) || cuerpo?.mensaje || 'No se pudo completar la solicitud.')
   }

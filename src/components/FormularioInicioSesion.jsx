@@ -3,13 +3,13 @@ import { ArrowRight, User } from 'lucide-react'
 import iconoCandado from '../assets/acceso/candado.svg'
 import iconoOjo from '../assets/acceso/ojo.svg'
 
-export default function FormularioInicioSesion({ alEnviar }) {
+export default function FormularioInicioSesion({ alEnviar, mensajeInicial = '' }) {
   const [usuario, establecerUsuario] = useState('')
   const [contrasena, establecerContrasena] = useState('')
   const [recordarme, establecerRecordarme] = useState(false)
   const [mostrarContrasena, establecerMostrarContrasena] = useState(false)
   const [errores, establecerErrores] = useState({})
-  const [mensaje, establecerMensaje] = useState('')
+  const [mensaje, establecerMensaje] = useState(mensajeInicial)
   const [enviando, establecerEnviando] = useState(false)
   const referenciaUsuario = useRef(null)
   const referenciaContrasena = useRef(null)

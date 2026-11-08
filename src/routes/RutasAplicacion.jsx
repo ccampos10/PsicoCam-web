@@ -7,10 +7,10 @@ import { puedeAcceder } from './navegacion'
 import { mapaRutas, rutasInternas } from './mapaRutas'
 
 function RequiereSesion() {
-  const { usuario } = useSesion()
+  const { usuario, sesionExpirada } = useSesion()
   const ubicacion = useLocation()
   return usuario ? <Outlet /> : <Navigate to={mapaRutas.acceso.ruta} replace
-    state={{ rutaSolicitada: ubicacion.pathname + ubicacion.search + ubicacion.hash }} />
+    state={{ rutaSolicitada: ubicacion.pathname + ubicacion.search + ubicacion.hash, sesionExpirada }} />
 }
 function RutaModulo({ opcion }) {
   const ubicacion = useLocation()

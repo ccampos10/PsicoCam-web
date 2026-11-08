@@ -8,6 +8,7 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
   const { usuario, iniciarSesion, vistaPreviaDisponible, iniciarVistaPrevia } = useSesion()
   const { state } = useLocation()
   const rutaSolicitada = state?.rutaSolicitada
+  const mensajeInicial = state?.sesionExpirada === true ? 'Tu sesión ha expirado. Inicia sesión nuevamente.' : ''
   const destinoInterno = typeof rutaSolicitada === 'string' && rutasDisponibles.some(opcion =>
     matchPath(opcion.ruta, rutaSolicitada.split(/[?#]/)[0]))
   if (usuario) return <Navigate to={destinoInterno ? rutaSolicitada : usuario.rutasPermitidas?.[0] || '/dashboard'} replace />
@@ -22,7 +23,7 @@ export default function InicioSesion({ rutasDisponibles = [], alEnviar }) {
     </section>
     <div className="acceso-area-formulario">
       <div className="acceso-contenedor">
-        <FormularioInicioSesion alEnviar={alEnviar || iniciarSesion} />
+        <FormularioInicioSesion alEnviar={alEnviar || iniciarSesion} mensajeInicial={mensajeInicial} />
         {vistaPreviaDisponible && <details className="acceso-desarrollo">
           <summary>Vista previa de desarrollo</summary>
           <p>Solo permite revisar la interfaz: no inicia sesión ni da acceso a datos protegidos. Para consultar datos, inicia sesión con una cuenta del backend.</p>
