@@ -28,7 +28,7 @@ describe('Creación, edición y administración de usuarios', () => {
     render(<FormularioUsuario usuarios={[]} alGuardar={vi.fn()} alCerrar={vi.fn()} />)
     const contrasena = screen.getByLabelText('Contraseña', { exact: true })
     await interaccion.type(contrasena, 'corta')
-    expect(screen.getByText('La contraseña debe tener al menos 6 caracteres.')).toBeTruthy()
+    expect(screen.getByText('La contraseña debe tener al menos 8 caracteres e incluir una letra y un número.')).toBeTruthy()
     await interaccion.clear(contrasena)
     await interaccion.type(contrasena, 'á'.repeat(37))
     expect(screen.getByText('La contraseña es demasiado larga. Acórtala e inténtalo nuevamente.')).toBeTruthy()

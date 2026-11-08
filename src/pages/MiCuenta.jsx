@@ -37,6 +37,10 @@ export default function MiCuenta() {
       setMensajeClave('Las contraseñas nuevas no coinciden.')
       return
     }
+    if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(clave.passwordNueva)) {
+      setMensajeClave('La nueva contraseña debe tener al menos 8 caracteres e incluir una letra y un número.')
+      return
+    }
     setCambiando(true)
     try {
       await api.cambiarContrasena({ passwordActual: clave.passwordActual, passwordNueva: clave.passwordNueva })
@@ -86,9 +90,9 @@ export default function MiCuenta() {
         </div>
         {cambiandoClave && <form className={styles.formulario} onSubmit={cambiarClave}>
           <label>Contraseña actual<input required type="password" autoComplete="current-password" value={clave.passwordActual} onChange={e => setClave({ ...clave, passwordActual: e.target.value })} /></label>
-          <label>Nueva contraseña<input required minLength={6} type="password" autoComplete="new-password" value={clave.passwordNueva} onChange={e => setClave({ ...clave, passwordNueva: e.target.value })} /></label>
-          <label>Confirmar nueva contraseña<input required minLength={6} type="password" autoComplete="new-password" value={clave.confirmacion} onChange={e => setClave({ ...clave, confirmacion: e.target.value })} /></label>
-          <p className={styles.nota}>Usa al menos 6 caracteres.</p>
+          <label>Nueva contraseña<input required minLength={8} type="password" autoComplete="new-password" value={clave.passwordNueva} onChange={e => setClave({ ...clave, passwordNueva: e.target.value })} /></label>
+          <label>Confirmar nueva contraseña<input required minLength={8} type="password" autoComplete="new-password" value={clave.confirmacion} onChange={e => setClave({ ...clave, confirmacion: e.target.value })} /></label>
+          <p className={styles.nota}>Usa al menos 8 caracteres e incluye una letra y un número.</p>
           <div className={styles.acciones}><button disabled={cambiando}>{cambiando ? 'Actualizando...' : 'Guardar contraseña'}</button><button className={styles.secundario} type="button" onClick={() => { setClave({ passwordActual: '', passwordNueva: '', confirmacion: '' }); setMensajeClave(''); setCambiandoClave(false) }}>Cancelar</button></div>
         </form>}
         {mensajeClave && <p className={styles.mensaje} role="status">{mensajeClave}</p>}
