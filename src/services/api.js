@@ -82,7 +82,11 @@ export const api = {
   },
 
   async cerrarSesion() {
-    // El backend usa JWT sin ruta de revocación; cerrar sesión elimina el token local.
+    try {
+      await solicitar('/api/logout', { method: 'POST' })
+    } catch {
+      // Si el backend no responde, la sesión local se elimina igualmente.
+    }
     borrarSesion()
   },
 
