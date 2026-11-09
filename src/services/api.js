@@ -2,6 +2,13 @@ const API_BASE = import.meta.env.VITE_API_URL || ''
 import { leerSesion, guardarSesion, borrarSesion } from './sesionStorage'
 import { EVENTO_ALERTAS, EVENTO_EVALUACION } from './eventosAlertas'
 
+export const EVENTO_SESION_EXPIRADA = 'psicocam:sesion-expirada'
+
+function expirarSesion() {
+  borrarSesion()
+  window.dispatchEvent(new CustomEvent(EVENTO_SESION_EXPIRADA))
+}
+
 function objeto(valor) { return valor !== null && typeof valor === 'object' && !Array.isArray(valor) }
 function validarObjeto(valor, nombre) {
   if (!objeto(valor)) throw new Error('El servidor devolvió '+nombre+' con un formato inesperado. Inténtalo nuevamente.')
@@ -13,12 +20,11 @@ function validarLista(valor, nombre) {
 }
 
 async function solicitar(ruta, opciones = {}) {
-  const token = leerSesion()?.token
   const respuesta = await fetch(`${API_BASE}${ruta}`, {
+    credentials: 'same-origin',
     ...opciones,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...opciones.headers,
     },
   })
@@ -26,7 +32,8 @@ async function solicitar(ruta, opciones = {}) {
   const cuerpo = await respuesta.json().catch(() => null)
   if (!respuesta.ok) {
     if (respuesta.status === 401 && ruta !== '/api/login') {
-      throw new Error('La sesión no es válida o ha expirado. Cierra sesión e inicia sesión para consultar los datos.')
+      expirarSesion()
+      throw new Error('La sesión ha expirado. Inicia sesión nuevamente.')
     }
     throw new Error((typeof cuerpo?.error === 'string' && cuerpo.error) || cuerpo?.mensaje || 'No se pudo completar la solicitud.')
   }
@@ -68,13 +75,21 @@ export const api = {
   async iniciarSesion(credenciales) {
     const datos = await solicitar('/api/login', {
       method: 'POST',
-      body: JSON.stringify({ correo: credenciales.usuario, password: credenciales.contrasena }),
+      body: JSON.stringify({
+        correo: credenciales.usuario,
+        password: credenciales.contrasena,
+        recordarme: credenciales.recordarme === true,
+      }),
     })
     return guardarSesion(datos, credenciales.recordarme === true)
   },
 
   async cerrarSesion() {
-    // El backend usa JWT sin ruta de revocación; cerrar sesión elimina el token local.
+    try {
+      await solicitar('/api/logout', { method: 'POST' })
+    } catch {
+      // Si el backend no responde, la sesión local se elimina igualmente.
+    }
     borrarSesion()
   },
 
