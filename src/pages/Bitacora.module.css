@@ -41,9 +41,11 @@
 .modalCategoria { display: flex; align-items: center; gap: 7px; margin: 0; color: var(--text-secondary); font-size: 12px; }
 .cerrarIcono { align-self: flex-start; display: inline-flex; padding: 7px; border: 0; border-radius: 8px; background: var(--canvas); color: var(--text-secondary); cursor: pointer; }
 .modalContenido { padding: 20px; }
-.modalDetalle { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-.modalDetalle span:first-child { color: var(--text-secondary); }
-.modalDetalle span:last-child { text-align: right; overflow-wrap: anywhere; }
+.modalDetalle { display: grid; grid-template-columns: minmax(130px, 42%) minmax(0, 1fr); align-items: start; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.modalDetalle span:first-child { min-width: 0; color: var(--text-secondary); }
+.modalDetalle span:last-child { min-width: 0; text-align: right; overflow-wrap: anywhere; }
+.modalDetalleDescripcion { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.modalDetalleDescripcion span:last-child { text-align: left; }
 .cerrar { display: block; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px; background: var(--primary); color: var(--card); font-weight: 600; cursor: pointer; }
 @media (max-width: 1000px) { .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 480px) { .filtros { grid-template-columns: 1fr; } .panel { padding: 16px; } }
+@media (max-width: 480px) { .filtros { grid-template-columns: 1fr; } .panel { padding: 16px; } .modalDetalle { grid-template-columns: minmax(112px, 40%) minmax(0, 1fr); gap: 12px; } .modalDetalleDescripcion { grid-template-columns: minmax(0, 1fr); } }
