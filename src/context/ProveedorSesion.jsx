@@ -4,6 +4,7 @@ import { ProveedorAccesibilidad } from './Accesibilidad'
 import { ProveedorNotificaciones } from './Notificaciones'
 import { rutasInternas } from '../routes/mapaRutas'
 import { api, EVENTO_SESION_EXPIRADA } from '../services/api'
+import { borrarSesion, EVENTO_CAMBIO_SESION } from '../services/sesionStorage'
 
 // Vista previa de la interfaz; no autentica las peticiones a la API.
 const usuarioVistaPrevia = {
@@ -22,14 +23,34 @@ function asignarRutasPermitidas(usuario) {
   return { ...usuario, rutasPermitidas }
 }
 
-export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesion }) {
-  const [usuario, establecerUsuario] = useState(() => asignarRutasPermitidas(usuarioInicial ?? api.sesionActual()))
+export function ProveedorSesion({ children, usuarioInicial, alCerrarSesion }) {
+  const usaUsuarioInicial = usuarioInicial !== undefined
+  const [usuario, establecerUsuario] = useState(() => asignarRutasPermitidas(usaUsuarioInicial ? usuarioInicial : null))
+  const [verificandoSesion, establecerVerificandoSesion] = useState(!usaUsuarioInicial)
   const [sesionExpirada, establecerSesionExpirada] = useState(false)
   const [errorCierreSesion, establecerErrorCierreSesion] = useState('')
   const [cerrandoSesion, establecerCerrandoSesion] = useState(false)
   useEffect(() => {
+    let activo = true
+    const verificar = async (silenciosa = true) => {
+      try {
+        const perfil = asignarRutasPermitidas(await api.obtenerCuenta({ silenciosa }))
+        if (activo) establecerUsuario(perfil)
+      } catch {
+        if (activo) establecerUsuario(null)
+      } finally {
+        if (activo) establecerVerificandoSesion(false)
+      }
+    }
+    if (!usaUsuarioInicial) {
+      borrarSesion()
+      verificar(true)
+    }
     const sincronizar = evento => {
-      if (evento.key === null || evento.key === 'psicocam_usuario') establecerUsuario(asignarRutasPermitidas(api.sesionActual()))
+      if (evento.key === EVENTO_CAMBIO_SESION) {
+        establecerVerificandoSesion(true)
+        verificar(false)
+      }
     }
     const expirar = () => {
       establecerUsuario(null)
@@ -38,10 +59,11 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
     window.addEventListener('storage', sincronizar)
     window.addEventListener(EVENTO_SESION_EXPIRADA, expirar)
     return () => {
+      activo = false
       window.removeEventListener('storage', sincronizar)
       window.removeEventListener(EVENTO_SESION_EXPIRADA, expirar)
     }
-  }, [])
+  }, [usaUsuarioInicial])
 
   async function iniciarSesion(credenciales) {
     const perfil = asignarRutasPermitidas(await api.iniciarSesion(credenciales))
@@ -64,7 +86,7 @@ export function ProveedorSesion({ children, usuarioInicial = null, alCerrarSesio
     } finally { establecerCerrandoSesion(false) }
   }
   const valor = {
-    usuario, iniciarSesion, cerrarSesion, cerrandoSesion, errorCierreSesion, sesionExpirada,
+    usuario, verificandoSesion, iniciarSesion, cerrarSesion, cerrandoSesion, errorCierreSesion, sesionExpirada,
     actualizarPerfil: async datos => {
       const perfil = asignarRutasPermitidas(await api.actualizarCuenta(datos))
       establecerUsuario(perfil)

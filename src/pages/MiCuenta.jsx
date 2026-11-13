@@ -54,7 +54,7 @@ export default function MiCuenta() {
   return <div className={styles.pagina}>
     <div className={styles.encabezado}>
       <div><h1>Mi cuenta</h1><p>Consulta tu perfil institucional y administra la seguridad de tu sesión.</p></div>
-      {api.sesionActual() && <span className={styles.estado}><span aria-hidden="true">●</span> Sesión iniciada</span>}
+      {usuario && <span className={styles.estado}><span aria-hidden="true">●</span> Sesión iniciada</span>}
     </div>
     <div className={styles.columnas}>
       <section className={styles.tarjeta} aria-labelledby="perfil-titulo">

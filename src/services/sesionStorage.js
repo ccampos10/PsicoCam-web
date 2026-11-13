@@ -1,31 +1,26 @@
-const USUARIO = 'psicocam_usuario'
-const TOKEN_LEGADO = 'psicocam_token'
-
-// El perfil no es una credencial: el token vive únicamente en una cookie HttpOnly.
-export function leerSesion() {
-  for (const tipo of ['sessionStorage', 'localStorage']) {
-    try {
-      const usuario = JSON.parse(window[tipo].getItem(USUARIO) || 'null')
-      if (usuario && typeof usuario.nombre === 'string' && typeof usuario.rol === 'string') return { usuario, tipo }
-    } catch { /* Un almacenamiento bloqueado o corrupto no impide abrir el login. */ }
-  }
-  return null
-}
+const CLAVES_LEGADAS = ['psicocam_token', 'psicocam_usuario']
+export const EVENTO_CAMBIO_SESION = 'psicocam_session_event'
 
 export function borrarSesion() {
   for (const tipo of ['sessionStorage', 'localStorage']) {
     try {
-      window[tipo].removeItem(TOKEN_LEGADO)
-      window[tipo].removeItem(USUARIO)
-    } catch { /* Almacenamiento bloqueado. */ }
+      for (const clave of CLAVES_LEGADAS) window[tipo].removeItem(clave)
+    } catch { /* Un almacenamiento bloqueado no impide cerrar la sesion. */ }
   }
 }
 
-export function guardarSesion(datos, recordar = leerSesion()?.tipo === 'localStorage') {
+export function guardarSesion(datos) {
   const usuario = datos?.usuario
-  if (!usuario || typeof usuario.nombre !== 'string' || typeof usuario.rol !== 'string') throw new Error('No se recibió una sesión válida del servidor.')
-  const almacenamiento = recordar ? localStorage : sessionStorage
+  if (!usuario || typeof usuario.nombre !== 'string' || typeof usuario.rol !== 'string') {
+    throw new Error('No se recibio una sesion valida del servidor.')
+  }
+  // El perfil y el rol nunca se persisten en el navegador. La sesion real vive
+  // en la cookie HttpOnly y el perfil se vuelve a consultar al backend.
   borrarSesion()
-  almacenamiento.setItem(USUARIO, JSON.stringify(usuario))
+  notificarCambioSesion()
   return usuario
+}
+
+export function notificarCambioSesion() {
+  try { localStorage.setItem(EVENTO_CAMBIO_SESION, String(Date.now())) } catch { /* Almacenamiento bloqueado. */ }
 }

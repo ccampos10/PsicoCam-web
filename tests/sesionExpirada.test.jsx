@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { ProveedorSesion } from '../src/context/ProveedorSesion'
 import RutasAplicacion from '../src/routes/RutasAplicacion'
+import { api } from '../src/services/api'
 
 const usuario = { nombre: 'Persona de prueba', rol: 'Supervisor' }
 
@@ -18,12 +19,16 @@ describe('Sesión expirada', () => {
 
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
-        <ProveedorSesion>
+        <ProveedorSesion usuarioInicial={usuario}>
+          <button type="button" onClick={() => api.listarAlertas().catch(() => {})}>
+            Simular petición protegida
+          </button>
           <RutasAplicacion />
         </ProveedorSesion>
       </MemoryRouter>,
     )
 
+    fireEvent.click(screen.getByRole('button', { name: 'Simular petición protegida' }))
     expect(await screen.findByRole('heading', { name: 'Iniciar sesión' })).toBeTruthy()
     expect(await screen.findByText('Tu sesión ha expirado. Inicia sesión nuevamente.')).toBeTruthy()
     expect(sessionStorage.getItem('psicocam_token')).toBeNull()

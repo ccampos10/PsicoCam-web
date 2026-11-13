@@ -11,18 +11,18 @@ const respuesta=datos=>new Response(JSON.stringify(datos),{status:200})
 afterEach(()=>vi.restoreAllMocks())
 
 describe('Correcciones de la verificación SCRUM-693',()=>{
-  it('Recordarme conserva solo el perfil y cerrar sesión limpia ambas ubicaciones',async()=>{
+  it('Recordarme usa la cookie HttpOnly y nunca persiste el perfil o rol en el navegador',async()=>{
     const fetchMock=vi.spyOn(globalThis,'fetch').mockImplementation(async()=>respuesta({token:'token-qa',usuario:{id:1,nombre:'QA',rol:'administrador'}}))
     await api.iniciarSesion({usuario:'qa@example.cl',contrasena:'prueba123',recordarme:true})
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({correo:'qa@example.cl',password:'prueba123',recordarme:true})
     expect(localStorage.getItem('psicocam_token')).toBeNull();expect(sessionStorage.getItem('psicocam_token')).toBeNull()
-    expect(JSON.parse(localStorage.getItem('psicocam_usuario')).nombre).toBe('QA')
+    expect(localStorage.getItem('psicocam_usuario')).toBeNull();expect(sessionStorage.getItem('psicocam_usuario')).toBeNull()
     await api.actualizarCuenta({nombre:'QA',correo:'qa@example.cl',passwordActual:'prueba123'})
     expect(localStorage.getItem('psicocam_token')).toBeNull()
-    await api.cerrarSesion();expect(fetchMock).toHaveBeenCalledWith('/api/logout',expect.objectContaining({method:'POST'}));expect(api.sesionActual()).toBeNull();expect(localStorage.getItem('psicocam_usuario')).toBeNull()
+    await api.cerrarSesion();expect(fetchMock).toHaveBeenCalledWith('/api/logout',expect.objectContaining({method:'POST'}));expect(localStorage.getItem('psicocam_usuario')).toBeNull()
     await api.iniciarSesion({usuario:'qa@example.cl',contrasena:'prueba123',recordarme:false})
     expect(sessionStorage.getItem('psicocam_token')).toBeNull();expect(localStorage.getItem('psicocam_token')).toBeNull()
-    expect(JSON.parse(sessionStorage.getItem('psicocam_usuario')).nombre).toBe('QA');expect(localStorage.getItem('psicocam_usuario')).toBeNull()
+    expect(sessionStorage.getItem('psicocam_usuario')).toBeNull();expect(localStorage.getItem('psicocam_usuario')).toBeNull()
   })
   it('una respuesta de alertas inválida informa un error recuperable',async()=>{
     vi.spyOn(globalThis,'fetch').mockImplementation(async()=>respuesta({}))

@@ -22,6 +22,15 @@
 .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
 .fecha small { color: var(--text-secondary); font-size: 12px; }
 .nivel { display: inline-block; background: var(--canvas); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; }
+.textoTruncado { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tablaBitacora table { min-width: 940px; table-layout: fixed; }
+.tablaBitacora th, .tablaBitacora td { min-width: 0; }
+.tablaBitacora th:nth-child(1), .tablaBitacora td:nth-child(1) { width: 112px; }
+.tablaBitacora th:nth-child(2), .tablaBitacora td:nth-child(2) { width: 145px; }
+.tablaBitacora th:nth-child(3), .tablaBitacora td:nth-child(3) { width: 125px; }
+.tablaBitacora th:nth-child(4), .tablaBitacora td:nth-child(4) { width: 155px; }
+.tablaBitacora th:nth-child(6), .tablaBitacora td:nth-child(6) { width: 105px; }
+.tablaBitacora th:nth-child(7), .tablaBitacora td:nth-child(7) { width: 44px; padding-inline: 6px; text-align: center; }
 .detalleBoton { display: inline-flex; align-items: center; border: 0; background: transparent; color: var(--text-secondary); cursor: pointer; }
 .error { padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
 .modal { width: min(480px, calc(100% - 32px)); max-height: calc(100% - 32px); box-sizing: border-box; border: 1px solid var(--border); border-radius: 14px; padding: 0; color: var(--text-primary); }

@@ -17,6 +17,11 @@ function textoAccion(accion) {
   return accion ? accion.replaceAll('_', ' ') : 'No registrada'
 }
 
+function TextoTruncado({ children }) {
+  const texto = String(children ?? '')
+  return <span className={styles.textoTruncado} title={texto}>{texto}</span>
+}
+
 function categoriaEvento(item) {
   const {categoria} = metadatosEvento(item)
   const nombres = {clinico:'Evento clínico', tecnico:'Evento técnico / integración', sistema:'Evento del sistema', sinCategoria:'Sin categoría'}
@@ -59,11 +64,11 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
 
   const columnas = [
     { clave: 'fecha', encabezado: 'Fecha / hora', renderizar: (_, item) => <span className={styles.fechaConPunto}><span className={`${styles.punto} ${categoriaEvento(item).estilo}`} aria-label={categoriaEvento(item).nombre} /><span className={styles.fecha}>{fechaVisible(item.fecha)}<small>{item.hora || '—'}</small></span></span> },
-    { clave: 'usuario', encabezado: 'Usuario', renderizar: valor => valor || 'No registrado' },
+    { clave: 'usuario', encabezado: 'Usuario', renderizar: valor => <TextoTruncado>{valor || 'No registrado'}</TextoTruncado> },
     { clave: 'tipo', encabezado: 'Tipo', renderizar: valor => <span className={styles.nivel}>{valor || 'Sin categoría'}</span> },
-    { clave: 'accion', encabezado: 'Acción', renderizar: textoAccion },
-    { clave: 'descripcion', encabezado: 'Detalle del evento', renderizar: valor => valor || 'Sin detalle' },
-    { clave: 'resultado', encabezado: 'Resultado' },
+    { clave: 'accion', encabezado: 'Acción', renderizar: valor => <TextoTruncado>{textoAccion(valor)}</TextoTruncado> },
+    { clave: 'descripcion', encabezado: 'Detalle del evento', renderizar: valor => <TextoTruncado>{valor || 'Sin detalle'}</TextoTruncado> },
+    { clave: 'resultado', encabezado: 'Resultado', renderizar: valor => <TextoTruncado>{valor || 'No registrado'}</TextoTruncado> },
     { clave: 'detalles', encabezado: '', renderizar: (_, item) => <button type="button" className={styles.detalleBoton} onClick={() => establecerSeleccionado(item)} aria-label={`Ver detalles de ${textoAccion(item.accion)}`}><ChevronRight size={18} /></button> },
   ]
 
@@ -85,7 +90,7 @@ export default function Bitacora({ titulo = 'Bitácora', repositorio = repositor
           {filtros.desde && filtros.hasta && filtros.desde > filtros.hasta && <p className={styles.aviso} role="alert">La fecha inicial debe ser anterior o igual a la fecha final.</p>}
           <p className={styles.contador}>Mostrando {registros.length} de {datos.length} eventos</p>
         </section>
-        <PaginaTabla datos={registros} columnas={columnas} itemsPorPagina={6} resumenPaginacion mensajeVacio="No hay registros para mostrar." alSeleccionarFila={establecerSeleccionado} headerTabla={<div><h2>Registro de eventos</h2><p>Cada registro identifica cuándo ocurrió el evento, su responsable y el detalle.</p></div>} />
+        <PaginaTabla className={styles.tablaBitacora} datos={registros} columnas={columnas} itemsPorPagina={6} resumenPaginacion mensajeVacio="No hay registros para mostrar." alSeleccionarFila={establecerSeleccionado} headerTabla={<div><h2>Registro de eventos</h2><p>Cada registro identifica cuándo ocurrió el evento, su responsable y el detalle.</p></div>} />
         <div className={styles.leyenda} aria-label="Categorías de eventos">
           <span><i className={`${styles.punto} ${styles.clinico}`} />Evento clínico</span>
           <span><i className={`${styles.punto} ${styles.tecnico}`} />Evento técnico / integración</span>

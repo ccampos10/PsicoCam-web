@@ -1,5 +1,5 @@
 const API_BASE = import.meta.env.VITE_API_URL || ''
-import { leerSesion, guardarSesion, borrarSesion } from './sesionStorage'
+import { guardarSesion, borrarSesion, notificarCambioSesion } from './sesionStorage'
 import { EVENTO_ALERTAS, EVENTO_EVALUACION } from './eventosAlertas'
 
 export const EVENTO_SESION_EXPIRADA = 'psicocam:sesion-expirada'
@@ -20,18 +20,19 @@ function validarLista(valor, nombre) {
 }
 
 async function solicitar(ruta, opciones = {}) {
+  const { omitirExpiracion = false, ...opcionesFetch } = opciones
   const respuesta = await fetch(`${API_BASE}${ruta}`, {
     credentials: 'same-origin',
-    ...opciones,
+    ...opcionesFetch,
     headers: {
       'Content-Type': 'application/json',
-      ...opciones.headers,
+      ...opcionesFetch.headers,
     },
   })
 
   const cuerpo = await respuesta.json().catch(() => null)
   if (!respuesta.ok) {
-    if (respuesta.status === 401 && ruta !== '/api/login') {
+    if (respuesta.status === 401 && ruta !== '/api/login' && !omitirExpiracion) {
       expirarSesion()
       throw new Error('La sesión ha expirado. Inicia sesión nuevamente.')
     }
@@ -81,7 +82,7 @@ export const api = {
         recordarme: credenciales.recordarme === true,
       }),
     })
-    return guardarSesion(datos, credenciales.recordarme === true)
+    return guardarSesion(datos)
   },
 
   async cerrarSesion() {
@@ -91,11 +92,10 @@ export const api = {
       // Si el backend no responde, la sesión local se elimina igualmente.
     }
     borrarSesion()
+    notificarCambioSesion()
   },
 
-  sesionActual() { return leerSesion()?.usuario || null },
-
-  obtenerCuenta: () => solicitar('/api/cuenta'),
+  obtenerCuenta: ({ silenciosa = false } = {}) => solicitar('/api/cuenta', { omitirExpiracion: silenciosa }),
   async actualizarCuenta(datos) {
     const sesion = await solicitar('/api/cuenta', { method: 'PATCH', body: JSON.stringify(datos) })
     return guardarSesion(sesion)

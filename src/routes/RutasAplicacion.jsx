@@ -7,8 +7,9 @@ import { puedeAcceder } from './navegacion'
 import { mapaRutas, rutasInternas } from './mapaRutas'
 
 function RequiereSesion() {
-  const { usuario, sesionExpirada } = useSesion()
+  const { usuario, sesionExpirada, verificandoSesion } = useSesion()
   const ubicacion = useLocation()
+  if (verificandoSesion) return <main className="placeholder-card"><p role="status">Comprobando sesion...</p></main>
   return usuario ? <Outlet /> : <Navigate to={mapaRutas.acceso.ruta} replace
     state={{ rutaSolicitada: ubicacion.pathname + ubicacion.search + ubicacion.hash, sesionExpirada }} />
 }
