@@ -21,3 +21,9 @@
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
+
+@media (max-width: 700px) {
+  .pagina { gap: 1rem; }
+  .encabezado h1 { font-size: 24px; }
+  .encabezado p { font-size: 13px; }
+}

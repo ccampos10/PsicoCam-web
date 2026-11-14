@@ -321,4 +321,8 @@
   .leyenda {
     flex-wrap: wrap;
   }
+
+  .encabezado { margin-bottom: 18px; }
+  .encabezado h1 { font-size: 24px; }
+  .tablaAlertas table { min-width: 0; }
 }

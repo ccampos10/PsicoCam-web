@@ -5,6 +5,7 @@ import styles from './Notificaciones.module.css'
 const predeterminadas = { pantalla: true, sonido: false, resumen: true }
 import { ContextoNotificaciones } from './ContextoNotificaciones'
 import { EVENTO_EVALUACION } from '../services/eventosAlertas'
+import { ordenarAlertasMasRecientes } from '../utils/ordenarAlertas'
 const INTERVALO = 15000
 
 export function ProveedorNotificaciones({ usuario, children }) {
@@ -94,7 +95,7 @@ export function ProveedorNotificaciones({ usuario, children }) {
         const ids = new Set(visibles.map(a => String(a.id)))
         const nuevas = anteriores.current === null ? [] : visibles.filter(a => !anteriores.current.has(String(a.id)) && (!a.estado_evaluacion || a.estado_evaluacion === 'neutro'))
         anteriores.current = ids
-        establecerAlertas([...visibles].sort((a, b) => `${b.fecha || ''}T${b.hora || ''}`.localeCompare(`${a.fecha || ''}T${a.hora || ''}`)))
+        establecerAlertas(ordenarAlertasMasRecientes(visibles))
         establecerPendientes(visibles.filter(a => !a.estado_evaluacion || a.estado_evaluacion === 'neutro'))
         establecerEstado('conectado')
         if (nuevas.length && opciones.current.pantalla) establecerAviso(nuevas.length)

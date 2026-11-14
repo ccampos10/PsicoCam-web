@@ -206,8 +206,24 @@
   min-width: 0;
 }
 
-@media (max-width: 480px) {
-  .contenedor { padding: 16px; }
-  .filtro, .filtro input[type="text"], .filtro input[type="date"], .contenedorFecha { min-width: 0; }
-  .tabla { min-width: 620px; }
+@media (max-width: 700px) {
+  .contenedor { padding: 16px 14px; margin-bottom: 14px; }
+  .filtros { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 14px; }
+  .filtro, .filtro input[type="text"], .filtro input[type="date"], .contenedorFecha { width: 100%; min-width: 0; }
+  .desplazamientoTabla { overflow: visible; }
+  .tabla, .tabla tbody { display: block; width: 100%; min-width: 0 !important; }
+  .tabla thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tabla tbody { display: grid; gap: 12px; }
+  .tabla tbody tr { display: grid; padding: 4px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+  .tabla td { display: grid; grid-template-columns: minmax(92px, 36%) minmax(0, 1fr); gap: 10px; align-items: start; padding: 9px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+  .tabla td::before { content: attr(data-label); color: var(--text-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; }
+  .tabla td[data-label=''] { display: flex; justify-content: flex-end; grid-template-columns: none; }
+  .tabla td[data-label='']::before { display: none; }
+  .tabla td[colspan] { display: block; padding: 18px 0; text-align: center; }
+  .tabla td[colspan]::before { display: none; }
+  .tabla tbody tr:last-child td:not(:last-child) { border-bottom: 1px solid var(--border); }
+  .tabla tbody tr td:last-child { border-bottom: 0; }
+  .paginacion { justify-content: space-between; gap: 8px; }
+  .paginacion span { order: -1; width: 100%; }
+  .paginacion button { min-height: 40px; flex: 1; }
 }

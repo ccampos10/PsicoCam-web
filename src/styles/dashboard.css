@@ -63,7 +63,12 @@
   .dashboard-fila { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 559px) {
-  .dashboard-metricas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .dashboard { gap: 14px; }
+  .dashboard-cabecera { align-items: flex-start; }
+  .dashboard-metricas { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .tarjeta-metrica { min-width: 0; padding: 16px; }
   .dashboard-titulo { font-size: 20px; }
+  .panel-estadistica { padding: 16px 14px; }
+  .lista-alertas li { flex-wrap: wrap; }
+  .lista-alertas time { width: 100%; margin-left: 18px; }
 }

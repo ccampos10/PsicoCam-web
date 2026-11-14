@@ -49,3 +49,8 @@
 .cerrar { display: block; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px; background: var(--primary); color: var(--card); font-weight: 600; cursor: pointer; }
 @media (max-width: 1000px) { .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .filtros { grid-template-columns: 1fr; } .panel { padding: 16px; } .modalDetalle { grid-template-columns: minmax(112px, 40%) minmax(0, 1fr); gap: 12px; } .modalDetalleDescripcion { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) {
+  .tablaBitacora table { min-width: 0; table-layout: auto; }
+  .tablaBitacora th, .tablaBitacora td { width: auto !important; }
+  .textoTruncado { white-space: normal; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+}

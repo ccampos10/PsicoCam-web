@@ -4,6 +4,7 @@ import { PaginaTabla } from '../components/PaginaTabla/PaginaTabla'
 import ModalDetalle from '../components/ModalDetalle'
 import { ApiAlertaRepository } from '../repositories/ApiAlertaRepository'
 import { ColorUrgencia } from '../components/Pilas'
+import { ordenarAlertasMasRecientes } from '../utils/ordenarAlertas'
 import styles from './Alertas.module.css'
 
 const repositorioPredeterminado = new ApiAlertaRepository()
@@ -15,7 +16,9 @@ export default function Alertas({ repositorio = repositorioPredeterminado }) {
   const [totalMostrado, establecerTotalMostrado] = useState(null)
 
 
-  const alertasPendientes = alertas.filter((alerta) => !alerta.estado_evaluacion || alerta.estado_evaluacion === 'neutro')
+  const alertasPendientes = ordenarAlertasMasRecientes(
+    alertas.filter((alerta) => !alerta.estado_evaluacion || alerta.estado_evaluacion === 'neutro')
+  )
   const filtros = [
     { clave: 'busqueda', etiqueta: 'Buscar', tipo: 'texto', campos: ['box', 'supervisor'], placeholder: 'Box o supervisor...' },
     { clave: 'categoria', etiqueta: 'Categoría', tipo: 'select', opciones: ['RS', 'VD'] },

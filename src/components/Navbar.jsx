@@ -37,7 +37,7 @@ export default function Navbar({ alAbrirMenu, alSolicitarCierreSesion, menuAbier
     </div>
     <div className="navbar-actions">
       <PanelDesplegable id="notifications" etiqueta="Notificaciones" abierto={abierto === 'notificaciones'} alCerrar={cerrar}
-        alAlternar={() => alternar('notificaciones')} className="notifications" activador={<Bell size={26} strokeWidth={1.8} aria-hidden="true" />}>
+        alAlternar={() => alternar('notificaciones')} className="notifications" activador={<span className="notification-trigger"><Bell size={26} strokeWidth={1.8} aria-hidden="true" />{noLeidas > 0 && <span className="notification-badge" aria-hidden="true">{noLeidas > 99 ? '99+' : noLeidas}</span>}</span>}>
         <div className="notification-header"><h2>Notificaciones {noLeidas > 0 && <span className="notification-count" aria-label={`${noLeidas} sin leer`}>{noLeidas}</span>}</h2>
           {preferencias.resumen && estado === 'conectado' && noLeidas > 0 && <button type="button" onClick={marcarTodasLeidas}>Marcar todas como leídas</button>}</div>
         {!preferencias.resumen ? <p className="notification-empty">El resumen está desactivado en Configuración.</p>

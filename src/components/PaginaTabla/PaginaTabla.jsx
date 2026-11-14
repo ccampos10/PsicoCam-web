@@ -299,6 +299,7 @@ return String(valorRegistro) === String(valor);
               {datosPagina.map((item, i) => (
                 <Fila
                   key={item.id ?? i}
+                  etiquetas={columnas.map((columna) => columna.encabezado)}
                   alSeleccionar={
                     alSeleccionarFila
                       ? () => alSeleccionarFila(item)

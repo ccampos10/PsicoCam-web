@@ -61,3 +61,11 @@
 .pagina button:disabled { cursor: not-allowed; }
 @media (max-width: 1100px) { .controles { grid-template-columns: 2fr 1fr 1fr; } .agregar { grid-column: 1 / -1; justify-self: end; min-width: 200px; } }
 @media (max-width: 639px) { .pagina { padding: 8px 0; } .encabezado { flex-direction: column; gap: 12px; margin-bottom: 20px; } .encabezado h1 { font-size: 25px; } .herramientas { padding: 18px 16px; } .controles { grid-template-columns: 1fr 1fr; } .busqueda { grid-column: 1 / -1; } .agregar { width: 100%; } }
+@media (max-width: 480px) {
+  .controles { grid-template-columns: minmax(0, 1fr); }
+  .busqueda, .agregar { grid-column: auto; }
+  .agregar { min-width: 0; }
+  .listado table { min-width: 0; table-layout: auto; }
+  .acciones { flex-wrap: wrap; justify-content: flex-end; }
+  .confirmacion { padding: 24px 18px; }
+}

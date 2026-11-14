@@ -1,4 +1,4 @@
-export function Fila({ celdas, alSeleccionar }) {
+export function Fila({ celdas, etiquetas = [], alSeleccionar }) {
   function seleccionar(evento) {
     if (evento.target.closest('button, a, input, select, textarea, [role="button"]')) return;
     evento.currentTarget.focus();
@@ -16,7 +16,7 @@ export function Fila({ celdas, alSeleccionar }) {
         }
       } : undefined}>
       {celdas.map((valor, i) => (
-        <td key={i}>{valor}</td>
+        <td key={i} data-label={etiquetas[i] ?? ''}>{valor}</td>
       ))}
     </tr>
   );
