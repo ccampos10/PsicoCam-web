@@ -27,7 +27,6 @@ const ETIQUETAS = {
   informacion: 'Información',
 }
 
-// Página temporal para validar visualmente SCRUM-658.
 export default function DemoNotificacion({ titulo = 'Demo de notificaciones' }) {
   const [notificacion, establecerNotificacion] = useState(null)
   const [clave, establecerClave] = useState(0)

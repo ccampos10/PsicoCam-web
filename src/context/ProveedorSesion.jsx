@@ -6,7 +6,6 @@ import { rutasInternas } from '../routes/mapaRutas'
 import { api, EVENTO_SESION_EXPIRADA } from '../services/api'
 import { borrarSesion, EVENTO_CAMBIO_SESION } from '../services/sesionStorage'
 
-// Vista previa de la interfaz; no autentica las peticiones a la API.
 const usuarioVistaPrevia = {
   nombre: 'Usuario', rol: 'Supervisor',
   rutasPermitidas: rutasInternas.map(({ ruta }) => ruta),

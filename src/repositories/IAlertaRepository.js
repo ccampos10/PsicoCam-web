@@ -1,12 +1,5 @@
 /**
- * Contrato base para interactuar con la informacion de los eventos generados (alertas).
- *
- * Establece las firmas de los metodos de lectura, escritura y actualizacion del estado
- * de evaluacion de las alertas, quedando preparado para que en una tarea posterior se
- * inyecte una implementacion concreta de persistencia en MongoDB.
- *
- * Todas las firmas son asincronas (devuelven Promise) para no acoplar el contrato a la
- * implementacion de persistencia que finalmente se utilice.
+ * Contrato asincrono para persistencia de alertas.
  *
  * @typedef {import("../models/Alerta.js").CategoriaAlerta} CategoriaAlerta
  * @typedef {import("../models/Alerta.js").NivelAlerta} NivelAlerta

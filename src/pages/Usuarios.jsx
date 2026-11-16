@@ -11,14 +11,12 @@ const formatoFecha = new Intl.DateTimeFormat('es-CL', {
   day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Santiago',
 })
 
-// Permite buscar sin distinguir mayúsculas ni tildes.
 function normalizarTexto(texto) {
   return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
 }
 
 const repositorioUsuarios = new ApiUsuarioRepository()
 
-// Presenta los usuarios y deja las acciones disponibles mediante funciones externas.
 export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, alEditar, alCambiarEstado, alEliminar }) {
   const [formulario, establecerFormulario] = useState(null)
   const [eliminando, establecerEliminando] = useState(null)
@@ -38,7 +36,6 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
 
   useEffect(() => {
     let vigente = true
-    // Carga los perfiles desde el servicio y evita actualizar una vista desmontada.
     async function cargarUsuarios() {
       establecerCargando(true)
       establecerError('')
@@ -55,7 +52,6 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
     return () => { vigente = false }
   }, [servicio, intento])
 
-  // Guarda el perfil y actualiza la tabla sin perder la búsqueda.
   async function guardarUsuario(datos) {
     const perfil = formulario.usuario
       ? await servicio.actualizarUsuario(formulario.usuario.id, datos)
@@ -67,7 +63,6 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
     establecerMensaje('Usuario guardado correctamente.')
   }
 
-  // Alterna el estado simulado de acceso de la cuenta.
   async function cambiarEstado(usuario) {
     if (procesando) return
     establecerProcesando(true)
@@ -82,7 +77,6 @@ export default function Usuarios({ servicio = repositorioUsuarios, alAgregar, al
     finally { establecerProcesando(false) }
   }
 
-  // Elimina la cuenta después de la confirmación del administrador.
   async function confirmarEliminacion() {
     if (procesando) return
     establecerProcesando(true)

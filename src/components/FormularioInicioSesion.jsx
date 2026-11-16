@@ -32,7 +32,6 @@ export default function FormularioInicioSesion({ alEnviar, mensajeInicial = '' }
       establecerMensaje('El inicio de sesión no está disponible en este momento.')
       return
     }
-    // La integración futura recibe los datos; este componente no autentica.
     envioEnCurso.current = true
     establecerEnviando(true)
     try {

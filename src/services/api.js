@@ -89,7 +89,6 @@ export const api = {
     try {
       await solicitar('/api/logout', { method: 'POST' })
     } catch {
-      // Si el backend no responde, la sesión local se elimina igualmente.
     }
     borrarSesion()
     notificarCambioSesion()

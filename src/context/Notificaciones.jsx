@@ -57,7 +57,6 @@ export function ProveedorNotificaciones({ usuario, children }) {
       const contexto = audio.current
       if (contexto.state === 'suspended') await contexto.resume()
       if (contexto.state !== 'running') throw new Error('Audio bloqueado')
-      // Tres notas suaves con ataque y caída graduales, sin cortes bruscos.
       ;[[659.25, 0], [783.99, 0.22], [698.46, 0.44]].forEach(([frecuencia, retraso]) => {
         const oscilador = contexto.createOscillator()
         const volumen = contexto.createGain()

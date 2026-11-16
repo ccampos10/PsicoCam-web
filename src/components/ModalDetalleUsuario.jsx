@@ -7,7 +7,6 @@ const formatoFecha = new Intl.DateTimeFormat('es-CL', {
   hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
 })
 
-// Muestra los datos de la cuenta seleccionada sin permitir modificaciones.
 export default function ModalDetalleUsuario({ usuario, alCerrar }) {
   if (!usuario) return null
 
