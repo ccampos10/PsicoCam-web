@@ -1,0 +1,67 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Mail } from 'lucide-react'
+import logoUa from '../assets/ua-logo.png'
+import { api } from '../services/api'
+import '../styles/inicioSesion.css'
+
+function Presentacion() {
+  return <section className="acceso-panel-marca" aria-labelledby="titulo-presentacion">
+    <img className="acceso-logo-ua" src={logoUa} alt="Universidad Autónoma" width="141" height="197" />
+    <div className="acceso-presentacion">
+      <p className="acceso-antetitulo">PSICOCAM - MONITOREO CLÍNICO</p>
+      <h2 id="titulo-presentacion">Supervisión<br />continua de los<br /><span>boxes clínicos</span></h2>
+      <p className="acceso-descripcion">Detección temprana de señales de riesgo suicida (RS) y vulneración de derechos (VD) para una respuesta clínica oportuna.</p>
+    </div>
+  </section>
+}
+
+export default function RecuperarContrasena() {
+  const [correo, establecerCorreo] = useState('')
+  const [mensaje, establecerMensaje] = useState('')
+  const [error, establecerError] = useState('')
+  const [enviando, establecerEnviando] = useState(false)
+
+  async function enviar(evento) {
+    evento.preventDefault()
+    establecerError('')
+    establecerMensaje('')
+    if (!correo.trim()) return establecerError('Ingresa tu correo electrónico.')
+    establecerEnviando(true)
+    try {
+      const respuesta = await api.solicitarRestablecimiento(correo.trim())
+      establecerMensaje(respuesta.mensaje)
+    } catch (fallo) {
+      establecerError(fallo.message)
+    } finally {
+      establecerEnviando(false)
+    }
+  }
+
+  return <main className="inicio-sesion">
+    <Presentacion />
+    <div className="acceso-area-formulario"><div className="acceso-contenedor">
+      <section className="acceso-tarjeta" aria-labelledby="titulo-recuperacion">
+        <h1 id="titulo-recuperacion">Recuperar contraseña</h1>
+        <p className="acceso-introduccion">Ingresa el correo asociado a tu cuenta. Te enviaremos un enlace temporal.</p>
+        <form onSubmit={enviar} noValidate aria-busy={enviando}>
+          <div className="acceso-grupo-campo">
+            <label htmlFor="correo-recuperacion">Correo electrónico</label>
+            <div className="acceso-campo">
+              <Mail size={16} className="acceso-icono-usuario" aria-hidden="true" />
+              <input id="correo-recuperacion" type="email" autoComplete="email" autoCapitalize="none"
+                value={correo} disabled={enviando} aria-invalid={Boolean(error)}
+                onChange={evento => { establecerCorreo(evento.target.value); establecerError('') }} />
+            </div>
+            {error && <p className="acceso-error" role="alert">{error}</p>}
+          </div>
+          <button className="acceso-enviar acceso-accion-separada" type="submit" disabled={enviando}>
+            <ArrowRight size={16} strokeWidth={3} aria-hidden="true" />{enviando ? 'Enviando…' : 'Enviar enlace'}
+          </button>
+          <div role="status" aria-live="polite">{mensaje && <p className="acceso-mensaje">{mensaje}</p>}</div>
+        </form>
+        <p className="acceso-ayuda"><Link className="acceso-recuperar" to="/login">Volver a iniciar sesión</Link></p>
+      </section>
+    </div></div>
+  </main>
+}

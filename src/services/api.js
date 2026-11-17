@@ -73,6 +73,13 @@ function datosUsuario(datos) {
 }
 
 export const api = {
+  solicitarRestablecimiento: correo => solicitar('/api/recuperar-contrasena', {
+    method: 'POST', body: JSON.stringify({ correo }), omitirExpiracion: true,
+  }),
+  restablecerContrasena: (token, password) => solicitar('/api/restablecer-contrasena', {
+    method: 'POST', body: JSON.stringify({ token, password }), omitirExpiracion: true,
+  }),
+
   async iniciarSesion(credenciales) {
     const datos = await solicitar('/api/login', {
       method: 'POST',
@@ -88,7 +95,8 @@ export const api = {
   async cerrarSesion() {
     try {
       await solicitar('/api/logout', { method: 'POST' })
-    } catch {
+    } catch (error) {
+      void error
     }
     borrarSesion()
     notificarCambioSesion()

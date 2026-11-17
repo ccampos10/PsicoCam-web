@@ -80,10 +80,7 @@ export default function FormularioInicioSesion({ alEnviar, mensajeInicial = '' }
       <div className="acceso-opciones">
         <label className="acceso-recordarme"><input type="checkbox" name="recordarme" checked={recordarme}
           disabled={enviando} onChange={evento => establecerRecordarme(evento.target.checked)} />Recordarme</label>
-        <button type="button" className="acceso-recuperar" disabled={enviando}
-          onClick={() => establecerMensaje('Para recuperar tu acceso, contacta al administrador del sistema.')}>
-          ¿Olvidaste tu contraseña?
-        </button>
+        <a className="acceso-recuperar" href="/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
       </div>
       <button className="acceso-enviar" type="submit" disabled={enviando}>
         <ArrowRight size={16} strokeWidth={3} aria-hidden="true" />{enviando ? 'Enviando…' : 'Iniciar sesión'}
