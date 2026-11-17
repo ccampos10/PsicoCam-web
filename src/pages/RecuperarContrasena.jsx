@@ -1,20 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Mail } from 'lucide-react'
-import logoUa from '../assets/ua-logo.png'
+import PanelPresentacionSesion from '../components/PanelPresentacionSesion'
 import { api } from '../services/api'
 import '../styles/inicioSesion.css'
-
-function Presentacion() {
-  return <section className="acceso-panel-marca" aria-labelledby="titulo-presentacion">
-    <img className="acceso-logo-ua" src={logoUa} alt="Universidad Autónoma" width="141" height="197" />
-    <div className="acceso-presentacion">
-      <p className="acceso-antetitulo">PSICOCAM - MONITOREO CLÍNICO</p>
-      <h2 id="titulo-presentacion">Supervisión<br />continua de los<br /><span>boxes clínicos</span></h2>
-      <p className="acceso-descripcion">Detección temprana de señales de riesgo suicida (RS) y vulneración de derechos (VD) para una respuesta clínica oportuna.</p>
-    </div>
-  </section>
-}
 
 export default function RecuperarContrasena() {
   const [correo, establecerCorreo] = useState('')
@@ -39,7 +28,7 @@ export default function RecuperarContrasena() {
   }
 
   return <main className="inicio-sesion">
-    <Presentacion />
+    <PanelPresentacionSesion />
     <div className="acceso-area-formulario"><div className="acceso-contenedor">
       <section className="acceso-tarjeta" aria-labelledby="titulo-recuperacion">
         <h1 id="titulo-recuperacion">Recuperar contraseña</h1>

@@ -19,6 +19,7 @@
 .acceso-grupo-campo > label { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
 .acceso-campo { position: relative; }
 .acceso-campo input { width: 100%; height: 46px; border: 1px solid var(--acceso-borde-campo); border-radius: 8px; background: var(--card); color: var(--text-primary); padding: 0 44px 0 40px; font-size: 13px; }
+.acceso-campo-contrasena input { padding-left: 12px; }
 .acceso-campo input::placeholder { color: var(--acceso-texto-ejemplo); opacity: 1; }
 .acceso-campo input:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
 .acceso-campo input[aria-invalid="true"] { border-color: var(--risk-high); }
