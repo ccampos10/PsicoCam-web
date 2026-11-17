@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import styles from "./ConfiguracionForm.module.css";
 
-const MIN_OPERACION = 480; // 08:00 en minutos
-const MAX_OPERACION = 1320; // 22:00 en minutos
+const MIN_OPERACION = 480;
+const MAX_OPERACION = 1320;
 
 function generarHoras() {
   const horas = [];
@@ -21,10 +21,6 @@ function aMinutos(valor) {
   return h * 60 + m;
 }
 
-/**
- * @param {{ horaInicio: string, horaTermino: string, correoCliente: string }} valoresIniciales
- * @param {(nuevaConfig: Object) => Promise<void>} onGuardar
- */
 export function ConfiguracionForm({ valoresIniciales, onGuardar, esAdmin = false }) {
   const [guardadoReciente, setGuardadoReciente] = useState(false);
   return <EditorConfiguracion key={JSON.stringify(valoresIniciales)} valoresIniciales={valoresIniciales} onGuardar={onGuardar} esAdmin={esAdmin} guardadoReciente={guardadoReciente} setGuardadoReciente={setGuardadoReciente} />;
@@ -163,7 +159,6 @@ function EditorConfiguracion({ valoresIniciales, onGuardar, esAdmin, guardadoRec
         {!esAdmin && <p className={styles.descripcion}>Solo un administrador puede cambiar esta configuración.</p>}
       </section>
 
-      {/* Sección */}
       <section className={styles.seccion}>
         <div className={styles.encabezadoSeccion}>
           <h2>Correo de respaldo</h2>

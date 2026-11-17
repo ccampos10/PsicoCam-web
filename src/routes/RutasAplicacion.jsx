@@ -5,6 +5,8 @@ import PaginaNoEncontrada from '../pages/PaginaNoEncontrada'
 import { useSesion } from '../hooks/useSesion'
 import { puedeAcceder } from './navegacion'
 import { mapaRutas, rutasInternas } from './mapaRutas'
+import RecuperarContrasena from '../pages/RecuperarContrasena'
+import RestablecerContrasena from '../pages/RestablecerContrasena'
 
 function RequiereSesion() {
   const { usuario, sesionExpirada, verificandoSesion } = useSesion()
@@ -29,6 +31,8 @@ export default function RutasAplicacion() {
   const ComponenteAcceso = mapaRutas.acceso.componente
   return <Routes>
     <Route path={mapaRutas.acceso.ruta} element={<ComponenteAcceso rutasDisponibles={rutasInternas} />} />
+    <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+    <Route path="/restablecer-contrasena" element={<RestablecerContrasena />} />
     <Route element={<RequiereSesion />}>
       <Route element={<Layout />}>
         <Route index element={<RedireccionInicio />} />

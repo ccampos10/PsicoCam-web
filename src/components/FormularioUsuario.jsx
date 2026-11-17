@@ -3,7 +3,6 @@ import { X } from 'lucide-react'
 import Modal from './Modal'
 import estilos from './FormularioUsuario.module.css'
 
-// Crea o edita una cuenta con validación inmediata antes del guardado.
 export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerrar }) {
   const [datos, establecerDatos] = useState({ nombre: usuario?.nombre ?? '', correo: usuario?.correo ?? '',
     contrasena: '', confirmacion: '', rol: usuario?.rol ?? 'Supervisor', estado: usuario?.estado ?? 'Activo' })
@@ -23,7 +22,6 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
   if (!['Administrador', 'Supervisor'].includes(datos.rol)) errores.rol = 'Selecciona un rol válido.'
   if (!['Activo', 'Inactivo'].includes(datos.estado)) errores.estado = 'Selecciona un estado válido.'
 
-  // Actualiza los campos y permite mostrar su validación mientras se escribe.
   function cambiar(evento) {
     const { name, value } = evento.target
     establecerDatos(actual => ({ ...actual, [name]: value }))
@@ -31,7 +29,6 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
     establecerError('')
   }
 
-  // Empaqueta el perfil y envía la contraseña solo si se ingresó una nueva.
   async function guardar(evento) {
     evento.preventDefault()
     if (envioEnCurso.current) return
@@ -55,7 +52,6 @@ export default function FormularioUsuario({ usuario, usuarios, alGuardar, alCerr
     }
   }
 
-  // Renderiza un campo con su etiqueta y mensaje de validación.
   function campo(nombre, etiqueta, tipo = 'text', placeholder = '') {
     const mensaje = (tocados[nombre] || enviado || (nombre === 'confirmacion' && tocados.contrasena && datos.confirmacion)) && errores[nombre]
     const correoValido = nombre === 'correo' && tocados.correo && !errores.correo

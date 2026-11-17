@@ -14,8 +14,7 @@ export function guardarSesion(datos) {
   if (!usuario || typeof usuario.nombre !== 'string' || typeof usuario.rol !== 'string') {
     throw new Error('No se recibio una sesion valida del servidor.')
   }
-  // El perfil y el rol nunca se persisten en el navegador. La sesion real vive
-  // en la cookie HttpOnly y el perfil se vuelve a consultar al backend.
+  // La sesion real vive en la cookie HttpOnly.
   borrarSesion()
   notificarCambioSesion()
   return usuario

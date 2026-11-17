@@ -1,4 +1,3 @@
-/* Los ajustes de color y contraste se combinan en toda la interfaz, incluidas imágenes. */
 html {
   --filtro-vision: hue-rotate(0deg);
   --filtro-contraste: contrast(1);

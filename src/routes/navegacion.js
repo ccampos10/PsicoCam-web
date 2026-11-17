@@ -11,7 +11,7 @@ export const navegacion = [
   { ...mapaRutas.cuenta, icono: UserRound, grupo: 'cuenta' },
 ]
 
-// Los permisos provienen de la sesión autenticada, no provienen del nombre visible del rol ojo.
+// Los permisos provienen de la sesion autenticada.
 export function puedeAcceder(usuario, ruta) {
   return Boolean(usuario?.rutasPermitidas?.includes(ruta))
 }

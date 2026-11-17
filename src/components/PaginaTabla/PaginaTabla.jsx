@@ -69,11 +69,9 @@ export function PaginaTabla({
   onFiltrosChange,
   onResultadosChange,
 }) {
-  // Estados administrados por PaginaTabla.
   const [valoresFiltro, setValoresFiltro] = useState({});
   const [paginaActual, setPaginaActual] = useState(1);
 
-  // Filtrado centralizado.
   const datosFiltrados = useMemo(() => {
     return datos.filter((item) =>
       filtros.every((filtro) => {
@@ -84,7 +82,6 @@ export function PaginaTabla({
         const campoDatos = filtro.campo ?? filtro.clave;
         const valorRegistro = item[campoDatos];
 
-        // Búsqueda de texto en uno o varios campos.
         if (filtro.tipo === "texto") {
           const campos = filtro.campos ?? [campoDatos];
           const textoBuscado = String(valor)
@@ -100,7 +97,6 @@ export function PaginaTabla({
 
         if (valorRegistro == null) return false;
 
-        // Comparación de fechas normalizadas.
         if (filtro.tipo === "fecha") {
           return normalizarFecha(valorRegistro) === valor;
         }
@@ -118,7 +114,6 @@ return String(valorRegistro) === String(valor);
     );
   }, [datos, filtros, valoresFiltro]);
 
-  // Notifica cuántos registros cumplen los filtros.
   useEffect(() => {
     onResultadosChange?.(datosFiltrados.length);
   }, [datosFiltrados.length, onResultadosChange]);
@@ -136,7 +131,6 @@ return String(valorRegistro) === String(valor);
     inicio + itemsPorPagina
   );
 
-  // Actualiza filtros y notifica sus valores.
   function handleFiltroChange(campo, valor) {
     const nuevosValores = {
       ...valoresFiltro,
@@ -151,7 +145,6 @@ return String(valorRegistro) === String(valor);
 
   return (
     <div className={className}>
-      {/* Panel de filtros */}
       {filtros.length > 0 && (
         <div className={styles.contenedor}>
           {headerFiltros}
@@ -169,7 +162,6 @@ return String(valorRegistro) === String(valor);
                     {filtro.etiqueta}
                   </label>
 
-                  {/* Filtro de texto */}
                   {filtro.tipo === "texto" ? (
                     <input
                       id={`filtro-${filtro.clave}`}
@@ -186,7 +178,6 @@ return String(valorRegistro) === String(valor);
                       }
                     />
 
-                  /* Filtro de fecha */
                   ) : filtro.tipo === "fecha" ? (
                     <div className={styles.contenedorFecha}>
                       <input
@@ -227,7 +218,6 @@ return String(valorRegistro) === String(valor);
                       />
                     </div>
 
-                  /* Filtro de selección */
                   ) : (
                     <select
                       id={`filtro-${filtro.clave}`}
@@ -271,7 +261,6 @@ return String(valorRegistro) === String(valor);
         </div>
       )}
 
-      {/* Tabla de registros */}
       <div className={styles.contenedor}>
         {headerTabla}
 
@@ -319,7 +308,6 @@ return String(valorRegistro) === String(valor);
           </table>
         </div>
 
-        {/* Paginación */}
         <div className={styles.paginacion}>
           {(!resumenPaginacion || totalPaginas > 1) && (
             <button

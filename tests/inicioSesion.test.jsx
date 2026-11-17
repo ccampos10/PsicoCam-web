@@ -32,15 +32,15 @@ describe('Formulario visual de inicio de sesión', () => {
     expect(alEnviar).toHaveBeenCalledExactlyOnceWith({ usuario: 'usuario.prueba', contrasena: ' clave de prueba ', recordarme: true })
   })
 
-  it('informa la falta de integración y ofrece ayuda sin simular autenticación', async () => {
+  it('informa la falta de integración y enlaza al flujo de recuperación', async () => {
     render(<FormularioInicioSesion />)
     const interaccion = userEvent.setup()
     await interaccion.type(screen.getByLabelText('Usuario o correo electrónico'), 'usuario.prueba')
     await interaccion.type(screen.getByLabelText('Contraseña', { exact: true }), 'clave de prueba')
     await interaccion.click(screen.getByRole('button', { name: 'Iniciar sesión' }))
     expect(screen.getByRole('status').textContent).toContain('no está disponible')
-    await interaccion.click(screen.getByRole('button', { name: '¿Olvidaste tu contraseña?' }))
-    expect(screen.getByRole('status').textContent).toContain('contacta al administrador')
+    const enlaceRecuperacion = screen.getByRole('link', { name: '¿Olvidaste tu contraseña?' })
+    expect(enlaceRecuperacion.getAttribute('href')).toBe('/recuperar-contrasena')
   })
 
   it('permite reintentar después de un fallo sin mostrar datos del error recibido', async () => {

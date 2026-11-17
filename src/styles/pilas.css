@@ -9,7 +9,6 @@
   border: 1px solid transparent;
   white-space: nowrap;
 }
-
 .dot {
   width: 8px;
   height: 8px;
@@ -73,39 +72,3 @@
   width: 110px;
   text-align: center;
 }
-
-/* .urgBajo {
-  border: 1px solid var(--bajo-fg);
-  background-color: var(--bajo-bg);
-  color: var(--bajo-fg);
-
-  padding: 2px 3px;
-  border-radius: 20px;
-
-  width: 75px;
-  text-align: center;
-}
-
-.urgMedio {
-  border: 1px solid var(--medio-fg);
-  background-color: var(--medio-bg);
-  color: var(--medio-fg);
-
-  padding: 2px 3px;
-  border-radius: 20px;
-
-  width: 75px;
-  text-align: center;
-}
-
-.urgAlto {
-  border: 1px solid var(--alto-fg);
-  background-color: var(--alto-bg);
-  color: var(--alto-fg);
-
-  padding: 2px 3px;
-  border-radius: 20px;
-
-  width: 75px;
-  text-align: center;
-} */
