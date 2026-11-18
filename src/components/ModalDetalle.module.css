@@ -1,10 +1,10 @@
-.modal { padding: 0; width: min(540px, calc(100vw - 32px)); max-width: 100%; max-height: calc(100dvh - 32px); border-radius: 16px; background: var(--card); box-shadow: 0 25px 50px color-mix(in srgb, var(--overlay) 25%, transparent); }
-.contenido { display: flex; flex-direction: column; max-height: calc(100dvh - 32px); }
-.header { display: flex; justify-content: space-between; gap: 20px; padding: 30px 32px 16px; }
+.modal { display: flex; flex-direction: column; padding: 0; width: min(540px, calc(100vw - 32px)); max-width: 100%; max-height: calc(100% - 100px); height: fit-content; box-sizing: border-box; overflow: hidden; border-radius: 16px; background: var(--card); box-shadow: 0 25px 50px color-mix(in srgb, var(--overlay) 25%, transparent); }
+.contenido { display: flex; flex-direction: column; flex: 0 1 auto; min-height: 0; min-width: 0; }
+.header { display: flex; justify-content: space-between; gap: 20px; padding: 30px 32px 16px; flex-shrink: 0; }
 .header h2 { margin: 0; color: var(--text-primary); font-size: 23px; font-weight: 600; }
 .header p { margin: 8px 0 0; color: var(--secondary); font-size: 13px; }
 .cerrar { border: 0; background: transparent; color: var(--text-secondary); cursor: pointer; }
-.body { padding: 0 32px 24px; overflow-y: auto; }
+.body { padding: 0 32px 24px; overflow-y: auto; flex: 0 1 auto; min-height: 0; }
 .lista { margin: 0; }
 .lista > div { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
 .lista dt { color: var(--text-secondary); }
@@ -31,7 +31,7 @@
 .opcion small { margin-top: 4px; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
 .aviso, .error { color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
 .error { color: var(--risk-high-text); }
-.footer { display: flex; gap: 12px; padding: 16px 32px 24px; border-top: 1px solid var(--border); }
+.footer { display: flex; gap: 12px; padding: 16px 32px 24px; border-top: 1px solid var(--border); flex-shrink: 0; }
 .footer button { flex: 1; min-height: 46px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .guardar { color: var(--card); background: var(--primary); border: 1px solid var(--primary); }
 .guardar:disabled { opacity: .55; cursor: not-allowed; }
